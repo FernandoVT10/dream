@@ -25,3 +25,15 @@ export async function createOne(data: CreateOneData): Promise<void> {
 export async function getAll(): Promise<Receipt[]> {
   return await Receipt.findAll();
 }
+
+export async function deleteOne(id: number): Promise<void> {
+  await Receipt.destroy({
+    where: { id },
+  });
+}
+
+export async function existsWithId(id: number): Promise<boolean> {
+  return (await Receipt.count({
+    where: { id },
+  })) > 0;
+}

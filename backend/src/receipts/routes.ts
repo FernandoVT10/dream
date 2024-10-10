@@ -1,9 +1,9 @@
 import validateSchema from "../middlewares/validateSchema";
 
 import { Router } from "express";
-import { createOne, getAll } from "./controller";
+import { createOne, getAll, deleteOne } from "./controller";
 import { Schema, matchedData } from "express-validator";
-import { createReceiptSchema } from "./validation";
+import { createReceiptSchema, deleteReceiptSchema } from "./validation";
 
 const router = Router();
 
@@ -21,6 +21,16 @@ router.get("/", async (_, res, next) => {
   try {
     const receipts = await getAll(); 
     res.json({ receipts });
+  } catch(e) {
+    next(e);
+  }
+});
+
+router.delete("/:id", validateSchema(deleteReceiptSchema), async (req, res, next) => {
+  try {
+    const id = parseInt(matchedData(req).id);
+    await deleteOne(id);
+    res.sendStatus(200);
   } catch(e) {
     next(e);
   }
