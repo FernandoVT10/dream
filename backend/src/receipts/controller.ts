@@ -37,3 +37,15 @@ export async function existsWithId(id: number): Promise<boolean> {
     where: { id },
   })) > 0;
 }
+
+type UpdateOneData = {
+  date?: Date;
+  folio?: string;
+  quantity?: string;
+  description?: string;
+};
+export async function updateOne(id: number, data: UpdateOneData): Promise<void> {
+  await Receipt.update(data, {
+    where: { id },
+  });
+}

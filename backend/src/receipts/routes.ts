@@ -1,9 +1,9 @@
 import validateSchema from "../middlewares/validateSchema";
 
 import { Router } from "express";
-import { createOne, getAll, deleteOne } from "./controller";
+import { createOne, getAll, deleteOne, updateOne } from "./controller";
 import { Schema, matchedData } from "express-validator";
-import { createReceiptSchema, deleteReceiptSchema } from "./validation";
+import { createReceiptSchema, deleteReceiptSchema, updateReceiptSchema } from "./validation";
 
 const router = Router();
 
@@ -30,6 +30,24 @@ router.delete("/:id", validateSchema(deleteReceiptSchema), async (req, res, next
   try {
     const id = parseInt(matchedData(req).id);
     await deleteOne(id);
+    res.sendStatus(200);
+  } catch(e) {
+    next(e);
+  }
+});
+
+router.put("/:id", validateSchema(updateReceiptSchema), async (req, res, next) => {
+  try {
+    const data = matchedData(req);
+
+    const id = parseInt(data.id);
+
+    await updateOne(id, {
+      date: data.date,
+      folio: data.folio,
+      quantity: data.quantity,
+      description: data.description,
+    });
     res.sendStatus(200);
   } catch(e) {
     next(e);
