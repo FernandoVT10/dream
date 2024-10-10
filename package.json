@@ -9,7 +9,8 @@
   "license": "ISC",
   "description": "",
   "workspaces": [
-    "backend"
+    "backend",
+    "frontend"
   ],
   "devDependencies": {
     "reflect-metadata": "^0.2.2",
