@@ -3,6 +3,8 @@ import app from "./app";
 
 import { Receipt } from "./models";
 
+const PORT = 3001;
+
 async function main() {
   try {
     await sequelize.authenticate();
@@ -12,9 +14,9 @@ async function main() {
   }
 
   const tag = "\x1b[34m[SERVER]\x1b[0m";
-  const message = "\x1b[36mServer running on port: [3000]\x1b[0m";
+  const message = `\x1b[36mServer running on port: [${PORT}]\x1b[0m`;
   
-  app.listen(3000, () => console.log(`${tag} ${message}`));
+  app.listen(PORT, () => console.log(`${tag} ${message}`));
 }
 
 main();
