@@ -1,5 +1,5 @@
 import { Router } from "express";
-import receipts from "./receipts";
+import receipts from "./receipts/routes";
 
 const router = Router();
 

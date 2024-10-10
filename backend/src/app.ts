@@ -1,6 +1,6 @@
 import express from "express";
 import bodyParser from "body-parser";
-import apiRoutes from "./api";
+import apiRoutes from "./apiRoutes";
 
 const app = express();
 
