@@ -1,6 +1,8 @@
 import { existsWithId, KIND_LIST } from "./controller";
 import { Schema, ParamSchema } from "express-validator";
 
+const INVALID_KIND_MSG = `kind is invalid (supported: ${KIND_LIST.join(", ")})`;
+
 export const createReceiptSchema: Schema = {
   date: {
     isDate: { errorMessage: "date is invalid" },
@@ -28,7 +30,7 @@ export const createReceiptSchema: Schema = {
       options: { values: "falsy" },
     },
     isIn: {
-      errorMessage: `kind is invalid (supported: ${KIND_LIST.join(", ")})`,
+      errorMessage: INVALID_KIND_MSG,
       options: [KIND_LIST],
     },
   },
@@ -86,6 +88,15 @@ export const updateReceiptSchema: Schema = {
   description: {
     optional: {
       options: { values: "falsy" },
+    },
+  },
+  kind: {
+    optional: {
+      options: { values: "falsy" },
+    },
+    isIn: {
+      errorMessage: INVALID_KIND_MSG,
+      options: [KIND_LIST],
     },
   },
 };

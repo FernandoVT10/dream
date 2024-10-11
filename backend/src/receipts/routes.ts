@@ -47,6 +47,7 @@ router.put("/:id", validateSchema(updateReceiptSchema), async (req, res, next) =
       folio: data.folio,
       quantity: data.quantity,
       description: data.description,
+      kind: data.kind,
     });
     res.sendStatus(200);
   } catch(e) {
