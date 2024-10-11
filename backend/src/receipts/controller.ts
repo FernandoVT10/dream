@@ -8,11 +8,14 @@ const RECEIPT_STATUS = {
   delivered: "delivered",
 };
 
+export const KIND_LIST = ["straw", "fram", "corn"];
+
 type CreateOneData = {
   date: Date;
   folio: string;
   quantity: string;
   description?: string;
+  kind: string;
 };
 
 export async function createOne(data: CreateOneData): Promise<void> {
@@ -43,6 +46,7 @@ type UpdateOneData = {
   folio?: string;
   quantity?: string;
   description?: string;
+  kind?: string;
 };
 export async function updateOne(id: number, data: UpdateOneData): Promise<void> {
   await Receipt.update(data, {

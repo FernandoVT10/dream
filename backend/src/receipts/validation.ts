@@ -1,4 +1,4 @@
-import { existsWithId } from "./controller";
+import { existsWithId, KIND_LIST } from "./controller";
 import { Schema, ParamSchema } from "express-validator";
 
 export const createReceiptSchema: Schema = {
@@ -20,6 +20,16 @@ export const createReceiptSchema: Schema = {
   description: {
     optional: {
       options: { values: "falsy" },
+    },
+  },
+  kind: {
+    exists: {
+      errorMessage: "kind is required",
+      options: { values: "falsy" },
+    },
+    isIn: {
+      errorMessage: `kind is invalid (supported: ${KIND_LIST.join(", ")})`,
+      options: [KIND_LIST],
     },
   },
 };

@@ -12,6 +12,8 @@ export class Receipt extends Model {
   description: string;
   @Column
   status: string;
+  @Column
+  kind: string;
 
   @HasMany(() => ReceiptUnit)
   units: ReceiptUnit[];
