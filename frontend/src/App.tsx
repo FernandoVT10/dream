@@ -1,3 +1,5 @@
+import Filters from "./components/Filters";
+
 import { useEffect, useState } from "react";
 
 import styles from "./App.module.scss";
@@ -31,18 +33,27 @@ function App() {
   }, []);
 
   return (
-    <>
-      <div className={styles.receiptsContainer}>
+    <div className={styles.app}>
+      <Filters/>
 
-      <div className={styles.header}>
-        <div className={styles.emtpy}></div>
-        <div className={styles.date}>Date</div>
-        <div className={styles.folio}>Folio</div>
-        <div className={styles.quantity}>Quantity</div>
-        <div className={styles.sap}>SAP</div>
-        <div className={styles.kind}>Kind</div>
-        <div className={styles.actions}>Actions</div>
+      <div className={styles.searchBar}>
+        <input
+          type="text"
+          className={styles.input}
+          placeholder="Search for receipts"
+        />
       </div>
+
+      <div className={styles.receiptsContainer}>
+        <div className={styles.header}>
+          <div className={styles.emtpy}></div>
+          <div className={styles.date}>Date</div>
+          <div className={styles.folio}>Folio</div>
+          <div className={styles.quantity}>Quantity</div>
+          <div className={styles.sap}>SAP</div>
+          <div className={styles.kind}>Kind</div>
+          <div className={styles.actions}>Actions</div>
+        </div>
 
         {receipts.map(receipt => {
           const d = new Date(receipt.date);
@@ -67,7 +78,7 @@ function App() {
 
       <div className={styles.formContainer}>
       </div>
-    </>
+    </div>
   )
 }
 

@@ -1,6 +1,22 @@
-.receiptsContainer {
-  width: 1200px;
+.app {
+  padding: 20px;
+}
 
+.searchBar {
+  margin-bottom: 20px;
+
+  & .input {
+    width: 100%;
+    padding: 15px;
+    background: transparent;
+    border: solid 1px var(--border);
+    color: var(--text);
+    border-radius: 5px;
+    font-size: 14px;
+  }
+}
+
+.receiptsContainer {
   & .receipt, & .header {
     padding: 10px;
     width: 100%;
@@ -11,7 +27,7 @@
     }
 
     & .date {
-      color: #7aa2f7;
+      color: var(--text-dim);
       /* color: #ff6590; */
       width: 120px;
     }

@@ -8,10 +8,21 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
-  --background: #100e17; 
-  --text: #bebebe;
-  --text-accent: #0fb6d6;
-  --text-dim: #45aaff;
+  --blue: #89b4fa;
+  --green: #a6e3a1;
+  --green-dark: #92c38e;
+
+  --background: #100e17;
+  --background-alt: #1e1e2e;
+
+  --text: #cdd6f4;
+  --text-accent: var(--blue);
+  --text-dim: #a6adc8;
+
+  --text-alt: #11111b;
+
+  --border: #585b70;
+  --border-accent: var(--blue);
 }
 
 * {
@@ -23,4 +34,12 @@ body {
   color: var(--text);
   padding: 0;
   margin: 0;
+}
+
+button {
+  cursor: pointer;
+}
+
+input {
+  outline: 0;
 }
