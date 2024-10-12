@@ -7,4 +7,20 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  --background: #100e17; 
+  --text: #bebebe;
+  --text-accent: #0fb6d6;
+  --text-dim: #45aaff;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background: var(--background);
+  color: var(--text);
+  padding: 0;
+  margin: 0;
 }

@@ -1,0 +1,55 @@
+.receiptsContainer {
+  width: 1200px;
+
+  & .receipt, & .header {
+    padding: 10px;
+    width: 100%;
+    display: flex;
+
+    & .emtpy {
+      width: 50px;
+    }
+
+    & .date {
+      color: #7aa2f7;
+      /* color: #ff6590; */
+      width: 120px;
+    }
+
+    & .folio {
+      /* color: var(--text-accent); */
+      flex: 3;
+    }
+
+    & .quantity {
+      /* color: var(--text-accent); */
+      flex: 3;
+    }
+
+    & .sap {
+      flex: 2;
+    }
+
+    & .kind {
+      color: var(--text-accent);
+      flex: 1;
+    }
+
+    & .actions {
+      flex: 2;
+    }
+  }
+
+  & .header {
+    background: #191621;
+
+    & div {
+      color: var(--text) !important;
+      font-weight: bold;
+    }
+
+    & .date {
+      text-align: left;
+    }
+  }
+}
