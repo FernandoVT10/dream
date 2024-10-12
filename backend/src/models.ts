@@ -11,9 +11,11 @@ export class Receipt extends Model {
   @Column
   description: string;
   @Column
-  status: string;
-  @Column
   kind: string;
+  @Column
+  sap: string;
+  @Column
+  status: string;
 
   @HasMany(() => ReceiptUnit)
   units: ReceiptUnit[];

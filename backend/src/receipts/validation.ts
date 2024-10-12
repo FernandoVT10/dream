@@ -19,11 +19,6 @@ export const createReceiptSchema: Schema = {
       options: { values: "falsy" },
     },
   },
-  description: {
-    optional: {
-      options: { values: "falsy" },
-    },
-  },
   kind: {
     exists: {
       errorMessage: "kind is required",
@@ -32,6 +27,17 @@ export const createReceiptSchema: Schema = {
     isIn: {
       errorMessage: INVALID_KIND_MSG,
       options: [KIND_LIST],
+    },
+  },
+  sap: {
+    exists: {
+      errorMessage: "sap is required",
+      options: { values: "falsy" },
+    },
+  },
+  description: {
+    optional: {
+      options: { values: "falsy" },
     },
   },
 };
@@ -97,6 +103,11 @@ export const updateReceiptSchema: Schema = {
     isIn: {
       errorMessage: INVALID_KIND_MSG,
       options: [KIND_LIST],
+    },
+  },
+  sap: {
+    optional: {
+      options: { values: "falsy" },
     },
   },
 };
