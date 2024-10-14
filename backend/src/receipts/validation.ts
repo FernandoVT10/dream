@@ -30,7 +30,6 @@ export const createReceiptSchema: Schema = {
       options: [KIND_LIST],
     },
   },
-  // TODO: SAP should only accept numbers
   sap: {
     exists: {
       errorMessage: "sap is required",
