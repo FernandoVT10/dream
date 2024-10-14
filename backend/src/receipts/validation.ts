@@ -1,6 +1,7 @@
 import { existsWithId, KIND_LIST } from "./controller";
 import { Schema, ParamSchema } from "express-validator";
 
+const SEARCH_BY_VALUES = ["folio", "sap", "date"];
 const INVALID_KIND_MSG = `kind is invalid (supported: ${KIND_LIST.join(", ")})`;
 
 export const createReceiptSchema: Schema = {
@@ -29,6 +30,7 @@ export const createReceiptSchema: Schema = {
       options: [KIND_LIST],
     },
   },
+  // TODO: SAP should only accept numbers
   sap: {
     exists: {
       errorMessage: "sap is required",
@@ -112,3 +114,32 @@ export const updateReceiptSchema: Schema = {
   },
 };
 
+export const getReceiptsSchema: Schema = {
+  searchBy: {
+    custom: {
+      options: (searchBy, { req }) => {
+        if(req.query?.search) {
+          if(!searchBy) throw new Error("searchBy is required");
+          
+          if(!SEARCH_BY_VALUES.includes(searchBy))
+            throw new Error(`searchBy is invalid (accepted values: ${SEARCH_BY_VALUES.join(", ")})`);
+        }
+
+        return true;
+      },
+    },
+  },
+  search: {
+    custom: {
+      options: (search, { req }) => {
+        if(!req.query?.searchBy) return true;
+
+        // TODO: validate for date and sap
+        const searchBy = req.query.searchBy;
+        if(!search) throw new Error("search is required");
+
+        return true;
+      },
+    },
+  },
+};

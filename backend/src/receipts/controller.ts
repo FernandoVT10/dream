@@ -1,4 +1,5 @@
 import { Receipt } from "../models";
+import { Op } from "sequelize";
 
 type ReceiptStatus = "pending" | "part-delivered" | "delivered";
 
@@ -53,5 +54,17 @@ type UpdateOneData = {
 export async function updateOne(id: number, data: UpdateOneData): Promise<void> {
   await Receipt.update(data, {
     where: { id },
+  });
+}
+
+type SearchBy = "folio" | "sap" | "date";
+
+export async function searchAll(search: string, searchBy: SearchBy): Promise<Receipt[]> {
+  return await Receipt.findAll({
+    where: {
+      [searchBy]: {
+        [Op.like]: `%${search}%`,
+      },
+    },
   });
 }

@@ -1,9 +1,15 @@
 import validateSchema from "../middlewares/validateSchema";
 
 import { Router } from "express";
-import { createOne, getAll, deleteOne, updateOne } from "./controller";
+import { Receipt } from "../models";
+import { createOne, getAll, deleteOne, updateOne, searchAll } from "./controller";
 import { Schema, matchedData } from "express-validator";
-import { createReceiptSchema, deleteReceiptSchema, updateReceiptSchema } from "./validation";
+import {
+  createReceiptSchema,
+  deleteReceiptSchema,
+  updateReceiptSchema,
+  getReceiptsSchema
+} from "./validation";
 
 const router = Router();
 
@@ -17,9 +23,17 @@ router.post("/", validateSchema(createReceiptSchema), async (req, res, next) => 
   }
 });
 
-router.get("/", async (_, res, next) => {
+router.get("/", validateSchema(getReceiptsSchema), async (req, res, next) => {
   try {
-    const receipts = await getAll(); 
+    const { search, searchBy } = matchedData(req);
+
+    let receipts: Receipt[];
+    if(search && searchBy) {
+      receipts = await searchAll(search, searchBy); 
+    } else {
+      receipts = await getAll(); 
+    }
+
     res.json({ receipts });
   } catch(e) {
     next(e);
