@@ -36,6 +36,10 @@ export const createReceiptSchema: Schema = {
       errorMessage: "sap is required",
       options: { values: "falsy" },
     },
+    isInt: {
+      errorMessage: "sap should only contain numbers",
+      options: { gt: 0 },
+    },
   },
   description: {
     optional: {
@@ -110,6 +114,10 @@ export const updateReceiptSchema: Schema = {
   sap: {
     optional: {
       options: { values: "falsy" },
+    },
+    isInt: {
+      errorMessage: "sap should only contain numbers",
+      options: { gt: 0 },
     },
   },
 };
