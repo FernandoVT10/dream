@@ -8,7 +8,6 @@ import {
   createReceiptSchema,
   deleteReceiptSchema,
   updateReceiptSchema,
-  getReceiptsSchema
 } from "./validation";
 
 const router = Router();
@@ -23,13 +22,13 @@ router.post("/", validateSchema(createReceiptSchema), async (req, res, next) => 
   }
 });
 
-router.get("/", validateSchema(getReceiptsSchema), async (req, res, next) => {
+router.get("/", async (req, res, next) => {
   try {
-    const { search, searchBy } = matchedData(req);
+    const search = req.query.search;
 
     let receipts: Receipt[];
-    if(search && searchBy) {
-      receipts = await searchAll(search, searchBy); 
+    if(search) {
+      receipts = await searchAll(search.toString()); 
     } else {
       receipts = await getAll(); 
     }

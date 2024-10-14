@@ -119,34 +119,4 @@ export const updateReceiptSchema: Schema = {
       options: { gt: 0 },
     },
   },
-};
-
-export const getReceiptsSchema: Schema = {
-  searchBy: {
-    custom: {
-      options: (searchBy, { req }) => {
-        if(req.query?.search) {
-          if(!searchBy) throw new Error("searchBy is required");
-          
-          if(!SEARCH_BY_VALUES.includes(searchBy))
-            throw new Error(`searchBy is invalid (accepted values: ${SEARCH_BY_VALUES.join(", ")})`);
-        }
-
-        return true;
-      },
-    },
-  },
-  search: {
-    custom: {
-      options: (search, { req }) => {
-        if(!req.query?.searchBy) return true;
-
-        // TODO: validate for date and sap
-        const searchBy = req.query.searchBy;
-        if(!search) throw new Error("search is required");
-
-        return true;
-      },
-    },
-  },
-};
+};;

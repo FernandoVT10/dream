@@ -1,5 +1,6 @@
 import { Receipt } from "../models";
-import { Op } from "sequelize";
+
+import getFiltersFromSearch from "./getFiltersFromSearch";
 
 type ReceiptStatus = "pending" | "part-delivered" | "delivered";
 
@@ -57,14 +58,8 @@ export async function updateOne(id: number, data: UpdateOneData): Promise<void> 
   });
 }
 
-type SearchBy = "folio" | "sap" | "date";
-
-export async function searchAll(search: string, searchBy: SearchBy): Promise<Receipt[]> {
+export async function searchAll(search: string): Promise<Receipt[]> {
   return await Receipt.findAll({
-    where: {
-      [searchBy]: {
-        [Op.like]: `%${search}%`,
-      },
-    },
+    where: getFiltersFromSearch(search),
   });
 }
