@@ -2,36 +2,6 @@
   padding: 20px;
 }
 
-.searchBar {
-  margin-bottom: 20px;
-  display: flex;
-  column-gap: 20px;
-
-  & .select {
-    padding: 0 20px;
-    font-size: 14px;
-    background: var(--background-alt);
-    color: var(--text-accent);
-    font-weight: bold;
-    border: none;
-  }
-
-  & .input {
-    width: 300px;
-    padding: 15px;
-    background: transparent;
-    border: solid 1px var(--border);
-    color: var(--text);
-    border-radius: 5px;
-    font-size: 14px;
-  }
-
-
-  & .dateInput {
-    font-weight: bold;
-  }
-}
-
 .receiptsContainer {
   & .receipt, & .header {
     padding: 10px;
@@ -44,17 +14,14 @@
 
     & .date {
       color: var(--text-dim);
-      /* color: #ff6590; */
       width: 120px;
     }
 
     & .folio {
-      /* color: var(--text-accent); */
       flex: 3;
     }
 
     & .quantity {
-      /* color: var(--text-accent); */
       flex: 3;
     }
 

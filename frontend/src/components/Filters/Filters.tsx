@@ -1,36 +1,95 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 import styles from "./Filters.module.scss";
 
-// TODO: remove this variable and instead get it from the server
-const KIND_LIST = ["All", "Raspberries", "Corn", "Strawberries"];
+const SEARCH_BY_LIST = [
+  { name: "Folio", value: "folio" },
+  { name: "SAP", value: "sap" },
+  { name: "Date", value: "date" },
+];
 
-function Filters() {
-  const [toggle, setToggle] = useState<boolean[]>([]);
+const KIND_LIST = [
+  { name: "All", value: "all" },
+  { name: "Raspberries", value: "rasp" },
+  { name: "Corn", value: "corn" },
+  { name: "Strawberries", value: "straw" },
+];
+
+type FiltersProps = {
+  loadReceipts: (search?: string) => void;
+};
+
+function Filters({ loadReceipts }: FiltersProps) {
+  const [searchBy, setSearchBy] = useState("folio");
+  const [search, setSearch] = useState("");
+  const [kind, setKind] = useState(KIND_LIST[0].value);
+
+  useEffect(() => {
+    let query = "";
+
+    // the query or search syntax is in the form: "[filter_name]: [value];"
+    // each filter term is separated by a semicolon
+    if(search) query = `${searchBy}:${search};`;
+    if(kind !== "all") query += `kind:${kind};`;
+
+    loadReceipts(query);
+  }, [search, kind]);
+
+  const handleSearchBy = (e: React.ChangeEvent<HTMLInput>): void => {
+    setSearchBy(e.target.value);
+    setSearch("");
+  };
+
+  const handleOnChange = (e: React.ChangeEvent<HTMLSelect>): void => {
+    setSearch(e.target.value);
+  };
+
+  const handleKindChange = (e: React.ChangeEvent<HTMLSelect>): void => {
+    setKind(e.target.value);
+  };
 
   return (
     <div className={styles.filters}>
-      <div className={styles.kindFilters}>
-        {KIND_LIST.map((kind, i) => {
-          const isActive = toggle[i] === true;
+      <div className={styles.searchBar}>
+        <select className={styles.select} value={searchBy} onChange={handleSearchBy}>
+          {SEARCH_BY_LIST.map(({ value, name }) => {
+            return (
+              <option value={value} key={value}>{name}</option>
+            );
+          })}
+        </select>
 
-          const onClick = () => {
-            const newToggle = [...toggle];
-            newToggle[i] = !isActive;
-            setToggle(newToggle);
-          };
-
-          return (
-            <button className={`${styles.filter} ${isActive && styles.active}`} onClick={onClick} key={kind}>
-              {kind}
-            </button>
-          );
-        })}
+        { searchBy === "date" ? (
+          <input
+            type="date"
+            className={`${styles.input} ${styles.dateInput}`}
+            value={search}
+            onChange={handleOnChange}
+          />
+        ) : (
+          <input
+            type="text"
+            className={styles.input}
+            placeholder={`Enter a ${searchBy.toLowerCase()} to filter`}
+            value={search}
+            onChange={handleOnChange}
+          />
+        )}
       </div>
 
-      <button className={styles.addReceiptBtn}>
-        Add Receipt
-      </button>
+      <div className={styles.extraFilters}>
+        <select className={styles.select} value={kind} onChange={handleKindChange}>
+          {KIND_LIST.map(kind => {
+            return (
+              <option key={kind.name} value={kind.value}>{kind.name}</option>
+            );
+          })}
+        </select>
+
+        <button className={styles.addReceiptBtn}>
+          Add Receipt
+        </button>
+      </div>
     </div>
   );
 }

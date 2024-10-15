@@ -15,67 +15,33 @@ type Receipt = {
 
 const API_URL = "http://localhost:3000/api";
 
-async function loadReceipts(search?: string, searchBy?: string): Promise<Receipt[]> {
+async function getReceipts(search?: string): Promise<Receipt[]> {
   let query = "";
-  if(search && searchBy) query = `?search=${search}&searchBy=${searchBy}`;
+  if(search) query = `?search=${search}`;
 
   const res = await fetch(`${API_URL}/receipts${query}`);
   const json = await res.json();
   return json.receipts;
 }
 
-type SearchBy = "folio" | "sap" | "date";
-
 function App() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
-  const [searchBy, setSearchBy] = useState<SearchBy>("folio");
-  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    const load = async () => {
-      setReceipts(await loadReceipts(search, searchBy));
-    };
+    loadReceipts();
+  }, []);
 
-    load();
-  }, [search]);
-
-  const handleSearchBy = (e: React.ChangeEvent<HTMLInput>): void => {
-    setSearchBy(e.target.value);
-    setSearch("");
-  };
-
-  const handleOnChange = (e: React.ChangeEvent<HTMLInput>): void => {
-    setSearch(e.target.value);
+  const loadReceipts = async (search?: string): void => {
+    try {
+      setReceipts(await getReceipts(search));
+    } catch {
+      // TODO: do something with this catch
+    }
   };
 
   return (
     <div className={styles.app}>
-      <Filters/>
-
-      <div className={styles.searchBar}>
-        <select className={styles.select} value={searchBy} onChange={handleSearchBy}>
-          <option value="folio">Folio</option>
-          <option value="sap">Sap</option>
-          <option value="date">Date</option>
-        </select>
-
-        { searchBy === "date" ? (
-          <input
-            type="date"
-            className={`${styles.input} ${styles.dateInput}`}
-            value={search}
-            onChange={handleOnChange}
-          />
-        ) : (
-          <input
-            type="text"
-            className={styles.input}
-            placeholder={`Enter a ${searchBy.toLowerCase()} to filter`}
-            value={search}
-            onChange={handleOnChange}
-          />
-        )}
-      </div>
+      <Filters loadReceipts={loadReceipts}/>
 
       <div className={styles.receiptsContainer}>
         <div className={styles.header}>
