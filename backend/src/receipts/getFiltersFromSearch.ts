@@ -60,8 +60,8 @@ function getFiltersFromSearch(search: string): WhereOptions {
   for(const key in tokens) {
     let val = tokens[key];
 
-    // add the like symbol to all the fields but date
-    if(key !== "date") val += "%";
+    // add the like symbol to all the fields but date and kind
+    if(key !== "date" && key !== "kind") val += "%";
 
     filters[key] = {
       [Op.like]: val,
