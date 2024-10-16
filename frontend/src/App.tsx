@@ -10,7 +10,6 @@ type Receipt = {
   id: number;
   date: string;
   folio: string;
-  quantity: string;
   sap: string;
   kind: string;
   description?: string;
@@ -60,7 +59,6 @@ function App() {
             <div className={styles.emtpy}></div>
             <div className={styles.date}>Date</div>
             <div className={styles.folio}>Folio</div>
-            <div className={styles.quantity}>Quantity</div>
             <div className={styles.sap}>SAP</div>
             <div className={styles.kind}>Kind</div>
             <div className={styles.actions}>Actions</div>
@@ -78,7 +76,6 @@ function App() {
                 <div className={styles.emtpy}></div>
                 <div className={styles.date}>{date}</div>
                 <div className={styles.folio}>{receipt.folio}</div>
-                <div className={styles.quantity}>{receipt.quantity}</div>
                 <div className={styles.sap}>{receipt.sap}</div>
                 <div className={styles.kind}>{receipt.kind}</div>
                 <div className={styles.actions}>Null</div>
