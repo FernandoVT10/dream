@@ -2,6 +2,29 @@
   padding: 20px;
 }
 
+.addReceipt {
+  & .date {
+    & .option {
+      & .checkbox {
+        & .input { display: none; }
+
+        & .actual {
+          cursor: pointer;
+          display: inline-block;
+          border: solid 1px var(--border);
+          width: 20px;
+          height: 20px;
+        }
+
+        & .input:checked + & .actual {
+          border-color: var(--border-accent);
+          background: red;
+        }
+      }
+    }
+  }
+}
+
 .receiptsContainer {
   & .receipt, & .header {
     padding: 10px;

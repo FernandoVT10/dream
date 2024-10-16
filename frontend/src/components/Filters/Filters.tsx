@@ -17,9 +17,10 @@ const KIND_LIST = [
 
 type FiltersProps = {
   loadReceipts: (search?: string) => void;
+  showReceiptModal: () => void;
 };
 
-function Filters({ loadReceipts }: FiltersProps) {
+function Filters({ loadReceipts, showReceiptModal }: FiltersProps) {
   const [searchBy, setSearchBy] = useState("folio");
   const [search, setSearch] = useState("");
   const [kind, setKind] = useState(KIND_LIST[0].value);
@@ -86,7 +87,7 @@ function Filters({ loadReceipts }: FiltersProps) {
           })}
         </select>
 
-        <button className={styles.addReceiptBtn}>
+        <button className={styles.addReceiptBtn} onClick={showReceiptModal}>
           Add Receipt
         </button>
       </div>
