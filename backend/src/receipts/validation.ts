@@ -14,12 +14,6 @@ export const createReceiptSchema: Schema = {
       options: { values: "falsy" },
     },
   },
-  quantity: {
-    exists: {
-      errorMessage: "quantity is required",
-      options: { values: "falsy" },
-    },
-  },
   kind: {
     exists: {
       errorMessage: "kind is required",
@@ -43,6 +37,38 @@ export const createReceiptSchema: Schema = {
   description: {
     optional: {
       options: { values: "falsy" },
+    },
+  },
+  mixes: {
+    custom: {
+      options: (mixes) => {
+        if(!Array.isArray(mixes)) throw new Error("mixes should be an array");
+
+        if(mixes.length < 1) throw new Error("there should be at least one mix");
+
+        return true;
+      },
+    },
+  },
+  "mixes.*.quantity": {
+    exists: {
+      errorMessage: "quantity is required",
+      options: { values: "falsy" },
+    },
+  },
+  "mixes.*.presentation": {
+    exists: {
+      errorMessage: "presentation is required",
+      options: { values: "falsy" },
+    },
+  },
+  "mixes.*.numberOfMix": {
+    optional: {
+      options: { values: "falsy" },
+    },
+    isInt: {
+      errorMessage: "numberOfMixes should only contain numbers",
+      options: { gt: 0 },
     },
   },
 };

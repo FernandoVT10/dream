@@ -1,4 +1,4 @@
-import { Receipt } from "../models";
+import { Receipt, Mix } from "../models";
 
 import getFiltersFromSearch from "./getFiltersFromSearch";
 
@@ -15,17 +15,18 @@ export const KIND_LIST = ["straw", "rasp", "corn"];
 type CreateOneData = {
   date: Date;
   folio: string;
-  quantity: string;
   kind: string;
   sap: string;
   description?: string;
+  mixes: {
+    quantity: string;
+    presentation: string;
+    numberOfMix?: string;
+  }[];
 };
 
 export async function createOne(data: CreateOneData): Promise<void> {
-  await Receipt.create({
-    status: RECEIPT_STATUS.pending,
-    ...data,
-  });
+  await Receipt.create(data, { include: [Mix] });
 }
 
 export async function getAll(): Promise<Receipt[]> {

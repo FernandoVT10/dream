@@ -18,6 +18,7 @@ router.post("/", validateSchema(createReceiptSchema), async (req, res, next) => 
     
     res.sendStatus(200);
   } catch(e) {
+    console.error(e);
     next(e);
   }
 });

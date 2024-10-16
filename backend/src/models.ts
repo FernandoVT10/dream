@@ -1,4 +1,14 @@
-import { Table, Column, Model, HasMany, BelongsTo, DataType, ForeignKey } from "sequelize-typescript";
+import {
+  Table,
+  Column,
+  Model,
+  HasMany,
+  BelongsTo,
+  DataType,
+  ForeignKey,
+  Default,
+  AllowNull
+} from "sequelize-typescript";
 
 @Table
 export class Receipt extends Model {
@@ -12,6 +22,7 @@ export class Receipt extends Model {
   kind: string;
   @Column
   sap: string;
+  @Default("pending")
   @Column
   status: string;
 
@@ -27,8 +38,10 @@ export class Mix extends Model {
   presentation: string;
   @Column
   numberOfMix: string;
+  @Default("pending")
   @Column
   status: string;
+  @AllowNull(true)
   @Column
   deliveredDate: Date;
 
