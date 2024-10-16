@@ -1,0 +1,109 @@
+.addReceiptForm {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+
+  & .fieldName {
+    font-weight: bold;
+    font-size: 14px;
+    margin-bottom: 5px;
+  }
+
+  & .input {
+    border: none;
+    background: transparent;
+    border: solid 1px var(--border);
+    color: var(--text);
+    padding: 10px;
+    font-weight: bold;
+    border-radius: 5px;
+    width: 100%;
+  }
+
+  & .select {
+    cursor: pointer;
+    padding: 0 20px;
+    font-size: 14px;
+    background: var(--background-alt);
+    color: var(--text-accent);
+    font-weight: bold;
+    border: none;
+    padding: 10px;
+  }
+
+  & .btnContainer {
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+
+    & .btn {
+      background: var(--btn-background);
+      color: var(--text-accent);
+      border: none;
+      border-radius: 5px;
+      padding: 10px 20px;
+      font-weight: bold;
+      transition: .3s;
+
+      &:hover {
+        background: var(--btn-hover-background);
+      }
+    }
+  }
+
+  & .subtitle {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--text-accent);
+  }
+
+  & .row {
+    display: flex;
+    column-gap: 20px;
+    flex: 1;
+
+    & .col {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+    }
+  }
+
+  & .mix {
+    & .col {
+      flex: 3;
+
+      &:nth-child(3) {
+        flex: 1;
+      }
+
+      &:nth-child(4) {
+        flex: 0;
+        justify-content: center;
+        width: fit-content;
+      }
+    }
+
+    & .fieldName {
+      font-size: 12px;
+    }
+
+    & .deleteBtn {
+      border: none;
+      color: #f38ba8;
+      font-weight: bold;
+      background: transparent;
+      margin-top: 30px;
+    }
+  }
+
+  & .addMixBtn {
+    background: transparent;
+    border: none;
+    color: var(--text-accent);
+    font-size: 14px;
+    font-weight: bold;
+    width: fit-content;
+    margin-left: 10px;
+  }
+}

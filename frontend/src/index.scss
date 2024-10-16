@@ -22,11 +22,16 @@
   --text-alt: #11111b;
 
   --border: #585b70;
+  --border-dark: #1d1e26;
   --border-accent: var(--blue);
+
+  --btn-background: #1e1e2e;
+  --btn-hover-background: #313244;
 }
 
 * {
   box-sizing: border-box;
+  color-scheme: dark;
 }
 
 body {
@@ -42,4 +47,12 @@ button {
 
 input {
   outline: 0;
+}
+
+input[type="date"] {
+  cursor: pointer;
+}
+
+p {
+  margin: 0;
 }

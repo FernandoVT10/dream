@@ -29,15 +29,13 @@
     width: 100%;
     min-height: 100vh;
     height: fit-content;
-    padding: 40px 0;
 
     & .modal {
       position: relative;
       z-index: 5;
       width: 100%;
-      max-width: 800px;
+      max-width: 600px;
       background: var(--background);
-      padding: 20px;
       border-radius: 10px;
       transform: scale(0);
       transition: .3s;
@@ -46,10 +44,12 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 20px;
+        border-bottom: solid 1px var(--border-dark);
+        padding: 0 20px;
 
         & .title {
-          font-size: 20px;
+          font-size: 18px;
+          color: var(--text-accent);
         }
 
         & .closeButton {
@@ -63,6 +63,10 @@
             color: var(--text-accent);
           }
         }
+      }
+
+      & .modalBody {
+        padding: 20px;
       }
     }
   }

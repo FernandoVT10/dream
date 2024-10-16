@@ -2,17 +2,17 @@ import { useState, useEffect } from "react";
 
 import styles from "./Filters.module.scss";
 
-const SEARCH_BY_LIST = [
-  { name: "Folio", value: "folio" },
-  { name: "SAP", value: "sap" },
-  { name: "Date", value: "date" },
-];
-
 const KIND_LIST = [
   { name: "All", value: "all" },
   { name: "Raspberries", value: "rasp" },
   { name: "Corn", value: "corn" },
   { name: "Strawberries", value: "straw" },
+];
+
+const SEARCH_BY_LIST = [
+  { name: "Folio", value: "folio" },
+  { name: "SAP", value: "sap" },
+  { name: "Date", value: "date" },
 ];
 
 type FiltersProps = {

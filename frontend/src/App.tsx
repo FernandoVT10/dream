@@ -2,6 +2,7 @@ import { useEffect, useState, useRef } from "react";
 import Modal, { useModal } from "./components/Modal";
 
 import Filters from "./components/Filters";
+import AddReceiptForm from "./components/AddReceiptForm";
 
 import styles from "./App.module.scss";
 
@@ -61,27 +62,8 @@ function App() {
 
   return (
     <>
-      <Modal title="" modal={addReceiptModal}>
-        <div className={styles.addReceipt}>
-          <form>
-            <div className={styles.date}>
-              <span className={styles.label}>Date:</span>
-
-              <div className={styles.option}>
-                <div className={styles.checkbox}>
-                  <input type="checkbox" id="a" className={styles.input}/>
-                  <label htmlFor="a" className={styles.actual}></label>
-                </div>
-                <label htmlFor="a">Use today's date</label>
-              </div>
-
-              <div className={styles.option}>
-                <input type="checkbox" id="b" className={styles.checkbox}/>
-                <label htmlFor="b">Use any other date</label>
-              </div>
-            </div>
-          </form>
-        </div>
+      <Modal title="Add Receipt" modal={addReceiptModal}>
+        <AddReceiptForm/>
       </Modal>
       <div className={styles.app}>
         <Filters
