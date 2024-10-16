@@ -1,4 +1,4 @@
-import { Receipt, ReceiptUnit } from "./models";
+import { Receipt, Mix } from "./models";
 import { Sequelize } from "sequelize-typescript";
 
 const sequelize = new Sequelize({
@@ -6,6 +6,6 @@ const sequelize = new Sequelize({
   storage: "./db.sqlite",
 });
 
-sequelize.addModels([ReceiptUnit, Receipt]);
+sequelize.addModels([Receipt, Mix]);
 
 export default sequelize;

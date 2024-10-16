@@ -7,8 +7,6 @@ export class Receipt extends Model {
   @Column
   folio: string;
   @Column
-  quantity: string;
-  @Column
   description: string;
   @Column
   kind: string;
@@ -17,18 +15,23 @@ export class Receipt extends Model {
   @Column
   status: string;
 
-  @HasMany(() => ReceiptUnit)
-  units: ReceiptUnit[];
+  @HasMany(() => Mix)
+  mixes: Mix[];
 }
 
 @Table
-export class ReceiptUnit extends Model {
-  @Column(DataType.JSON)
+export class Mix extends Model {
+  @Column
+  quantity: string;
+  @Column
   presentation: string;
+  @Column
+  numberOfMix: string;
   @Column
   status: string;
   @Column
-  deliveryDate: Date;
+  deliveredDate: Date;
+
   @ForeignKey(() => Receipt)
   @Column
   receiptId: number;
