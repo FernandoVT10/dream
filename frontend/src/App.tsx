@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import Modal, { useModal } from "./components/Modal";
 
 import Filters from "./components/Filters";
@@ -11,6 +11,8 @@ type Receipt = {
   date: string;
   folio: string;
   quantity: string;
+  sap: string;
+  kind: string;
   description?: string;
   status: string;
 };
@@ -26,24 +28,6 @@ async function getReceipts(search?: string): Promise<Receipt[]> {
   return json.receipts;
 }
 
-type CheckboxProps = {
-  value: boolean;
-  setValue: (v: boolean) => void;
-  id: string;
-};
-
-function Checkbox({ value, setValue, id }: CheckboxProps) {
-  const handleChange = (e: React.ChangeEvent<HTMLInput>) => {
-    setValue(!value);
-  };
-
-  return (
-    <div className={styles.checkbox}>
-
-    </div>
-  );
-}
-
 function App() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
   const addReceiptModal = useModal();
@@ -52,7 +36,7 @@ function App() {
     loadReceipts();
   }, []);
 
-  const loadReceipts = async (search?: string): void => {
+  const loadReceipts = async (search?: string): Promise<void> => {
     try {
       setReceipts(await getReceipts(search));
     } catch {

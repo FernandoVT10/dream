@@ -3,8 +3,8 @@ import { useEffect, useState } from "react";
 const ESCAPE_CODE = "Escape";
 
 export interface UseModalReturn {
-  hideModal: () => void,
-  showModal: () => void,
+  hide: () => void,
+  show: () => void,
   isActive: boolean
 }
 

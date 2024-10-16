@@ -36,16 +36,16 @@ function Filters({ loadReceipts, showReceiptModal }: FiltersProps) {
     loadReceipts(query);
   }, [search, kind]);
 
-  const handleSearchBy = (e: React.ChangeEvent<HTMLInput>): void => {
+  const handleSearchBy = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     setSearchBy(e.target.value);
     setSearch("");
   };
 
-  const handleOnChange = (e: React.ChangeEvent<HTMLSelect>): void => {
+  const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     setSearch(e.target.value);
   };
 
-  const handleKindChange = (e: React.ChangeEvent<HTMLSelect>): void => {
+  const handleKindChange = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     setKind(e.target.value);
   };
 
