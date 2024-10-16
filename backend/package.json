@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon --watch ./src ./src/main.ts"
+    "dev": "nodemon --watch ./src ./src/main.ts",
+    "check": "tsc --noEmit --watch"
   },
   "author": "",
   "license": "ISC",
