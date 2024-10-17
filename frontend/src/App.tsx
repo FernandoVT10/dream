@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { API_URL } from "./constants";
+
 import Modal, { useModal } from "./components/Modal";
 
 import Filters from "./components/Filters";
@@ -15,8 +17,6 @@ type Receipt = {
   description?: string;
   status: string;
 };
-
-const API_URL = "http://localhost:3000/api";
 
 async function getReceipts(search?: string): Promise<Receipt[]> {
   let query = "";
@@ -46,7 +46,7 @@ function App() {
   return (
     <>
       <Modal title="Add Receipt" modal={addReceiptModal}>
-        <AddReceiptForm/>
+        <AddReceiptForm hideModal={addReceiptModal.hide}/>
       </Modal>
       <div className={styles.app}>
         <Filters

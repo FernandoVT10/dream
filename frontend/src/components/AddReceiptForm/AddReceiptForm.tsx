@@ -1,6 +1,29 @@
 import { useState, useReducer } from "react";
+import { API_URL } from "../../constants";
 
 import styles from  "./AddReceiptForm.module.scss";
+
+type CreateReceiptData = {
+  date: string;
+  kind: string;
+  folio: string;
+  sap: string;
+  mixes: {
+    quantity: string;
+    presentation: string;
+    numberOfMix?: string;
+  }[];
+};
+
+async function createReceipt(data: CreateReceiptData): Promise<void> {
+  await fetch(`${API_URL}/receipts`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(data),
+  });
+}
 
 const KIND_LIST = [
   { name: "Raspberries", value: "rasp" },
@@ -12,6 +35,7 @@ enum MixFormActions {
   Add = "add",
   Remove = "remove",
   Update = "update",
+  Reset = "reset",
 };
 
 type MixFormData = {
@@ -36,6 +60,8 @@ type MixFormAction = {
   type: MixFormActions.Update;
   formId: number;
   data: Omit<MixFormData, "id">;
+} | {
+  type: MixFormActions.Reset;
 };
 
 function getNumbersFromStr(str: string): string {
@@ -101,7 +127,6 @@ function MixForm({ mixForm, removeForm, updateForm }: MixFormProps) {
           name="numberOfMix"
           value={mixForm.numberOfMix}
           onChange={handleInputChange}
-          required
         />
       </div>
 
@@ -202,6 +227,10 @@ function mixesFormsReducer(state: MixFormData[], action: MixFormAction): MixForm
         return mix;
       });
     } break;
+    case MixFormActions.Reset: {
+      mixFormId = 0;
+      return intialMixesForms;
+    } break;
   }
 }
 
@@ -214,12 +243,13 @@ const intialMixesForms: MixFormData[] = [
   },
 ];
 
-function AddReceiptForm() {
+function AddReceiptForm({ hideModal }: { hideModal: () => void }) {
   const [mixesForms, dispatch] = useReducer(mixesFormsReducer, intialMixesForms);
   const [date, setDate] = useState("");
   const [kind, setKind] = useState(KIND_LIST[0].value);
   const [folio, setFolio] = useState("");
   const [sap, setSap] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const getInputValue = (cb: (v: string) => void) => {
     return (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -227,68 +257,110 @@ function AddReceiptForm() {
     };
   };
 
+  const handleOnSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if(loading) return;
+    setLoading(true);
+
+    const mixes: CreateReceiptData["mixes"] = mixesForms.map(mixForm => {
+      return {
+        quantity: mixForm.quantity,
+        presentation: mixForm.presentation,
+        numberOfMix: mixForm.numberOfMix,
+      };
+    });
+
+    try {
+      // TODO: show notification when success
+      await createReceipt({ date, kind, folio, sap, mixes });
+
+      setDate("");
+      setKind("");
+      setFolio("");
+      setSap("");
+      dispatch({ type: MixFormActions.Reset });
+
+      setLoading(false);
+      hideModal();
+    } catch {
+      // TODO: catch possible error
+    }
+  };
+
   return (
-    <form>
-      <div className={styles.addReceiptForm}>
-        <div className={styles.row}>
-          <div className={styles.col}>
-            <span className={styles.fieldName}>Date</span>
-            <input
-              type="date"
-              className={styles.input}
-              value={date}
-              onChange={getInputValue(v => setDate(v))}
-              required
-            />
+    <>
+      { loading && (
+        <div className={styles.loaderContainer}>
+          <span className={styles.text}>Adding Receipts...</span>
+          <span className={styles.loader}></span>
+        </div>
+      )}
+
+      <form onSubmit={handleOnSubmit}>
+        <div className={styles.addReceiptForm}>
+          <div className={styles.row}>
+            <div className={styles.col}>
+              <span className={styles.fieldName}>Date</span>
+              <input
+                type="date"
+                className={styles.input}
+                value={date}
+                onChange={getInputValue(v => setDate(v))}
+                required
+              />
+            </div>
+            <div className={styles.col}>
+              <span className={styles.fieldName}>Kind</span>
+              <select
+                className={styles.select}
+                value={kind}
+                onChange={getInputValue(v => setKind(v))}
+              >
+                {KIND_LIST.map(kind => {
+                  return (
+                    <option key={kind.name} value={kind.value}>{kind.name}</option>
+                  );
+                })}
+              </select>
+            </div>
           </div>
-          <div className={styles.col}>
-            <span className={styles.fieldName}>Kind</span>
-            <select
-              className={styles.select}
-              value={kind}
-              onChange={getInputValue(v => setKind(v))}
-            >
-              {KIND_LIST.map(kind => {
-                return (
-                  <option key={kind.name} value={kind.value}>{kind.name}</option>
-                );
-              })}
-            </select>
+
+          <div className={styles.row}>
+            <div className={styles.col}>
+              <span className={styles.fieldName}>Folio</span>
+              <input
+                type="text"
+                className={styles.input}
+                placeholder="0000 Mya"
+                value={folio}
+                onChange={getInputValue(v => setFolio(v))}
+                required
+              />
+            </div>
+            <div className={styles.col}>
+              <span className={styles.fieldName}>SAP</span>
+              <input
+                type="text"
+                className={styles.input}
+                placeholder="125222"
+                value={sap}
+                onChange={getInputValue(v => setSap(getNumbersFromStr(v)))}
+                required
+              />
+            </div>
+          </div>
+
+          <Mixes mixesForms={mixesForms} dispatch={dispatch} />
+
+          <div className={styles.btnContainer}>
+            <button type="submit" className={styles.btn}>
+              Add Receipt
+            </button>
           </div>
         </div>
-
-        <div className={styles.row}>
-          <div className={styles.col}>
-            <span className={styles.fieldName}>Folio</span>
-            <input
-              type="text"
-              className={styles.input}
-              placeholder="0000 Mya"
-              value={folio}
-              onChange={getInputValue(v => setFolio(v))}
-              required
-            />
-          </div>
-          <div className={styles.col}>
-            <span className={styles.fieldName}>SAP</span>
-            <input
-              type="text"
-              className={styles.input}
-              placeholder="125222"
-              value={sap}
-              onChange={getInputValue(v => setSap(getNumbersFromStr(v)))}
-              required
-            />
-          </div>
-        </div>
-
-        <Mixes mixesForms={mixesForms} dispatch={dispatch} />
-
-        <div className={styles.btnContainer}>
-          <button type="submit" className={styles.btn}>Add Receipt</button>
-        </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 }
 
