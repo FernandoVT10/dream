@@ -19,3 +19,16 @@ export function getIcon(type: NotificationType): string {
     case NotificationType.Error: return ERROR_ICON;
   }
 }
+
+export function lerp(start: number, end: number, time: number): number {
+  return start + (end - start) * time;
+}
+
+export function smoothStep(t: number): number {
+  return (Math.sin(t * Math.PI - 0.5*Math.PI) + 1) * 0.5;
+}
+
+export function setElementPos(el: HTMLElement, left: number, top: number): void {
+  el.style.left = `${left}px`;
+  el.style.top = `${top}px`;
+}
