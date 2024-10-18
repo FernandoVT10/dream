@@ -1,0 +1,62 @@
+.notifications {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  margin: 20px;
+
+  --n-background: #181825;
+  --n-text: #cdd6f4;
+
+  & .notification {
+    position: relative;
+    margin-top: 20px;
+    display: flex;
+    width: 300px;
+    background: var(--n-background);
+    border-radius: 5px;
+    overflow: hidden;
+
+    &.success {
+      --n-text-accent: #89b4fa;
+      --n-icon-background: rgba(137, 180, 250, .18);
+    }
+
+    &.error {
+      --n-text-accent: #f38ba8;
+      --n-icon-background: rgba(243, 139, 168, .18);
+    }
+
+    &:nth-child(1) { margin: 0; }
+
+    & .iconContainer {
+      padding: 0 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--n-icon-background);
+      color: var(--n-text-accent);
+
+      & .icon {
+        margin-top: 7px;
+      }
+    }
+
+    & .body {
+      width: calc(100% - 40px);
+      padding: 10px;
+      font-size: 14px;
+    }
+
+    & .closeButton {
+      background: transparent;
+      color: var(--n-text-accent);
+      padding: 0 10px;
+      border: none;
+      transition: .3s;
+
+      &:hover {
+        background: var(--n-icon-background);
+      }
+    }
+  }
+}
