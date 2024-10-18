@@ -13,7 +13,7 @@ import {
 @Table
 export class Receipt extends Model {
   @Column
-  date: Date;
+  date: string;
   @Column
   folio: string;
   @Column
