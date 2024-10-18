@@ -1,6 +1,6 @@
 import { useState, useReducer } from "react";
 import { API_URL } from "../../constants";
-import { XIcon } from "../../icons";
+import { XIcon, CopyIcon } from "../../icons";
 
 import Notifications from "../../Notifications";
 
@@ -41,6 +41,7 @@ enum MixFormActions {
   Remove = "remove",
   Update = "update",
   Reset = "reset",
+  Duplicate = "duplicate",
 };
 
 type MixFormData = {
@@ -48,12 +49,6 @@ type MixFormData = {
   quantity: string;
   presentation: string;
   numberOfMix: string;
-};
-
-type MixFormProps = {
-  mixForm: MixFormData;
-  removeForm: (formId: number) => void;
-  updateForm: (formId: number, data: Omit<MixFormData, "id">) => void;
 };
 
 type MixFormAction = {
@@ -67,13 +62,24 @@ type MixFormAction = {
   data: Omit<MixFormData, "id">;
 } | {
   type: MixFormActions.Reset;
+} | {
+  type: MixFormActions.Duplicate;
+  formId: number;
 };
 
 function getNumbersFromStr(str: string): string {
   return str.replace(/[^0-9]/g, "");
 }
 
-function MixForm({ mixForm, removeForm, updateForm }: MixFormProps) {
+
+type MixFormProps = {
+  mixForm: MixFormData;
+  removeForm: (formId: number) => void;
+  updateForm: (formId: number, data: Omit<MixFormData, "id">) => void;
+  duplicateForm: (formId: number) => void;
+};
+
+function MixForm({ mixForm, removeForm, updateForm, duplicateForm }: MixFormProps) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
@@ -135,13 +141,21 @@ function MixForm({ mixForm, removeForm, updateForm }: MixFormProps) {
         />
       </div>
 
-      <div className={styles.col}>
+      <div className={`${styles.col} ${styles.buttons}`}>
+        <button
+          type="button"
+          className={styles.duplicateBtn}
+          onClick={() => duplicateForm(mixForm.id)}
+        >
+          <CopyIcon size={18}/>
+        </button>
+
         <button
           type="button"
           className={styles.deleteBtn}
           onClick={() => removeForm(mixForm.id)}
         >
-          <XIcon size={18} strokeWidth={4}/>
+          <XIcon size={18}/>
         </button>
       </div>
     </div>
@@ -167,6 +181,10 @@ function Mixes({ mixesForms, dispatch }: MixesProps) {
     dispatch({ type: MixFormActions.Update, formId, data });
   };
 
+  const duplicateMixForm = (formId: number) => {
+    dispatch({ type: MixFormActions.Duplicate, formId });
+  };
+
   return (
     <>
       <p className={styles.subtitle}>Mixes</p>
@@ -176,6 +194,7 @@ function Mixes({ mixesForms, dispatch }: MixesProps) {
           mixForm={mixForm}
           removeForm={removeMixForm}
           updateForm={updateMixForm}
+          duplicateForm={duplicateMixForm}
           key={mixForm.id}
         />;
       })}
@@ -221,6 +240,19 @@ function mixesFormsReducer(state: MixFormData[], action: MixFormAction): MixForm
     case MixFormActions.Reset: {
       mixFormId = 0;
       return intialMixesForms;
+    } break;
+    case MixFormActions.Duplicate: {
+      const index = state.findIndex((mix) => {
+        return mix.id === action.formId;
+      });
+      const newState = [...state];
+
+      newState.splice(index, 0, {
+        ...state[index],
+        id: mixFormId++,
+      });
+
+      return newState;
     } break;
   }
 }
