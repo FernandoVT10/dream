@@ -1,6 +1,8 @@
 import { useState, useReducer } from "react";
 import { API_URL } from "../../constants";
 
+import Notifications from "../../Notifications";
+
 import styles from  "./AddReceiptForm.module.scss";
 
 type CreateReceiptData = {
@@ -15,14 +17,16 @@ type CreateReceiptData = {
   }[];
 };
 
-async function createReceipt(data: CreateReceiptData): Promise<void> {
-  await fetch(`${API_URL}/receipts`, {
+async function createReceipt(data: CreateReceiptData): Promise<boolean> {
+  const res = await fetch(`${API_URL}/receipts`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
     },
     body: JSON.stringify(data),
   });
+
+  return res.status === 200;
 }
 
 const KIND_LIST = [
@@ -271,10 +275,7 @@ function AddReceiptForm({ hideModal }: { hideModal: () => void }) {
       };
     });
 
-    try {
-      // TODO: show notification when success
-      await createReceipt({ date, kind, folio, sap, mixes });
-
+    if(await createReceipt({ date, kind, folio, sap, mixes })) {
       setDate("");
       setKind("");
       setFolio("");
@@ -283,8 +284,11 @@ function AddReceiptForm({ hideModal }: { hideModal: () => void }) {
 
       setLoading(false);
       hideModal();
-    } catch {
-      // TODO: catch possible error
+
+      Notifications.success("Receipt added!");
+    } else {
+      Notifications.error("Receipt couldn't be added.");
+      setLoading(false);
     }
   };
 
