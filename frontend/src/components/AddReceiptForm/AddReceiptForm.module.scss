@@ -50,6 +50,10 @@
     font-weight: bold;
     border-radius: 5px;
     width: 100%;
+
+    &:disabled {
+      opacity: .5;
+    }
   }
 
   & .select {
@@ -61,6 +65,33 @@
     font-weight: bold;
     border: none;
     padding: 10px;
+  }
+
+  & .checkboxContainer {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+    padding: 5px;
+    padding-bottom: 0;
+
+    & .checkbox {
+      cursor: pointer;
+      display: inline-flex;
+      width: 15px;
+      height: 15px;
+      border: solid 1px var(--border-accent);
+      color: black;
+      border-radius: 2px;
+
+      &.checked {
+        background: var(--border-accent);
+      }
+    }
+
+    & .text {
+      font-size: 14px;
+      color: var(--text-accent);
+    }
   }
 
   & .btnContainer {

@@ -1,10 +1,19 @@
 import { useState, useReducer } from "react";
 import { API_URL } from "../../constants";
-import { XIcon, CopyIcon } from "../../icons";
+import { CheckIcon } from "../../icons";
 
 import Notifications from "../../Notifications";
+import Mixes, { getNumbersFromStr } from "./Mixes";
+
+import mixesFormsReducer, { MixFormActions, intialMixesForms } from "./mixesFormsReducer";
 
 import styles from  "./AddReceiptForm.module.scss";
+
+const KIND_LIST = [
+  { name: "Raspberries", value: "rasp" },
+  { name: "Corn", value: "corn" },
+  { name: "Strawberries", value: "straw" },
+];
 
 type CreateReceiptData = {
   date: string;
@@ -30,245 +39,19 @@ async function createReceipt(data: CreateReceiptData): Promise<boolean> {
   return res.status === 200;
 }
 
-const KIND_LIST = [
-  { name: "Raspberries", value: "rasp" },
-  { name: "Corn", value: "corn" },
-  { name: "Strawberries", value: "straw" },
-];
-
-enum MixFormActions {
-  Add = "add",
-  Remove = "remove",
-  Update = "update",
-  Reset = "reset",
-  Duplicate = "duplicate",
-};
-
-type MixFormData = {
-  id: number;
-  quantity: string;
-  presentation: string;
-  numberOfMix: string;
-};
-
-type MixFormAction = {
-  type: MixFormActions.Add;
-} | {
-  type: MixFormActions.Remove;
-  formId: number;
-} | {
-  type: MixFormActions.Update;
-  formId: number;
-  data: Omit<MixFormData, "id">;
-} | {
-  type: MixFormActions.Reset;
-} | {
-  type: MixFormActions.Duplicate;
-  formId: number;
-};
-
-function getNumbersFromStr(str: string): string {
-  return str.replace(/[^0-9]/g, "");
+function getTodayDate(): string {
+  // the date should be formatted to yyyy-mm-dd
+  const d = new Date();
+  const year = d.getFullYear();
+  const month = (d.getMonth() + 1).toString().padStart(2, "0");
+  const day = d.getDate().toString().padStart(2, "0");
+  return `${year}-${month}-${day}`;
 }
-
-
-type MixFormProps = {
-  mixForm: MixFormData;
-  removeForm: (formId: number) => void;
-  updateForm: (formId: number, data: Omit<MixFormData, "id">) => void;
-  duplicateForm: (formId: number) => void;
-};
-
-function MixForm({ mixForm, removeForm, updateForm, duplicateForm }: MixFormProps) {
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    const data = {
-      ...mixForm,
-    };
-
-    switch(name) {
-      case "quantity": {
-        data.quantity = value;
-      } break;
-      case "presentation": {
-        data.presentation = value;
-      } break;
-      case "numberOfMix": {
-        data.numberOfMix = getNumbersFromStr(value);
-      } break;
-    }
-
-    updateForm(mixForm.id, data);
-  };
-
-  return (
-    <div className={`${styles.row} ${styles.mix}`}>
-      <div className={styles.col}>
-        <span className={styles.fieldName}>Quantity</span>
-        <input
-          type="text"
-          className={styles.input}
-          placeholder="1 and 1/2 willy"
-          name="quantity"
-          value={mixForm.quantity}
-          onChange={handleInputChange}
-          required
-        />
-      </div>
-      <div className={styles.col}>
-        <span className={styles.fieldName}>Presentation</span>
-        <input
-          type="text"
-          className={styles.input}
-          placeholder="3 decanters 2 bags"
-          name="presentation"
-          value={mixForm.presentation}
-          onChange={handleInputChange}
-          required
-        />
-      </div>
-
-      <div className={styles.col}>
-        <span className={styles.fieldName}>No.</span>
-        <input
-          type="text"
-          className={styles.input}
-          placeholder="#"
-          name="numberOfMix"
-          value={mixForm.numberOfMix}
-          onChange={handleInputChange}
-        />
-      </div>
-
-      <div className={`${styles.col} ${styles.buttons}`}>
-        <button
-          type="button"
-          className={styles.duplicateBtn}
-          onClick={() => duplicateForm(mixForm.id)}
-        >
-          <CopyIcon size={18}/>
-        </button>
-
-        <button
-          type="button"
-          className={styles.deleteBtn}
-          onClick={() => removeForm(mixForm.id)}
-        >
-          <XIcon size={18}/>
-        </button>
-      </div>
-    </div>
-  );
-}
-
-type MixesProps = {
-  mixesForms: MixFormData[];
-  dispatch: React.Dispatch<MixFormAction>;
-};
-
-function Mixes({ mixesForms, dispatch }: MixesProps) {
-  const addMixForm = () => {
-    dispatch({ type: MixFormActions.Add });
-  };
-
-  const removeMixForm = (formId: number) => {
-    if(mixesForms.length > 1)
-      dispatch({ type: MixFormActions.Remove, formId });
-  };
-
-  const updateMixForm = (formId: number, data: Omit<MixFormData, "id">) => {
-    dispatch({ type: MixFormActions.Update, formId, data });
-  };
-
-  const duplicateMixForm = (formId: number) => {
-    dispatch({ type: MixFormActions.Duplicate, formId });
-  };
-
-  return (
-    <>
-      <p className={styles.subtitle}>Mixes</p>
-
-      {mixesForms.map((mixForm) => {
-        return <MixForm
-          mixForm={mixForm}
-          removeForm={removeMixForm}
-          updateForm={updateMixForm}
-          duplicateForm={duplicateMixForm}
-          key={mixForm.id}
-        />;
-      })}
-
-      <button
-        type="button"
-        className={styles.addMixBtn}
-        onClick={addMixForm}
-      >
-        Add Mix
-      </button>
-    </>
-  );
-}
-
-let mixFormId = 0;
-
-function mixesFormsReducer(state: MixFormData[], action: MixFormAction): MixFormData[] {
-  switch(action.type) {
-    case MixFormActions.Add: {
-      return [...state, {
-        id: mixFormId++,
-        quantity: "",
-        presentation: "",
-        numberOfMix: "",
-      }];
-    } break;
-    case MixFormActions.Remove: {
-      return state.filter(mix => mix.id !== action.formId);
-    } break;
-    case MixFormActions.Update: {
-      return state.map(mix => {
-        if(mix.id === action.formId) {
-          return {
-            id: mix.id,
-            ...action.data,
-          };
-        }
-
-        return mix;
-      });
-    } break;
-    case MixFormActions.Reset: {
-      mixFormId = 0;
-      return intialMixesForms;
-    } break;
-    case MixFormActions.Duplicate: {
-      const index = state.findIndex((mix) => {
-        return mix.id === action.formId;
-      });
-      const newState = [...state];
-
-      newState.splice(index, 0, {
-        ...state[index],
-        id: mixFormId++,
-      });
-
-      return newState;
-    } break;
-  }
-}
-
-const intialMixesForms: MixFormData[] = [
-  {
-    id: mixFormId++,
-    quantity: "",
-    presentation: "",
-    numberOfMix: "",
-  },
-];
 
 function AddReceiptForm({ hideModal }: { hideModal: () => void }) {
   const [mixesForms, dispatch] = useReducer(mixesFormsReducer, intialMixesForms);
   const [date, setDate] = useState("");
+  const [useTodayDate, setUseTodayDate] = useState(true);
   const [kind, setKind] = useState(KIND_LIST[0].value);
   const [folio, setFolio] = useState("");
   const [sap, setSap] = useState("");
@@ -294,7 +77,9 @@ function AddReceiptForm({ hideModal }: { hideModal: () => void }) {
       };
     });
 
-    if(await createReceipt({ date, kind, folio, sap, mixes })) {
+    const actualDate = useTodayDate ? getTodayDate() : date;
+
+    if(await createReceipt({ date: actualDate, kind, folio, sap, mixes })) {
       setDate("");
       setKind("");
       setFolio("");
@@ -331,7 +116,17 @@ function AddReceiptForm({ hideModal }: { hideModal: () => void }) {
                 value={date}
                 onChange={getInputValue(v => setDate(v))}
                 required
+                disabled={useTodayDate}
               />
+              <div className={styles.checkboxContainer}>
+                <span
+                  className={`${styles.checkbox} ${useTodayDate && styles.checked}`}
+                  onClick={() => setUseTodayDate(!useTodayDate)}
+                >
+                  <CheckIcon size={14}/>
+                </span>
+                <span className={styles.text}>Use today's date</span>
+              </div>
             </div>
             <div className={styles.col}>
               <span className={styles.fieldName}>Kind</span>
@@ -386,7 +181,5 @@ function AddReceiptForm({ hideModal }: { hideModal: () => void }) {
     </>
   );
 }
-
-// TODO: create a button to duplicate a mix form
 
 export default AddReceiptForm;
