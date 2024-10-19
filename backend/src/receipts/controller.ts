@@ -64,3 +64,9 @@ export async function searchAll(search: string): Promise<Receipt[]> {
     where: getFiltersFromSearch(search),
   });
 }
+
+export async function getAllMixesFromId(receiptId: number): Promise<Mix[]> {
+  return await Mix.findAll({
+    where: { receiptId },
+  });
+}

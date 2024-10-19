@@ -2,12 +2,20 @@ import validateSchema from "../middlewares/validateSchema";
 
 import { Router } from "express";
 import { Receipt } from "../models";
-import { createOne, getAll, deleteOne, updateOne, searchAll } from "./controller";
+import {
+  createOne,
+  getAll,
+  deleteOne,
+  updateOne,
+  searchAll,
+  getAllMixesFromId
+} from "./controller";
 import { Schema, matchedData } from "express-validator";
 import {
   createReceiptSchema,
   deleteReceiptSchema,
   updateReceiptSchema,
+  getMixesSchema,
 } from "./validation";
 
 const router = Router();
@@ -65,6 +73,18 @@ router.put("/:id", validateSchema(updateReceiptSchema), async (req, res, next) =
       description: data.description,
     });
     res.sendStatus(200);
+  } catch(e) {
+    next(e);
+  }
+});
+
+router.get("/:id/mixes", validateSchema(getMixesSchema), async (req, res, next) => {
+  try {
+    const data = matchedData(req);
+    const id = parseInt(data.id);
+
+    const mixes = await getAllMixesFromId(id);
+    res.json({ mixes });
   } catch(e) {
     next(e);
   }

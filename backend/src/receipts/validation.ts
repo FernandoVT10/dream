@@ -78,6 +78,7 @@ const idValidator: ParamSchema = {
   isInt: {
     errorMessage: "id should be a number greater than 0",
     options: { gt: 0 },
+    bail: true,
   },
   custom: {
     options: async (value) => {
@@ -145,4 +146,6 @@ export const updateReceiptSchema: Schema = {
       options: { gt: 0 },
     },
   },
-};;
+};
+
+export const getMixesSchema: Schema = { id: idValidator };

@@ -41,9 +41,10 @@ export class Mix extends Model {
   @Default("pending")
   @Column
   status: string;
+  // TODO: use string instead of date
   @AllowNull(true)
   @Column
-  deliveredDate: Date;
+  deliveredDate: string;
 
   @ForeignKey(() => Receipt)
   @Column
