@@ -10,7 +10,7 @@ const RECEIPT_STATUS = {
   delivered: "delivered",
 };
 
-export const KIND_LIST = ["straw", "rasp", "corn"];
+export const KIND_LIST = ["strawberry", "raspberry", "corn"];
 
 type CreateOneData = {
   date: Date;

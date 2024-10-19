@@ -10,9 +10,9 @@ import mixesFormsReducer, { MixFormActions, intialMixesForms } from "./mixesForm
 import styles from  "./AddReceiptForm.module.scss";
 
 const KIND_LIST = [
-  { name: "Raspberries", value: "rasp" },
+  { name: "Raspberry", value: "raspberry" },
   { name: "Corn", value: "corn" },
-  { name: "Strawberries", value: "straw" },
+  { name: "Strawberry", value: "strawberry" },
 ];
 
 type CreateReceiptData = {

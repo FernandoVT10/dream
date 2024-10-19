@@ -4,9 +4,9 @@ import styles from "./Filters.module.scss";
 
 const KIND_LIST = [
   { name: "All", value: "all" },
-  { name: "Raspberries", value: "rasp" },
+  { name: "Raspberries", value: "raspberry" },
   { name: "Corn", value: "corn" },
-  { name: "Strawberries", value: "straw" },
+  { name: "Strawberries", value: "strawberry" },
 ];
 
 const SEARCH_BY_LIST = [
