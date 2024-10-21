@@ -1,22 +1,15 @@
 import { useEffect, useState } from "react";
 import { API_URL } from "./constants";
+import { Receipt } from "./types";
 
 import Modal, { useModal } from "./components/Modal";
 
+import Notifications from "./Notifications";
 import Filters from "./components/Filters";
 import AddReceiptForm from "./components/AddReceiptForm";
+import Receipts from "./components/Receipts";
 
 import styles from "./App.module.scss";
-
-type Receipt = {
-  id: number;
-  date: string;
-  folio: string;
-  sap: string;
-  kind: string;
-  description?: string;
-  status: string;
-};
 
 async function getReceipts(search?: string): Promise<Receipt[]> {
   let query = "";
@@ -28,8 +21,9 @@ async function getReceipts(search?: string): Promise<Receipt[]> {
 }
 
 function App() {
-  const [receipts, setReceipts] = useState<Receipt[]>([]);
   const addReceiptModal = useModal();
+
+  const [receipts, setReceipts] = useState<Receipt[]>([]);
 
   useEffect(() => {
     loadReceipts();
@@ -39,7 +33,7 @@ function App() {
     try {
       setReceipts(await getReceipts(search));
     } catch {
-      // TODO: do something with this catch
+      Notifications.error("There was an error with the server.");
     }
   };
 
@@ -54,38 +48,7 @@ function App() {
           showReceiptModal={() => addReceiptModal.show()}
         />
 
-        <div className={styles.receiptsContainer}>
-          <div className={styles.header}>
-            <div className={styles.emtpy}></div>
-            <div className={styles.date}>Date</div>
-            <div className={styles.folio}>Folio</div>
-            <div className={styles.sap}>SAP</div>
-            <div className={styles.kind}>Kind</div>
-            <div className={styles.actions}>Actions</div>
-          </div>
-
-          {receipts.map(receipt => {
-            const d = new Date(receipt.date);
-            const day = d.getDate().toString().padStart(2, "0");
-            const month = (d.getMonth() + 1).toString().padStart(2, "0");
-            const year = d.getFullYear();
-
-            const date = `${day}/${month}/${year}`;
-            return (
-              <div className={styles.receipt} key={receipt.id}>
-                <div className={styles.emtpy}></div>
-                <div className={styles.date}>{date}</div>
-                <div className={styles.folio}>{receipt.folio}</div>
-                <div className={styles.sap}>{receipt.sap}</div>
-                <div className={styles.kind}>{receipt.kind}</div>
-                <div className={styles.actions}>Null</div>
-              </div>
-            );
-          })}
-        </div>
-
-        <div className={styles.formContainer}>
-        </div>
+        <Receipts receipts={receipts}/>
       </div>
     </>
   )

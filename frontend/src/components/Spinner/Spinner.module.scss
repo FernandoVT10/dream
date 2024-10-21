@@ -1,0 +1,16 @@
+.spinner {
+  display: inline-block;
+  border: solid 5px var(--border-accent);
+  border-top: solid 5px transparent;
+  border-radius: 50%;
+  animation: rotate .8s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

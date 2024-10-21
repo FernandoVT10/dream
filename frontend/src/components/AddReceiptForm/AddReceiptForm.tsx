@@ -96,6 +96,7 @@ function AddReceiptForm({ hideModal }: { hideModal: () => void }) {
     }
   };
 
+  // TODO: replace the loader with the component Spinner
   return (
     <>
       { loading && (
