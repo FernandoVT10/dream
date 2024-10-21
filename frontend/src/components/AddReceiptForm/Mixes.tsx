@@ -88,6 +88,7 @@ function MixForm({ mixForm, removeForm, updateForm, duplicateForm }: MixFormProp
           type="button"
           className={styles.duplicateBtn}
           onClick={() => duplicateForm(mixForm.id)}
+          title="Duplicate"
         >
           <CopyIcon size={18}/>
         </button>
@@ -96,6 +97,7 @@ function MixForm({ mixForm, removeForm, updateForm, duplicateForm }: MixFormProp
           type="button"
           className={styles.deleteBtn}
           onClick={() => removeForm(mixForm.id)}
+          title="Remove"
         >
           <XIcon size={18}/>
         </button>
