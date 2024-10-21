@@ -8,6 +8,8 @@ import Spinner from "../Spinner";
 
 import styles from "./Receipts.module.scss";
 
+const DELIVERED_STATUS = "delivered";
+
 async function getMixes(receiptId: number): Promise<Mix[]> {
   const res = await fetch(`${API_URL}/receipts/${receiptId}/mixes`);
   const json = await res.json();
@@ -15,7 +17,9 @@ async function getMixes(receiptId: number): Promise<Mix[]> {
 }
 
 async function markMixAsDelivered(mixId: number): Promise<boolean> {
-  const res = await fetch(`${API_URL}/mixes/${mixId}/markAsDelivered`);
+  const res = await fetch(`${API_URL}/mixes/${mixId}/markAsDelivered`, {
+    method: "PUT",
+  });
   return res.status === 200;
 }
 
@@ -32,11 +36,22 @@ function Status({ status }: { status: string }) {
 
 type MixesProps = {
   mixes: Mix[];
+  setMixes: React.Dispatch<Mix[]>;
+  onMixUpdate: () => void;
 };
 
-function Mixes({ mixes }: MixesProps) {
+function Mixes({ mixes, setMixes, onMixUpdate }: MixesProps) {
   const markAsDelivered = async (mixId: number) => {
     if(await markMixAsDelivered(mixId)) {
+      setMixes(mixes.map(mix => {
+        if(mix.id === mixId) {
+          mix.status = DELIVERED_STATUS;
+        }
+
+        return mix;
+      }));
+
+      onMixUpdate();
     } else {
       Notifications.error("Couldn't mark this mix as delivered");
     }
@@ -86,9 +101,10 @@ function Mixes({ mixes }: MixesProps) {
 
 type ReceiptProps = {
   receipt: ReceiptType;
+  setReceiptAsDelivered: (receiptId: number) => void;
 };
 
-function Receipt({ receipt }: ReceiptProps) {
+function Receipt({ receipt, setReceiptAsDelivered }: ReceiptProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [mixesFetched, setMixesFetched] = useState(false);
   const [mixes, setMixes] = useState<Mix[]>([]);
@@ -106,6 +122,21 @@ function Receipt({ receipt }: ReceiptProps) {
       load();
     }
   }, [isOpen]);
+
+  const onMixUpdate = () => {
+    let allMixesAreDelivered = true;
+
+    for(const mix of mixes) {
+      if(mix.status !== DELIVERED_STATUS) {
+        allMixesAreDelivered = false;
+        break;
+      }
+    }
+
+    if(allMixesAreDelivered) {
+      setReceiptAsDelivered(receipt.id);
+    }
+  };
 
   return (
     <div className={`${styles.receipt} ${isOpen && styles.open}`}>
@@ -130,7 +161,7 @@ function Receipt({ receipt }: ReceiptProps) {
           <Spinner size={25} borderWidth={3}/>
         </div>
       ) : (
-        <Mixes mixes={mixes}/>
+        <Mixes mixes={mixes} setMixes={setMixes} onMixUpdate={onMixUpdate}/>
       )}
     </div>
   );
@@ -138,9 +169,20 @@ function Receipt({ receipt }: ReceiptProps) {
 
 type ReceiptsProps = {
   receipts: ReceiptType[];
+  setReceipts: React.Dispatch<ReceiptType[]>;
 };
 
-function Receipts({ receipts }: ReceiptsProps) {
+function Receipts({ receipts, setReceipts }: ReceiptsProps) {
+  const setReceiptAsDelivered = (receiptId: number) => {
+    setReceipts(receipts.map(receipt => {
+      if(receipt.id === receiptId) {
+        receipt.status = DELIVERED_STATUS;
+      }
+
+      return receipt;
+    }));
+  };
+
   return (
     <div className={styles.receipts}>
       <div className={styles.header}>
@@ -153,7 +195,13 @@ function Receipts({ receipts }: ReceiptsProps) {
       </div>
 
       {receipts.map(receipt => {
-        return <Receipt receipt={receipt} key={receipt.id}/>;
+        return (
+          <Receipt
+            receipt={receipt}
+            setReceiptAsDelivered={setReceiptAsDelivered}
+            key={receipt.id}
+          />
+        );
       })}
     </div>
   );

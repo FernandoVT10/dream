@@ -33,18 +33,17 @@ export async function markAsDelivered(id: number): Promise<void> {
   const mix = await Mix.findByPk(id);
 
   // TODO: here we should log this as if this was an error
-  // when the mix status is already "delivered" we should return an error and let the user know
-  if(!mix || mix.status === MIX_STATUS_LIST.delivered) return;
+  if(!mix) return;
 
   mix.status = MIX_STATUS_LIST.delivered;
   mix.deliveredDate = getTodayDate();
   await mix.save();
 
-  await updateReceiptStatus(id);
+  await updateReceiptStatus(mix.receiptId);
 }
 
-export async function existsWithId(id: number): Promise<boolean> {
-  return (await Mix.count({
-    where: { id },
-  })) > 0;
+export async function getMixStatus(id: number): Promise<string | null> {
+  const mix = await Mix.findByPk(id);
+  if(!mix) return null;
+  return mix.status;
 }

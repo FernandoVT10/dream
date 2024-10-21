@@ -1,6 +1,6 @@
 import { ParamSchema, Schema } from "express-validator";
-
-import { existsWithId } from "./controller";
+import { MIX_STATUS_LIST } from "../constants";
+import { getMixStatus } from "./controller";
 
 const idValidator: ParamSchema = {
   in: "params",
@@ -13,19 +13,26 @@ const idValidator: ParamSchema = {
     options: async (value) => {
       const id = parseInt(value);
 
-      let exists: boolean;
+      let mixStatus: null | string;
 
       try {
-        exists = await existsWithId(id);
+        mixStatus = await getMixStatus(id);
       } catch(e) {
         // TODO: implement better error logging
         console.error("[SERVER] Error trying to connect with db", e);
         throw new Error("Sever Error");
       }
 
-      if(exists) return true;
 
-      throw new Error(`there is no mix with id: ${id}`);
+      if(mixStatus === null) {
+        throw new Error("there is no a mix with this id");
+      }
+
+      if(mixStatus === MIX_STATUS_LIST.delivered) {
+        throw new Error("the status of the mix is already marked as delivered");
+      }
+
+      return true;
     },
   },
 };

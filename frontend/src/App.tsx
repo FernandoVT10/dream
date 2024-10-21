@@ -48,7 +48,7 @@ function App() {
           showReceiptModal={() => addReceiptModal.show()}
         />
 
-        <Receipts receipts={receipts}/>
+        <Receipts receipts={receipts} setReceipts={setReceipts}/>
       </div>
     </>
   )
