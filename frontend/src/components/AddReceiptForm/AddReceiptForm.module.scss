@@ -17,17 +17,6 @@
     font-weight: bold;
     font-size: 18px;
   }
-
-  & .loader {
-    display: inline-block;
-    width: 35px;
-    height: 35px;
-    border: solid 5px var(--border-accent);
-    border-top: solid 5px transparent;
-    border-radius: 50%;
-    animation: rotate .8s linear infinite;
-    margin-left: 5px;
-  }
 }
 
 .addReceiptForm {
@@ -179,14 +168,5 @@
     font-weight: bold;
     width: fit-content;
     margin-left: 10px;
-  }
-}
-
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
   }
 }

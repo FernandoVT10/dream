@@ -2,6 +2,7 @@ import { useState, useReducer } from "react";
 import { API_URL } from "../../constants";
 import { CheckIcon } from "../../icons";
 
+import Spinner from "../Spinner";
 import Notifications from "../../Notifications";
 import Mixes, { getNumbersFromStr } from "./Mixes";
 
@@ -96,13 +97,12 @@ function AddReceiptForm({ hideModal }: { hideModal: () => void }) {
     }
   };
 
-  // TODO: replace the loader with the component Spinner
   return (
     <>
       { loading && (
         <div className={styles.loaderContainer}>
           <span className={styles.text}>Adding Receipts...</span>
-          <span className={styles.loader}></span>
+          <Spinner size={35} borderWidth={5}/>
         </div>
       )}
 
