@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "nodemon --watch ./src ./src/main.ts",
-    "check": "tsc --noEmit --watch"
+    "check": "tsc --noEmit",
+    "check:watch": "tsc --noEmit --watch"
   },
   "author": "",
   "license": "ISC",
