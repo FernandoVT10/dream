@@ -10,6 +10,8 @@ import {
   AllowNull
 } from "sequelize-typescript";
 
+import { MIX_STATUS_LIST } from "./constants";
+
 @Table
 export class Receipt extends Model {
   @Column
@@ -38,7 +40,7 @@ export class Mix extends Model {
   presentation: string;
   @Column
   numberOfMix: string;
-  @Default("pending")
+  @Default(MIX_STATUS_LIST.pending)
   @Column
   status: string;
   @AllowNull(true)

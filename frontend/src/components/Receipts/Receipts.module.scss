@@ -69,10 +69,6 @@
       background: var(--background-alt-dark);
     }
 
-    & .date {
-      color: var(--text-dim);
-    }
-
     & .kind {
       text-transform: capitalize;
     }
@@ -93,6 +89,24 @@
       width: 20px;
       margin-right: 20px;
       color: var(--text-dimer);
+    }
+
+    & .colActions {
+      display: flex;
+      justify-content: center;
+      column-gap: 10px;
+      width: 80px;
+
+      & button {
+        background: transparent;
+        border: solid 1px var(--border);
+        border: none;
+        transition: .3s;
+
+        &:hover {
+          color: var(--text-accent);
+        }
+      }
     }
 
     & .header {
@@ -138,6 +152,7 @@
 
   & .colDate {
     width: 120px;
+    color: var(--text-dim);
   }
 
   & .colIcon {

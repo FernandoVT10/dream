@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { ChevronUpIcon } from "../../icons";
+import { ChevronUpIcon, CheckIcon, PencilIcon } from "../../icons";
 import { API_URL } from "../../constants";
 import { Receipt as ReceiptType, Mix } from "../../types";
 
+import Notifications from "../../Notifications";
 import Spinner from "../Spinner";
 
 import styles from "./Receipts.module.scss";
@@ -11,6 +12,11 @@ async function getMixes(receiptId: number): Promise<Mix[]> {
   const res = await fetch(`${API_URL}/receipts/${receiptId}/mixes`);
   const json = await res.json();
   return json.mixes;
+}
+
+async function markMixAsDelivered(mixId: number): Promise<boolean> {
+  const res = await fetch(`${API_URL}/mixes/${mixId}/markAsDelivered`);
+  return res.status === 200;
 }
 
 function Status({ status }: { status: string }) {
@@ -29,6 +35,13 @@ type MixesProps = {
 };
 
 function Mixes({ mixes }: MixesProps) {
+  const markAsDelivered = async (mixId: number) => {
+    if(await markMixAsDelivered(mixId)) {
+    } else {
+      Notifications.error("Couldn't mark this mix as delivered");
+    }
+  };
+
   return (
     <div className={styles.mixes}>
       <div className={styles.header}>
@@ -36,6 +49,7 @@ function Mixes({ mixes }: MixesProps) {
         <div className={styles.col1}>Quantity</div>
         <div className={styles.col1}>Presentation</div>
         <div className={styles.col1}>Status</div>
+        <div className={styles.colActions}>Actions</div>
       </div>
 
       {mixes.map(mix => {
@@ -46,6 +60,21 @@ function Mixes({ mixes }: MixesProps) {
             <div className={styles.col1}>{mix.presentation}</div>
             <div className={styles.col1}>
               <Status status={mix.status}/>
+            </div>
+            <div className={styles.colActions}>
+              {mix.status === "pending" && (
+                <button
+                  type="button"
+                  title="Mark as delivered"
+                  onClick={() => markAsDelivered(mix.id)}
+                >
+                  <CheckIcon size={20}/>
+                </button>
+              )}
+
+              <button type="button" title="Edit mix">
+                <PencilIcon size={20}/>
+              </button>
             </div>
           </div>
         );
@@ -90,7 +119,7 @@ function Receipt({ receipt }: ReceiptProps) {
         <div className={styles.colDate}>{receipt.date}</div>
         <div className={styles.col2}>{receipt.folio}</div>
         <div className={styles.col1}>{receipt.sap}</div>
-        <div className={styles.col1}>{receipt.kind}</div>
+        <div className={`${styles.col1} ${styles.kind}`}>{receipt.kind}</div>
         <div className={styles.col1}>
           <Status status={receipt.status}/>
         </div>
