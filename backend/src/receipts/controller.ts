@@ -4,12 +4,6 @@ import getFiltersFromSearch from "./getFiltersFromSearch";
 
 type ReceiptStatus = "pending" | "part-delivered" | "delivered";
 
-const RECEIPT_STATUS = {
-  pending: "pending",
-  partDelivered: "part-delivered",
-  delivered: "delivered",
-};
-
 export const KIND_LIST = ["strawberry", "raspberry", "corn"];
 
 type CreateOneData = {
