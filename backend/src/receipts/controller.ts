@@ -24,7 +24,11 @@ export async function createOne(data: CreateOneData): Promise<Receipt> {
 }
 
 export async function getAll(): Promise<Receipt[]> {
-  return await Receipt.findAll();
+  return await Receipt.findAll({
+    order: [
+      ["createdAt", "DESC"],
+    ],
+  });
 }
 
 export async function deleteOne(id: number): Promise<void> {
@@ -56,6 +60,9 @@ export async function updateOne(id: number, data: UpdateOneData): Promise<void> 
 export async function searchAll(search: string): Promise<Receipt[]> {
   return await Receipt.findAll({
     where: getFiltersFromSearch(search),
+    order: [
+      ["createdAt", "DESC"],
+    ],
   });
 }
 
