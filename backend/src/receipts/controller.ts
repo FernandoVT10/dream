@@ -19,8 +19,8 @@ type CreateOneData = {
   }[];
 };
 
-export async function createOne(data: CreateOneData): Promise<void> {
-  await Receipt.create(data, { include: [Mix] });
+export async function createOne(data: CreateOneData): Promise<Receipt> {
+  return await Receipt.create(data, { include: [Mix] });
 }
 
 export async function getAll(): Promise<Receipt[]> {

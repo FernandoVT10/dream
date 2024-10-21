@@ -1,6 +1,7 @@
 import { useState, useReducer } from "react";
 import { API_URL } from "../../constants";
 import { CheckIcon } from "../../icons";
+import { Receipt } from "../../types";
 
 import Spinner from "../Spinner";
 import Notifications from "../../Notifications";
@@ -28,7 +29,7 @@ type CreateReceiptData = {
   }[];
 };
 
-async function createReceipt(data: CreateReceiptData): Promise<boolean> {
+async function createReceipt(data: CreateReceiptData): Promise<Receipt | null> {
   const res = await fetch(`${API_URL}/receipts`, {
     method: "POST",
     headers: {
@@ -37,7 +38,12 @@ async function createReceipt(data: CreateReceiptData): Promise<boolean> {
     body: JSON.stringify(data),
   });
 
-  return res.status === 200;
+  if(res.status === 200) {
+    const json = await res.json();
+    return json.receipt;
+  }
+
+  return null;
 }
 
 function getTodayDate(): string {
@@ -49,7 +55,12 @@ function getTodayDate(): string {
   return `${year}-${month}-${day}`;
 }
 
-function AddReceiptForm({ hideModal }: { hideModal: () => void }) {
+type AddReceiptFormProps = {
+  hideModal: () => void;
+  addReceiptToState: (receipt: Receipt) => void;
+};
+
+function AddReceiptForm({ hideModal, addReceiptToState }: AddReceiptFormProps) {
   const [mixesForms, dispatch] = useReducer(mixesFormsReducer, intialMixesForms);
   const [date, setDate] = useState("");
   const [useTodayDate, setUseTodayDate] = useState(true);
@@ -80,7 +91,9 @@ function AddReceiptForm({ hideModal }: { hideModal: () => void }) {
 
     const actualDate = useTodayDate ? getTodayDate() : date;
 
-    if(await createReceipt({ date: actualDate, kind, folio, sap, mixes })) {
+    const receipt = await createReceipt({ date: actualDate, kind, folio, sap, mixes });
+
+    if(receipt) {
       setDate("");
       setKind("");
       setFolio("");
@@ -89,6 +102,8 @@ function AddReceiptForm({ hideModal }: { hideModal: () => void }) {
 
       setLoading(false);
       hideModal();
+
+      addReceiptToState(receipt);
 
       Notifications.success("Receipt added!");
     } else {

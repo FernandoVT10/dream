@@ -37,10 +37,14 @@ function App() {
     }
   };
 
+  const addReceipt = (receipt: Receipt) => {
+    setReceipts([receipt, ...receipts]);
+  };
+
   return (
     <>
       <Modal title="Add Receipt" modal={addReceiptModal}>
-        <AddReceiptForm hideModal={addReceiptModal.hide}/>
+        <AddReceiptForm hideModal={addReceiptModal.hide} addReceiptToState={addReceipt}/>
       </Modal>
       <div className={styles.app}>
         <Filters

@@ -22,9 +22,9 @@ const router = Router();
 
 router.post("/", validateSchema(createReceiptSchema), async (req, res, next) => {
   try {
-    await createOne(matchedData(req));
+    const receipt = await createOne(matchedData(req));
     
-    res.sendStatus(200);
+    res.json({ receipt });
   } catch(e) {
     console.error(e);
     next(e);
