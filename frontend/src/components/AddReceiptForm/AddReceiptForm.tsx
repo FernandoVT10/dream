@@ -16,6 +16,7 @@ const KIND_LIST = [
   { name: "Corn", value: "corn" },
   { name: "Strawberry", value: "strawberry" },
 ];
+const DEFAULT_KIND_VALUE = KIND_LIST[0].value;
 
 type CreateReceiptData = {
   date: string;
@@ -64,7 +65,7 @@ function AddReceiptForm({ hideModal, addReceiptToState }: AddReceiptFormProps) {
   const [mixesForms, dispatch] = useReducer(mixesFormsReducer, intialMixesForms);
   const [date, setDate] = useState("");
   const [useTodayDate, setUseTodayDate] = useState(true);
-  const [kind, setKind] = useState(KIND_LIST[0].value);
+  const [kind, setKind] = useState(DEFAULT_KIND_VALUE);
   const [folio, setFolio] = useState("");
   const [sap, setSap] = useState("");
   const [loading, setLoading] = useState(false);
@@ -95,7 +96,7 @@ function AddReceiptForm({ hideModal, addReceiptToState }: AddReceiptFormProps) {
 
     if(receipt) {
       setDate("");
-      setKind("");
+      setKind(DEFAULT_KIND_VALUE);
       setFolio("");
       setSap("");
       dispatch({ type: MixFormActions.Reset });
