@@ -1,8 +1,9 @@
 import { ParamSchema, Schema } from "express-validator";
 import { MIX_STATUS_LIST } from "../constants";
-import { getMixStatus } from "./controller";
 
-const idValidator: ParamSchema = {
+import MixController from "../controllers/MixController";
+
+const mixIdValidator: ParamSchema = {
   in: "params",
   isInt: {
     errorMessage: "id should be a number greater than 0",
@@ -16,7 +17,7 @@ const idValidator: ParamSchema = {
       let mixStatus: null | string;
 
       try {
-        mixStatus = await getMixStatus(id);
+        mixStatus = await MixController.getMixStatus(id);
       } catch(e) {
         // TODO: implement better error logging
         console.error("[SERVER] Error trying to connect with db", e);
@@ -37,6 +38,8 @@ const idValidator: ParamSchema = {
   },
 };
 
-export const markAsDeliveredSchema: Schema = {
-  id: idValidator,
+const markAsDeliveredSchema: Schema = { id: mixIdValidator };
+
+export default {
+  markAsDelivered: markAsDeliveredSchema,
 };

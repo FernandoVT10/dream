@@ -1,7 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
-import receipts from "./receipts/routes";
-import mixes from "./mixes/routes";
+import receipts from "./routes/receipts";
+import mixes from "./routes/mixes";
 
 const app = express();
 

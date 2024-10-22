@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
-import { API_URL } from "./constants";
-import { Receipt } from "./types";
+import { API_URL } from "../../constants";
+import { Receipt } from "../../types";
 
-import Modal, { useModal } from "./components/Modal";
+import Modal, { useModal } from "../Modal";
 
-import Notifications from "./Notifications";
-import Filters from "./components/Filters";
-import AddReceiptForm from "./components/AddReceiptForm";
-import Receipts from "./components/Receipts";
+import Notifications from "../../Notifications";
+import Filters from "../Filters";
+import AddReceiptForm from "../AddReceiptForm";
+import Receipts from "../Receipts";
 
 import styles from "./App.module.scss";
 

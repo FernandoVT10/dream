@@ -2,27 +2,17 @@ import validateSchema from "../middlewares/validateSchema";
 
 import { Router } from "express";
 import { Receipt } from "../models";
-import {
-  createOne,
-  getAll,
-  deleteOne,
-  updateOne,
-  searchAll,
-  getAllMixesFromId
-} from "./controller";
-import { Schema, matchedData } from "express-validator";
-import {
-  createReceiptSchema,
-  deleteReceiptSchema,
-  updateReceiptSchema,
-  getMixesSchema,
-} from "./validation";
+import { matchedData } from "express-validator";
+
+import ReceiptSchema from "../schemas/ReceiptSchema";
+import ReceiptController from "../controllers/ReceiptController";
+import MixController from "../controllers/MixController";
 
 const router = Router();
 
-router.post("/", validateSchema(createReceiptSchema), async (req, res, next) => {
+router.post("/", validateSchema(ReceiptSchema.create), async (req, res, next) => {
   try {
-    const receipt = await createOne(matchedData(req));
+    const receipt = await ReceiptController.createOne(matchedData(req));
     
     res.json({ receipt });
   } catch(e) {
@@ -37,9 +27,9 @@ router.get("/", async (req, res, next) => {
 
     let receipts: Receipt[];
     if(search) {
-      receipts = await searchAll(search.toString()); 
+      receipts = await ReceiptController.searchAll(search.toString()); 
     } else {
-      receipts = await getAll(); 
+      receipts = await ReceiptController.getAll(); 
     }
 
     res.json({ receipts });
@@ -48,23 +38,23 @@ router.get("/", async (req, res, next) => {
   }
 });
 
-router.delete("/:id", validateSchema(deleteReceiptSchema), async (req, res, next) => {
+router.delete("/:id", validateSchema(ReceiptSchema.delete), async (req, res, next) => {
   try {
     const id = parseInt(matchedData(req).id);
-    await deleteOne(id);
+    await ReceiptController.deleteOne(id);
     res.sendStatus(200);
   } catch(e) {
     next(e);
   }
 });
 
-router.put("/:id", validateSchema(updateReceiptSchema), async (req, res, next) => {
+router.put("/:id", validateSchema(ReceiptSchema.update), async (req, res, next) => {
   try {
     const data = matchedData(req);
 
     const id = parseInt(data.id);
 
-    await updateOne(id, {
+    await ReceiptController.updateOne(id, {
       date: data.date,
       folio: data.folio,
       quantity: data.quantity,
@@ -78,12 +68,12 @@ router.put("/:id", validateSchema(updateReceiptSchema), async (req, res, next) =
   }
 });
 
-router.get("/:id/mixes", validateSchema(getMixesSchema), async (req, res, next) => {
+router.get("/:id/mixes", validateSchema(ReceiptSchema.getMixes), async (req, res, next) => {
   try {
     const data = matchedData(req);
     const id = parseInt(data.id);
 
-    const mixes = await getAllMixesFromId(id);
+    const mixes = await MixController.getAllByReceiptId(id);
     res.json({ mixes });
   } catch(e) {
     next(e);

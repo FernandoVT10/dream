@@ -1,10 +1,10 @@
-import { existsWithId, KIND_LIST } from "./controller";
 import { Schema, ParamSchema } from "express-validator";
+import { RECEIPT_KIND_LIST, RECEIPT_SEARCH_BY_VALUES } from "../constants";
+import ReceiptController from "../controllers/ReceiptController";
 
-const SEARCH_BY_VALUES = ["folio", "sap", "date"];
-const INVALID_KIND_MSG = `kind is invalid (supported: ${KIND_LIST.join(", ")})`;
+const INVALID_KIND_MSG = `kind is invalid (supported: ${RECEIPT_KIND_LIST.join(", ")})`;
 
-export const createReceiptSchema: Schema = {
+const createSchema: Schema = {
   date: {
     isDate: { errorMessage: "date is invalid" },
   },
@@ -21,7 +21,7 @@ export const createReceiptSchema: Schema = {
     },
     isIn: {
       errorMessage: INVALID_KIND_MSG,
-      options: [KIND_LIST],
+      options: [RECEIPT_KIND_LIST],
     },
   },
   sap: {
@@ -73,7 +73,7 @@ export const createReceiptSchema: Schema = {
   },
 };
 
-const idValidator: ParamSchema = {
+const receiptIdValidator: ParamSchema = {
   in: "params",
   isInt: {
     errorMessage: "id should be a number greater than 0",
@@ -87,7 +87,7 @@ const idValidator: ParamSchema = {
       let exists: boolean;
 
       try {
-        exists = await existsWithId(id);
+        exists = await ReceiptController.existsWithId(id);
       } catch(e) {
         // TODO: implement better error logging
         console.error("[SERVER] Error trying to connect with db", e);
@@ -101,12 +101,10 @@ const idValidator: ParamSchema = {
   },
 };
 
-export const deleteReceiptSchema: Schema = {
-  id: idValidator,
-};
+export const deleteSchema: Schema = { id: receiptIdValidator };
 
-export const updateReceiptSchema: Schema = {
-  id: idValidator,
+const updateSchema: Schema = {
+  id: receiptIdValidator,
   date: {
     isDate: { errorMessage: "date is invalid" },
     optional: {
@@ -134,7 +132,7 @@ export const updateReceiptSchema: Schema = {
     },
     isIn: {
       errorMessage: INVALID_KIND_MSG,
-      options: [KIND_LIST],
+      options: [RECEIPT_KIND_LIST],
     },
   },
   sap: {
@@ -148,4 +146,11 @@ export const updateReceiptSchema: Schema = {
   },
 };
 
-export const getMixesSchema: Schema = { id: idValidator };
+const getMixesSchema: Schema = { id: receiptIdValidator };
+
+export default {
+  create: createSchema,
+  delete: deleteSchema,
+  update: updateSchema,
+  getMixes: getMixesSchema,
+};
