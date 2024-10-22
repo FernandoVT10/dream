@@ -2,7 +2,7 @@ import { Receipt, Mix } from "../models";
 import { Op, WhereOptions } from "sequelize";
 import { MIX_STATUS_LIST, RECEIPT_STATUS_LIST } from "../constants";
 
-const SUPPORTED_KEYS = ["folio", "sap", "date", "kind"];
+const SUPPORTED_KEYS = ["folio", "sap", "date", "kind", "status"];
 
 function getSearchTokens(search: string): Record<string, string> {
   const tokens: Record<string, string> = {};
@@ -63,7 +63,7 @@ function getFiltersFromSearch(search: string): WhereOptions {
     let val = tokens[key];
 
     // add the like symbol to all the fields but date and kind
-    if(key !== "date" && key !== "kind") val += "%";
+    if(key !== "date" && key !== "kind" && key !== "status") val += "%";
 
     filters[key] = {
       [Op.like]: val,

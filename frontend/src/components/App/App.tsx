@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { API_URL } from "../../constants";
 import { Receipt } from "../../types";
 
@@ -24,10 +24,6 @@ function App() {
   const addReceiptModal = useModal();
 
   const [receipts, setReceipts] = useState<Receipt[]>([]);
-
-  useEffect(() => {
-    loadReceipts();
-  }, []);
 
   const loadReceipts = async (search?: string): Promise<void> => {
     try {
