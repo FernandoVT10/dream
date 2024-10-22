@@ -188,7 +188,7 @@ function AddReceiptForm({ hideModal, addReceiptToState }: AddReceiptFormProps) {
           <Mixes mixesForms={mixesForms} dispatch={dispatch} />
 
           <div className={styles.btnContainer}>
-            <button type="submit" className={styles.btn}>
+            <button type="submit" className="custom-btn">
               Add Receipt
             </button>
           </div>

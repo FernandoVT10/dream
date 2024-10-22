@@ -1,0 +1,24 @@
+.custom-btn {
+  display: inline-flex;
+  align-items: center;
+  background: var(--btn-background);
+  color: var(--text-accent);
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-weight: bold;
+  transition: .3s;
+
+  &.warning {
+    background: rgba(243, 139, 168, 0.2);
+    color: var(--red);
+
+    &:hover {
+      background: rgba(243, 139, 168, 0.4);
+    }
+  }
+
+  &:hover {
+    background: var(--btn-hover-background);
+  }
+}

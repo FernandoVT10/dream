@@ -87,22 +87,6 @@
     display: flex;
     flex: 1;
     justify-content: flex-end;
-
-    & .btn {
-      display: flex;
-      align-items: center;
-      background: var(--btn-background);
-      color: var(--text-accent);
-      border: none;
-      border-radius: 5px;
-      padding: 10px 20px;
-      font-weight: bold;
-      transition: .3s;
-
-      &:hover {
-        background: var(--btn-hover-background);
-      }
-    }
   }
 
   & .subtitle {

@@ -91,24 +91,6 @@
       color: var(--text-dimer);
     }
 
-    & .colActions {
-      display: flex;
-      justify-content: center;
-      column-gap: 10px;
-      width: 80px;
-
-      & button {
-        background: transparent;
-        border: solid 1px var(--border);
-        border: none;
-        transition: .3s;
-
-        &:hover {
-          color: var(--text-accent);
-        }
-      }
-    }
-
     & .header {
       font-weight: bold;
       color: var(--text-dimer);
@@ -159,6 +141,24 @@
     width: 30px;
   }
 
+  & .colActions {
+    display: flex;
+    justify-content: center;
+    column-gap: 10px;
+    width: 80px;
+
+    & button {
+      background: transparent;
+      border: solid 1px var(--border);
+      border: none;
+      transition: .3s;
+
+      &:hover {
+        color: var(--text-accent);
+      }
+    }
+  }
+
   & .header {
     padding: 10px;
     width: 100%;
@@ -167,5 +167,15 @@
     font-weight: bold;
     text-transform: uppercase;
     font-size: 14px;
+  }
+}
+
+.deleteModal {
+  & .text {
+    margin-bottom: 20px;
+  }
+
+  & .cancelBtn {
+    margin-left: 10px;
   }
 }

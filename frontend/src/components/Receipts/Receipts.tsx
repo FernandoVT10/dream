@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
-import { ChevronUpIcon, CheckIcon, PencilIcon } from "../../icons";
+import { ChevronUpIcon, CheckIcon, PencilIcon, TrashIcon } from "../../icons";
 import { API_URL } from "../../constants";
 import { Receipt as ReceiptType, Mix } from "../../types";
+
+import Modal, { useModal } from "../Modal";
 
 import Notifications from "../../Notifications";
 import Spinner from "../Spinner";
@@ -19,6 +21,13 @@ async function getMixes(receiptId: number): Promise<Mix[]> {
 async function markMixAsDelivered(mixId: number): Promise<boolean> {
   const res = await fetch(`${API_URL}/mixes/${mixId}/markAsDelivered`, {
     method: "PUT",
+  });
+  return res.status === 200;
+}
+
+async function deleteReceipt(receiptId: number): Promise<boolean> {
+  const res = await fetch(`${API_URL}/receipts/${receiptId}`, {
+    method: "DELETE",
   });
   return res.status === 200;
 }
@@ -102,9 +111,10 @@ function Mixes({ mixes, setMixes, onMixUpdate }: MixesProps) {
 type ReceiptProps = {
   receipt: ReceiptType;
   setReceiptAsDelivered: (receiptId: number) => void;
+  showDeleteModal: (receiptId: number) => void;
 };
 
-function Receipt({ receipt, setReceiptAsDelivered }: ReceiptProps) {
+function Receipt({ receipt, setReceiptAsDelivered, showDeleteModal }: ReceiptProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [mixesFetched, setMixesFetched] = useState(false);
   const [mixes, setMixes] = useState<Mix[]>([]);
@@ -138,6 +148,10 @@ function Receipt({ receipt, setReceiptAsDelivered }: ReceiptProps) {
     }
   };
 
+  const stopClickPropagation = (e: React.UIEvent) => {
+    e.stopPropagation();
+  };
+
   return (
     <div className={`${styles.receipt} ${isOpen && styles.open}`}>
       <div
@@ -153,6 +167,16 @@ function Receipt({ receipt, setReceiptAsDelivered }: ReceiptProps) {
         <div className={`${styles.col1} ${styles.kind}`}>{receipt.kind}</div>
         <div className={styles.col1}>
           <Status status={receipt.status}/>
+        </div>
+
+        <div className={styles.colActions} onClick={stopClickPropagation}>
+          <button type="button" title="Edit Receipt">
+            <PencilIcon size={20}/>
+          </button>
+
+          <button type="button" title="Delete Receipt" onClick={() => showDeleteModal(receipt.id)}>
+            <TrashIcon size={20}/>
+          </button>
         </div>
       </div>
 
@@ -173,6 +197,10 @@ type ReceiptsProps = {
 };
 
 function Receipts({ receipts, setReceipts }: ReceiptsProps) {
+  const [receiptToDelete, setReceiptToDelete] = useState(0);
+
+  const deleteModal = useModal();
+
   const setReceiptAsDelivered = (receiptId: number) => {
     setReceipts(receipts.map(receipt => {
       if(receipt.id === receiptId) {
@@ -183,27 +211,63 @@ function Receipts({ receipts, setReceipts }: ReceiptsProps) {
     }));
   };
 
-  return (
-    <div className={styles.receipts}>
-      <div className={styles.header}>
-        <div className={styles.colIcon}></div>
-        <div className={styles.colDate}>Date</div>
-        <div className={styles.col2}>Folio</div>
-        <div className={styles.col1}>SAP</div>
-        <div className={styles.col1}>Kind</div>
-        <div className={styles.col1}>Status</div>
-      </div>
+  const showDeleteModal = (receiptId: number) => {
+    deleteModal.show();
+    setReceiptToDelete(receiptId);
+  };
 
-      {receipts.map(receipt => {
-        return (
-          <Receipt
-            receipt={receipt}
-            setReceiptAsDelivered={setReceiptAsDelivered}
-            key={receipt.id}
-          />
-        );
-      })}
-    </div>
+  const handleDeleteReceipt = async () => {
+    try {
+      await deleteReceipt(receiptToDelete);
+      Notifications.success("Receipt deleted sucessfully!");
+      deleteModal.hide();
+
+      setReceipts(receipts.filter(receipt => {
+        return receipt.id !== receiptToDelete;
+      }));
+    } catch {
+      Notifications.error("There was a server error.");
+    }
+  };
+
+  return (
+    <>
+      <Modal title="Delete Receipt" modal={deleteModal}>
+        <div className={styles.deleteModal}>
+          <p className={styles.text}>Are you sure you want to delete this receipt?</p>
+          <button
+            className={`custom-btn warning`}
+            onClick={handleDeleteReceipt}
+          >Delete Receipt</button>
+          <button
+            className={`custom-btn ${styles.cancelBtn}`}
+            onClick={deleteModal.hide}
+          >Cancel</button>
+        </div>
+      </Modal>
+      <div className={styles.receipts}>
+        <div className={styles.header}>
+          <div className={styles.colIcon}></div>
+          <div className={styles.colDate}>Date</div>
+          <div className={styles.col2}>Folio</div>
+          <div className={styles.col1}>SAP</div>
+          <div className={styles.col1}>Kind</div>
+          <div className={styles.col1}>Status</div>
+          <div className={styles.colActions}>Actions</div>
+        </div>
+
+        {receipts.map(receipt => {
+          return (
+            <Receipt
+              receipt={receipt}
+              setReceiptAsDelivered={setReceiptAsDelivered}
+              showDeleteModal={showDeleteModal}
+              key={receipt.id}
+            />
+          );
+        })}
+      </div>
+    </>
   );
 }
 
