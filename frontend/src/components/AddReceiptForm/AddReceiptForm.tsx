@@ -100,7 +100,7 @@ function AddReceiptForm({ hideModal, addReceiptToState }: AddReceiptFormProps) {
               <span className={styles.fieldName}>Date</span>
               <input
                 type="date"
-                className={styles.input}
+                className="custom-input"
                 value={date}
                 onChange={getInputValue(v => setDate(v))}
                 required
@@ -137,7 +137,7 @@ function AddReceiptForm({ hideModal, addReceiptToState }: AddReceiptFormProps) {
               <span className={styles.fieldName}>Folio</span>
               <input
                 type="text"
-                className={styles.input}
+                className="custom-input"
                 placeholder="0000 Mya"
                 value={folio}
                 onChange={getInputValue(v => setFolio(v))}
@@ -148,7 +148,7 @@ function AddReceiptForm({ hideModal, addReceiptToState }: AddReceiptFormProps) {
               <span className={styles.fieldName}>SAP</span>
               <input
                 type="text"
-                className={styles.input}
+                className="custom-input"
                 placeholder="125222"
                 value={sap}
                 onChange={getInputValue(v => setSap(getNumbersFromStr(v)))}

@@ -192,7 +192,12 @@
     margin-bottom: 20px;
   }
 
-  & .cancelBtn {
-    margin-left: 10px;
+  & .buttons {
+    display: flex;
+    justify-content: flex-end;
+
+    & .cancelBtn {
+      margin-right: 10px;
+    }
   }
 }

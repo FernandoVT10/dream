@@ -234,14 +234,21 @@ function Receipts({ receipts, setReceipts }: ReceiptsProps) {
             </div>
           )}
           <p className={styles.text}>Are you sure you want to delete this receipt?</p>
-          <button
-            className={`custom-btn warning`}
-            onClick={handleDeleteReceipt}
-          >Delete Receipt</button>
-          <button
-            className={`custom-btn ${styles.cancelBtn}`}
-            onClick={deleteModal.hide}
-          >Cancel</button>
+
+          <div className={styles.buttons}>
+            <button
+              className={`custom-btn ${styles.cancelBtn}`}
+              onClick={deleteModal.hide}
+            >
+              Cancel
+            </button>
+            <button
+              className={`custom-btn warning`}
+              onClick={handleDeleteReceipt}
+            >
+              Delete Receipt
+            </button>
+          </div>
         </div>
       </Modal>
 

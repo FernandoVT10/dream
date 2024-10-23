@@ -30,21 +30,6 @@
     margin-bottom: 5px;
   }
 
-  & .input {
-    border: none;
-    background: transparent;
-    border: solid 1px var(--border);
-    color: var(--text);
-    padding: 10px;
-    font-weight: bold;
-    border-radius: 5px;
-    width: 100%;
-
-    &:disabled {
-      opacity: .5;
-    }
-  }
-
   & .select {
     cursor: pointer;
     padding: 0 20px;

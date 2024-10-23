@@ -50,7 +50,7 @@ function MixForm({ mixForm, removeForm, updateForm, duplicateForm }: MixFormProp
         <span className={styles.fieldName}>Quantity</span>
         <input
           type="text"
-          className={styles.input}
+          className="custom-input"
           placeholder="1 and 1/2 willy"
           name="quantity"
           value={mixForm.quantity}
@@ -62,7 +62,7 @@ function MixForm({ mixForm, removeForm, updateForm, duplicateForm }: MixFormProp
         <span className={styles.fieldName}>Presentation</span>
         <input
           type="text"
-          className={styles.input}
+          className="custom-input"
           placeholder="3 decanters 2 bags"
           name="presentation"
           value={mixForm.presentation}
@@ -75,7 +75,7 @@ function MixForm({ mixForm, removeForm, updateForm, duplicateForm }: MixFormProp
         <span className={styles.fieldName}>No.</span>
         <input
           type="text"
-          className={styles.input}
+          className="custom-input"
           placeholder="#"
           name="numberOfMix"
           value={mixForm.numberOfMix}
