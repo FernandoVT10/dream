@@ -1,36 +1,16 @@
 import { useEffect, useState } from "react";
 import { ChevronUpIcon, CheckIcon, PencilIcon, TrashIcon } from "../../icons";
-import { API_URL } from "../../constants";
 import { Receipt as ReceiptType, Mix } from "../../types";
 
 import Modal, { useModal } from "../Modal";
 
 import Notifications from "../../Notifications";
 import Spinner from "../Spinner";
+import Api from "../../Api";
 
 import styles from "./Receipts.module.scss";
 
 const DELIVERED_STATUS = "delivered";
-
-async function getMixes(receiptId: number): Promise<Mix[]> {
-  const res = await fetch(`${API_URL}/receipts/${receiptId}/mixes`);
-  const json = await res.json();
-  return json.mixes;
-}
-
-async function markMixAsDelivered(mixId: number): Promise<boolean> {
-  const res = await fetch(`${API_URL}/mixes/${mixId}/markAsDelivered`, {
-    method: "PUT",
-  });
-  return res.status === 200;
-}
-
-async function deleteReceipt(receiptId: number): Promise<boolean> {
-  const res = await fetch(`${API_URL}/receipts/${receiptId}`, {
-    method: "DELETE",
-  });
-  return res.status === 200;
-}
 
 function Status({ status }: { status: string }) {
   const statusClass = status === "pending" ? styles.pending : styles.delivered;
@@ -50,8 +30,14 @@ type MixesProps = {
 };
 
 function Mixes({ mixes, setMixes, onMixUpdate }: MixesProps) {
+  const [loading, setLoading] = useState(false);
+
   const markAsDelivered = async (mixId: number) => {
-    if(await markMixAsDelivered(mixId)) {
+    if(loading) return;
+
+    setLoading(true);
+
+    if(await Api.markMixAsDelivered(mixId)) {
       setMixes(mixes.map(mix => {
         if(mix.id === mixId) {
           mix.status = DELIVERED_STATUS;
@@ -64,11 +50,13 @@ function Mixes({ mixes, setMixes, onMixUpdate }: MixesProps) {
     } else {
       Notifications.error("Couldn't mark this mix as delivered");
     }
+
+    setLoading(false);
   };
 
   return (
     <div className={styles.mixes}>
-      <div className={styles.header}>
+      <div className={styles.colHeader}>
         <div className={styles.colNumberOfMix}>#</div>
         <div className={styles.col1}>Quantity</div>
         <div className={styles.col1}>Presentation</div>
@@ -86,7 +74,7 @@ function Mixes({ mixes, setMixes, onMixUpdate }: MixesProps) {
               <Status status={mix.status}/>
             </div>
             <div className={styles.colActions}>
-              {mix.status === "pending" && (
+              {mix.status !== DELIVERED_STATUS && (
                 <button
                   type="button"
                   title="Mark as delivered"
@@ -124,7 +112,7 @@ function Receipt({ receipt, setReceiptAsDelivered, showDeleteModal }: ReceiptPro
     const load = async () => {
       setMixesFetched(true);
       setLoading(true);
-      setMixes(await getMixes(receipt.id));
+      setMixes(await Api.getMixes(receipt.id));
       setLoading(false);
     };
 
@@ -198,6 +186,7 @@ type ReceiptsProps = {
 
 function Receipts({ receipts, setReceipts }: ReceiptsProps) {
   const [receiptToDelete, setReceiptToDelete] = useState(0);
+  const [isDeletingReceipt, setIsDeletingReceipt] = useState(false);
 
   const deleteModal = useModal();
 
@@ -217,8 +206,10 @@ function Receipts({ receipts, setReceipts }: ReceiptsProps) {
   };
 
   const handleDeleteReceipt = async () => {
+    setIsDeletingReceipt(true);
+
     try {
-      await deleteReceipt(receiptToDelete);
+      await Api.deleteReceipt(receiptToDelete);
       Notifications.success("Receipt deleted sucessfully!");
       deleteModal.hide();
 
@@ -228,12 +219,20 @@ function Receipts({ receipts, setReceipts }: ReceiptsProps) {
     } catch {
       Notifications.error("There was a server error.");
     }
+
+    setIsDeletingReceipt(false);
   };
 
   return (
     <>
       <Modal title="Delete Receipt" modal={deleteModal}>
         <div className={styles.deleteModal}>
+          {isDeletingReceipt && (
+            <div className={styles.loader}>
+              <Spinner size={35} borderWidth={5}/>
+              <span className={styles.text}>Deleting Receipt...</span>
+            </div>
+          )}
           <p className={styles.text}>Are you sure you want to delete this receipt?</p>
           <button
             className={`custom-btn warning`}
@@ -245,8 +244,9 @@ function Receipts({ receipts, setReceipts }: ReceiptsProps) {
           >Cancel</button>
         </div>
       </Modal>
+
       <div className={styles.receipts}>
-        <div className={styles.header}>
+        <div className={styles.colHeader}>
           <div className={styles.colIcon}></div>
           <div className={styles.colDate}>Date</div>
           <div className={styles.col2}>Folio</div>
