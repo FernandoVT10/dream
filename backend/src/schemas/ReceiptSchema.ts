@@ -1,6 +1,7 @@
 import { Schema, ParamSchema } from "express-validator";
 import { RECEIPT_KIND_LIST, RECEIPT_SEARCH_BY_VALUES } from "../constants";
 import ReceiptController from "../controllers/ReceiptController";
+import Logger from "../Logger";
 
 const INVALID_KIND_MSG = `kind is invalid (supported: ${RECEIPT_KIND_LIST.join(", ")})`;
 
@@ -89,8 +90,7 @@ const receiptIdValidator: ParamSchema = {
       try {
         exists = await ReceiptController.existsWithId(id);
       } catch(e) {
-        // TODO: implement better error logging
-        console.error("[SERVER] Error trying to connect with db", e);
+        Logger.logError("Error trying to connect with db", e);
         throw new Error("Sever Error");
       }
 

@@ -2,6 +2,8 @@ import { Receipt, Mix } from "../models";
 import { Op, WhereOptions } from "sequelize";
 import { MIX_STATUS_LIST, RECEIPT_STATUS_LIST } from "../constants";
 
+import Logger from "../Logger";
+
 const SUPPORTED_KEYS = ["folio", "sap", "date", "kind", "status"];
 
 function getSearchTokens(search: string): Record<string, string> {
@@ -148,7 +150,13 @@ class ReceiptController {
     const receipt = await Receipt.findByPk(id);
 
     // TODO: here we should log this as if this was an error
-    if(!receipt) return;
+    if(!receipt) {
+      Logger.logError(
+        "Receipt is null, it's either a problem of the database or with the validation",
+        new Error()
+      );
+      return;
+    }
 
     receipt.status = RECEIPT_STATUS_LIST.delivered;
     await receipt.save();

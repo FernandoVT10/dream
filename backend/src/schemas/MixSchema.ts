@@ -2,6 +2,7 @@ import { ParamSchema, Schema } from "express-validator";
 import { MIX_STATUS_LIST } from "../constants";
 
 import MixController from "../controllers/MixController";
+import Logger from "../Logger";
 
 const mixIdValidator: ParamSchema = {
   in: "params",
@@ -19,8 +20,7 @@ const mixIdValidator: ParamSchema = {
       try {
         mixStatus = await MixController.getMixStatus(id);
       } catch(e) {
-        // TODO: implement better error logging
-        console.error("[SERVER] Error trying to connect with db", e);
+        Logger.logError("Error trying to connect with db", e);
         throw new Error("Sever Error");
       }
 

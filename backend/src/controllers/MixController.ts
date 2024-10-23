@@ -1,6 +1,7 @@
 import { Mix } from "../models";
 import { MIX_STATUS_LIST } from "../constants";
 
+import Logger from "../Logger";
 import ReceiptController from "./ReceiptController";
 
 function getTodayDate(): string {
@@ -28,8 +29,13 @@ class MixController {
   static async markAsDelivered(id: number): Promise<void> {
     const mix = await Mix.findByPk(id);
 
-    // TODO: here we should log this as if this was an error
-    if(!mix) return;
+    if(!mix) {
+      Logger.logError(
+        "Mix is null, it's either a problem of the database or with the validation",
+        new Error()
+      );
+      return;
+    }
 
     mix.status = MIX_STATUS_LIST.delivered;
     mix.deliveredDate = getTodayDate();
