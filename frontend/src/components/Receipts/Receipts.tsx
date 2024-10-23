@@ -1,36 +1,16 @@
 import { useEffect, useState } from "react";
 import { ChevronUpIcon, CheckIcon, PencilIcon, TrashIcon } from "../../icons";
-import { API_URL } from "../../constants";
 import { Receipt as ReceiptType, Mix } from "../../types";
 
 import Modal, { useModal } from "../Modal";
 
 import Notifications from "../../Notifications";
 import Spinner from "../Spinner";
+import Api from "../../Api";
 
 import styles from "./Receipts.module.scss";
 
 const DELIVERED_STATUS = "delivered";
-
-async function getMixes(receiptId: number): Promise<Mix[]> {
-  const res = await fetch(`${API_URL}/receipts/${receiptId}/mixes`);
-  const json = await res.json();
-  return json.mixes;
-}
-
-async function markMixAsDelivered(mixId: number): Promise<boolean> {
-  const res = await fetch(`${API_URL}/mixes/${mixId}/markAsDelivered`, {
-    method: "PUT",
-  });
-  return res.status === 200;
-}
-
-async function deleteReceipt(receiptId: number): Promise<boolean> {
-  const res = await fetch(`${API_URL}/receipts/${receiptId}`, {
-    method: "DELETE",
-  });
-  return res.status === 200;
-}
 
 function Status({ status }: { status: string }) {
   const statusClass = status === "pending" ? styles.pending : styles.delivered;
@@ -51,7 +31,7 @@ type MixesProps = {
 
 function Mixes({ mixes, setMixes, onMixUpdate }: MixesProps) {
   const markAsDelivered = async (mixId: number) => {
-    if(await markMixAsDelivered(mixId)) {
+    if(await Api.markMixAsDelivered(mixId)) {
       setMixes(mixes.map(mix => {
         if(mix.id === mixId) {
           mix.status = DELIVERED_STATUS;
@@ -124,7 +104,7 @@ function Receipt({ receipt, setReceiptAsDelivered, showDeleteModal }: ReceiptPro
     const load = async () => {
       setMixesFetched(true);
       setLoading(true);
-      setMixes(await getMixes(receipt.id));
+      setMixes(await Api.getMixes(receipt.id));
       setLoading(false);
     };
 
@@ -218,7 +198,7 @@ function Receipts({ receipts, setReceipts }: ReceiptsProps) {
 
   const handleDeleteReceipt = async () => {
     try {
-      await deleteReceipt(receiptToDelete);
+      await Api.deleteReceipt(receiptToDelete);
       Notifications.success("Receipt deleted sucessfully!");
       deleteModal.hide();
 

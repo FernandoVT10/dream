@@ -1,11 +1,11 @@
 import { useState, useReducer } from "react";
-import { API_URL } from "../../constants";
 import { CheckIcon } from "../../icons";
 import { Receipt } from "../../types";
 
 import Spinner from "../Spinner";
 import Notifications from "../../Notifications";
 import Mixes, { getNumbersFromStr } from "./Mixes";
+import Api, { CreateReceiptData } from "../../Api";
 
 import mixesFormsReducer, { MixFormActions, intialMixesForms } from "./mixesFormsReducer";
 
@@ -16,35 +16,6 @@ const KIND_LIST = [
   { name: "Corn", value: "corn" },
   { name: "Strawberry", value: "strawberry" },
 ];
-
-type CreateReceiptData = {
-  date: string;
-  kind: string;
-  folio: string;
-  sap: string;
-  mixes: {
-    quantity: string;
-    presentation: string;
-    numberOfMix?: string;
-  }[];
-};
-
-async function createReceipt(data: CreateReceiptData): Promise<Receipt | null> {
-  const res = await fetch(`${API_URL}/receipts`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-
-  if(res.status === 200) {
-    const json = await res.json();
-    return json.receipt;
-  }
-
-  return null;
-}
 
 function getTodayDate(): string {
   // the date should be formatted to yyyy-mm-dd
@@ -91,7 +62,7 @@ function AddReceiptForm({ hideModal, addReceiptToState }: AddReceiptFormProps) {
 
     const actualDate = useTodayDate ? getTodayDate() : date;
 
-    const receipt = await createReceipt({ date: actualDate, kind, folio, sap, mixes });
+    const receipt = await Api.createReceipt({ date: actualDate, kind, folio, sap, mixes });
 
     if(receipt) {
       setDate("");
