@@ -4,7 +4,6 @@ import styles from "./Filters.module.scss";
 
 const KIND_LIST = [
   { name: "Raspberries", value: "raspberry" },
-  { name: "Corn", value: "corn" },
   { name: "Strawberries", value: "strawberry" },
 ];
 

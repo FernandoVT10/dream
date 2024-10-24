@@ -13,7 +13,6 @@ import styles from  "./AddReceiptForm.module.scss";
 
 const KIND_LIST = [
   { name: "Raspberry", value: "raspberry" },
-  { name: "Corn", value: "corn" },
   { name: "Strawberry", value: "strawberry" },
 ];
 const DEFAULT_KIND_VALUE = KIND_LIST[0].value;
