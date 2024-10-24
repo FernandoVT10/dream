@@ -12,6 +12,13 @@ import styles from "./Receipts.module.scss";
 
 const DELIVERED_STATUS = "delivered";
 
+// oldDate is a date in the form: YYYY-MM-DD
+// this function formats the date into: DD-MM-YYYY
+function getFormattedDate(oldDate: string): string {
+  const [year, month, day] = oldDate.split("-");
+  return `${day}-${month}-${year}`;
+}
+
 type StatusProps = {
   status: string;
   deliveredDate?: string;
@@ -20,8 +27,10 @@ type StatusProps = {
 function Status({ status, deliveredDate }: StatusProps) {
   const statusClass = status === "pending" ? styles.pending : styles.delivered;
 
+  const title = deliveredDate ? getFormattedDate(deliveredDate) : undefined;
+
   return (
-    <div className={`${styles.status} ${statusClass}`} title={deliveredDate}>
+    <div className={`${styles.status} ${statusClass}`} title={title}>
       <span className={styles.dot}></span>
       <span className={styles.text}>{status}</span>
     </div>
@@ -154,7 +163,7 @@ function Receipt({ receipt, setReceiptAsDelivered, showDeleteModal }: ReceiptPro
         <div className={styles.colIcon}>
           <ChevronUpIcon size={22} className={styles.icon}/>
         </div>
-        <div className={styles.colDate}>{receipt.date}</div>
+        <div className={styles.colDate}>{getFormattedDate(receipt.date)}</div>
         <div className={styles.col2}>{receipt.folio}</div>
         <div className={styles.col1}>{receipt.sap}</div>
         <div className={`${styles.col1} ${styles.kind}`}>{receipt.kind}</div>
