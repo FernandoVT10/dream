@@ -43,7 +43,7 @@ function Filters({ loadReceipts, showReceiptModal }: FiltersProps) {
     // the query or search syntax is in the form: "[filter_name]: [value];"
     // each filter term is separated by a semicolon
     let query = `kind:${selectedKind};`;
-    if(search) query = `${searchBy}:${search};`;
+    if(search) query += `${searchBy}:${search};`;
     if(status !== "all") query += `status:${status};`;
 
     loadReceipts(query);

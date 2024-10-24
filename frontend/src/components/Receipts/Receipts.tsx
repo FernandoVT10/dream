@@ -12,11 +12,16 @@ import styles from "./Receipts.module.scss";
 
 const DELIVERED_STATUS = "delivered";
 
-function Status({ status }: { status: string }) {
+type StatusProps = {
+  status: string;
+  deliveredDate?: string;
+};
+
+function Status({ status, deliveredDate }: StatusProps) {
   const statusClass = status === "pending" ? styles.pending : styles.delivered;
 
   return (
-    <div className={`${styles.status} ${statusClass}`}>
+    <div className={`${styles.status} ${statusClass}`} title={deliveredDate}>
       <span className={styles.dot}></span>
       <span className={styles.text}>{status}</span>
     </div>
@@ -71,7 +76,7 @@ function Mixes({ mixes, setMixes, onMixUpdate }: MixesProps) {
             <div className={styles.col1}>{mix.quantity}</div>
             <div className={styles.col1}>{mix.presentation}</div>
             <div className={styles.col1}>
-              <Status status={mix.status}/>
+              <Status status={mix.status} deliveredDate={mix.deliveredDate}/>
             </div>
             <div className={styles.colActions}>
               {mix.status !== DELIVERED_STATUS && (
