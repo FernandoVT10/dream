@@ -105,7 +105,7 @@ class ReceiptController {
   static async getAll(): Promise<Receipt[]> {
     return await Receipt.findAll({
       order: [
-        ["createdAt", "DESC"],
+        ["date", "DESC"],
       ],
     });
   }
@@ -132,7 +132,7 @@ class ReceiptController {
     return await Receipt.findAll({
       where: getFiltersFromSearch(search),
       order: [
-        ["createdAt", "DESC"],
+        ["date", "DESC"],
       ],
     });
   }

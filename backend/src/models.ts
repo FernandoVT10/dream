@@ -14,7 +14,7 @@ import { MIX_STATUS_LIST } from "./constants";
 
 @Table
 export class Receipt extends Model {
-  @Column
+  @Column(DataType.DATEONLY)
   date: string;
   @Column
   folio: string;
@@ -43,8 +43,9 @@ export class Mix extends Model {
   @Default(MIX_STATUS_LIST.pending)
   @Column
   status: string;
+
   @AllowNull(true)
-  @Column
+  @Column(DataType.DATEONLY)
   deliveredDate: string;
 
   @ForeignKey(() => Receipt)
