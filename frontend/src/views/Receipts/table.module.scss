@@ -1,0 +1,39 @@
+.col1 { flex: 1; }
+.col2 { flex: 2; }
+
+.colActions {
+  display: flex;
+  justify-content: center;
+  column-gap: 10px;
+  width: 80px;
+
+  & button {
+    background: transparent;
+    border: solid 1px var(--border);
+    border: none;
+    transition: .3s;
+
+    &:hover {
+      color: var(--text-accent);
+    }
+  }
+}
+
+.colDate {
+  width: 120px;
+  color: var(--text-dim);
+}
+
+.colIcon {
+  width: 30px;
+}
+
+.colHeader {
+  padding: 10px;
+  width: 100%;
+  display: flex;
+  color: var(--text-dimer) !important;
+  font-weight: bold;
+  text-transform: uppercase;
+  font-size: 14px;
+}

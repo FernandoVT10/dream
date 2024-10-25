@@ -1,0 +1,36 @@
+.status {
+  &.pending {
+    --dot-color: var(--blue);
+  }
+
+  &.delivered {
+    --dot-color: var(--green);
+  }
+
+  & .dot {
+    position: relative;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--dot-color);
+    margin-right: 10px;
+
+    &:before {
+      position: absolute;
+      content: "";
+      top: -3px;
+      left: -3px;
+      width: 16px;
+      height: 16px;
+      background: var(--dot-color);
+      opacity: .4;
+      border-radius: 50%;
+    }
+  }
+
+  & .text {
+    text-transform: capitalize;
+    color: var(--dot-color);
+  }
+}

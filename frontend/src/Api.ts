@@ -14,7 +14,16 @@ export type CreateReceiptData = {
 };
 
 class Api {
-  static async getMixes(receiptId: number): Promise<Mix[]> {
+  static async getMixes(search?: string): Promise<Mix[]> {
+    let query = "";
+    if(search) query = `?search=${search}`;
+
+    const res = await fetch(`${API_URL}/mixes${query}`);
+    const json = await res.json();
+    return json.mixes;
+  }
+
+  static async getMixesByReceiptId(receiptId: number): Promise<Mix[]> {
     const res = await fetch(`${API_URL}/receipts/${receiptId}/mixes`);
     const json = await res.json();
     return json.mixes;
