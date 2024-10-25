@@ -11,9 +11,9 @@ router.get("/", async (req, res, next) => {
   try {
     const search = req.query.search || "";
 
-    const receipts = await MixController.searchAll(search.toString()); 
+    const mixes = await MixController.searchAll(search.toString()); 
 
-    res.json({ receipts });
+    res.json({ mixes });
   } catch(e) {
     next(e);
   }
