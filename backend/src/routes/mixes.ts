@@ -7,6 +7,18 @@ import validateSchema from "../middlewares/validateSchema";
 
 const router = Router();
 
+router.get("/", async (req, res, next) => {
+  try {
+    const search = req.query.search || "";
+
+    const receipts = await MixController.searchAll(search.toString()); 
+
+    res.json({ receipts });
+  } catch(e) {
+    next(e);
+  }
+});
+
 router.put("/:id/markAsDelivered", validateSchema(MixSchema.markAsDelivered), async (req, res, next) => {
   try {
     const id = parseInt(matchedData(req).id);

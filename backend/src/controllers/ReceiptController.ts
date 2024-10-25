@@ -3,63 +3,14 @@ import { Op, WhereOptions } from "sequelize";
 import { MIX_STATUS_LIST, RECEIPT_STATUS_LIST } from "../constants";
 
 import Logger from "../Logger";
+import getSearchTokens from "../utils/getSearchTokens";
 
-const SUPPORTED_KEYS = ["folio", "sap", "date", "kind", "status"];
-
-function getSearchTokens(search: string): Record<string, string> {
-  const tokens: Record<string, string> = {};
-
-  let key = "";
-  let val = "";
-  let state: "key" | "val" | "noState" = "noState";
-
-  for(let i = 0; i < search.length; i++) {
-    const c = search.charAt(i);
-
-    switch(state) {
-      case "key": {
-        if(c === ":") {
-          state = "val";
-        } else {
-          key += c;
-        }
-      } break;
-      case "val": {
-        // if either we encounter a space or is the last character
-        // we add the token
-
-        if(c !== ";") val += c;
-
-        if(c === ";" || i === search.length - 1) {
-          // only add supported keys to the tokens
-          if(SUPPORTED_KEYS.includes(key)) {
-            // TODO: validate that date is a valid date
-            tokens[key] = val;
-          }
-
-          key = "";
-          val = "";
-          state = "noState";
-        }
-      } break;
-      case "noState": {
-        // we skip all spaces before of entering the getting key "phase"
-        if(c !== " ") {
-          key += c;
-          state = "key";
-        }
-      } break;
-    }
-  }
-
-  return tokens;
-}
-
+const SUPPORTED_TOKENS = ["folio", "sap", "date", "kind", "status"];
 
 function getFiltersFromSearch(search: string): WhereOptions {
   const filters: WhereOptions = {};
 
-  const tokens = getSearchTokens(search);
+  const tokens = getSearchTokens(search, SUPPORTED_TOKENS);
 
   for(const key in tokens) {
     let val = tokens[key];

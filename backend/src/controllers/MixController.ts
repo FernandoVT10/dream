@@ -1,8 +1,11 @@
+import { WhereOptions } from "sequelize";
 import { Mix } from "../models";
 import { MIX_STATUS_LIST } from "../constants";
 
 import Logger from "../Logger";
 import ReceiptController from "./ReceiptController";
+import getSearchTokens from "../utils/getSearchTokens";
+const SUPPORTED_TOKENS = ["status", "deliveredDate"];
 
 function getTodayDate(): string {
   // the date should be formatted to yyyy-mm-dd
@@ -11,6 +14,17 @@ function getTodayDate(): string {
   const month = (d.getMonth() + 1).toString().padStart(2, "0");
   const day = d.getDate().toString().padStart(2, "0");
   return `${year}-${month}-${day}`;
+}
+
+function getFiltersFromSearch(search: string): WhereOptions {
+  const filters: WhereOptions = {};
+
+  const tokens = getSearchTokens(search, SUPPORTED_TOKENS);
+  for(const key in tokens) {
+    filters[key] = tokens[key];
+  }
+
+  return filters;
 }
 
 class MixController {
@@ -42,6 +56,12 @@ class MixController {
     await mix.save();
 
     await ReceiptController.updateStatus(mix.receiptId);
+  }
+
+  static async searchAll(search: string): Promise<Mix[]> {
+    return await Mix.findAll({
+      where: getFiltersFromSearch(search),
+    });
   }
 }
 
