@@ -1,9 +1,8 @@
-.kindSelector {
+.selector {
   display: flex;
   column-gap: 10px;
-  margin-bottom: 30px;
 
-  & .kind {
+  & .selectorItem {
     position: relative;
     border: none;
     background: transparent;
@@ -11,6 +10,7 @@
     font-weight: bold;
     padding: 0 10px;
     transition: .3s;
+    color: var(--text-dim);
 
     &:before {
       position: absolute;
@@ -32,6 +32,12 @@
       }
     }
   }
+}
+
+.mainFilters {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 30px;
 }
 
 .filters {

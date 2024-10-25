@@ -1,13 +1,22 @@
+import type { LoadReceiptsFn } from "../App";
+
 import { useState, useEffect } from "react";
 
 import styles from "./Filters.module.scss";
+
+const VIEW_LIST = [
+  { name: "Receipts", value: "receipts" },
+  { name: "Mixes", value: "mixes" },
+];
+
+const DEFAULT_SELECTED_VIEW = VIEW_LIST[0].value;
 
 const KIND_LIST = [
   { name: "Raspberries", value: "raspberry" },
   { name: "Strawberries", value: "strawberry" },
 ];
 
-const SELECTED_KIND = KIND_LIST[0].value;
+const DEFAULT_SELECTED_KIND = KIND_LIST[0].value;
 
 const STATUS_LIST = [
   { name: "All", value: "all" },
@@ -22,7 +31,7 @@ const SEARCH_BY_LIST = [
 ];
 
 type FiltersProps = {
-  loadReceipts: (search?: string) => void;
+  loadReceipts: LoadReceiptsFn;
   showReceiptModal: () => void;
 };
 
@@ -32,8 +41,34 @@ const getValue = (cb: (value: string) => void) => {
   }
 };
 
+type SelectorProps = {
+  selectedValue: string;
+  setSelectedValue: React.Dispatch<string>;
+  valueList: { name: string, value: string }[];
+};
+function Selector({ selectedValue, setSelectedValue, valueList }: SelectorProps) {
+  return (
+    <div className={styles.selector}>
+      {valueList.map(({ name, value }) => {
+        const activeClass = selectedValue === value && styles.active;
+
+        return (
+          <button
+            className={`${styles.selectorItem} ${activeClass}`}
+            onClick={() => setSelectedValue(value)}
+            key={value}
+          >
+            {name}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
 function Filters({ loadReceipts, showReceiptModal }: FiltersProps) {
-  const [selectedKind, setSelectedKind] = useState(SELECTED_KIND);
+  const [selectedView, setSelectedView] = useState(DEFAULT_SELECTED_VIEW);
+  const [selectedKind, setSelectedKind] = useState(DEFAULT_SELECTED_KIND);
   const [searchBy, setSearchBy] = useState("folio");
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState(STATUS_LIST[1].value);
@@ -45,8 +80,8 @@ function Filters({ loadReceipts, showReceiptModal }: FiltersProps) {
     if(search) query += `${searchBy}:${search};`;
     if(status !== "all") query += `status:${status};`;
 
-    loadReceipts(query);
-  }, [selectedKind, search, status]);
+    loadReceipts(selectedView, query);
+  }, [selectedView, selectedKind, search, status]);
 
   const handleSearchBy = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     setSearchBy(e.target.value);
@@ -55,20 +90,18 @@ function Filters({ loadReceipts, showReceiptModal }: FiltersProps) {
 
   return (
     <>
-      <div className={styles.kindSelector}>
-        {KIND_LIST.map(kind => {
-          const activeClass = selectedKind === kind.value && styles.active;
+      <div className={styles.mainFilters}>
+        <Selector
+          selectedValue={selectedView}
+          setSelectedValue={setSelectedView}
+          valueList={VIEW_LIST}
+        />
 
-          return (
-            <button
-              className={`${styles.kind} ${activeClass}`}
-              onClick={() => setSelectedKind(kind.value)}
-              key={kind.value}
-            >
-              {kind.name}
-            </button>
-          );
-        })}
+        <Selector
+          selectedValue={selectedKind}
+          setSelectedValue={setSelectedKind}
+          valueList={KIND_LIST}
+        />
       </div>
 
       <div className={styles.filters}>

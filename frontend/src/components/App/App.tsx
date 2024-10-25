@@ -12,17 +12,23 @@ import Spinner from "../Spinner";
 
 import styles from "./App.module.scss";
 
+export type LoadReceiptsFn = (view: string, search?: string) => Promise<void>;
+
 function App() {
   const [receipts, setReceipts] = useState<Receipt[]>([]);
   const [loading, setLoading] = useState(false);
 
   const addReceiptModal = useModal();
 
-  const loadReceipts = async (search?: string): Promise<void> => {
+  const loadReceipts: LoadReceiptsFn = async (view, search) => {
     setLoading(true);
 
     try {
-      setReceipts(await Api.getReceipts(search));
+      if(view === "receipts") {
+        setReceipts(await Api.getReceipts(search));
+      } else {
+        setReceipts([]);
+      }
     } catch {
       Notifications.error("There was an error with the server.");
     }
