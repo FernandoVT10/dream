@@ -1,3 +1,20 @@
+.loader {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+.infoMessage {
+  display: flex;
+  justify-content: center;
+
+  & .text {
+    font-weight: bold;
+    color: var(--text-accent);
+    font-size: 20px;
+  }
+}
+
 .deleteModal {
   & .loader {
     position: absolute;

@@ -16,3 +16,5 @@ export type Mix = {
   status: string;
   deliveredDate: string;
 };
+
+export type ReactSetState<T> = React.Dispatch<React.SetStateAction<T>>;

@@ -1,5 +1,3 @@
-import type { LoadReceiptsFn } from "../App";
-
 import { useState, useEffect } from "react";
 
 import styles from "./Filters.module.scss";
@@ -31,7 +29,7 @@ const SEARCH_BY_LIST = [
 ];
 
 type FiltersProps = {
-  loadReceipts: LoadReceiptsFn;
+  loadReceipts: (search?: string) => Promise<void>;
   showReceiptModal: () => void;
 };
 
@@ -80,8 +78,8 @@ function Filters({ loadReceipts, showReceiptModal }: FiltersProps) {
     if(search) query += `${searchBy}:${search};`;
     if(status !== "all") query += `status:${status};`;
 
-    loadReceipts(selectedView, query);
-  }, [selectedView, selectedKind, search, status]);
+    loadReceipts(query);
+  }, [selectedKind, search, status]);
 
   const handleSearchBy = (e: React.ChangeEvent<HTMLSelectElement>): void => {
     setSearchBy(e.target.value);
