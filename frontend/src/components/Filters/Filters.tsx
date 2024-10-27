@@ -2,13 +2,6 @@ import { useState, useEffect } from "react";
 
 import styles from "./Filters.module.scss";
 
-const VIEW_LIST = [
-  { name: "Receipts", value: "receipts" },
-  { name: "Mixes", value: "mixes" },
-];
-
-const DEFAULT_SELECTED_VIEW = VIEW_LIST[0].value;
-
 const KIND_LIST = [
   { name: "Raspberries", value: "raspberry" },
   { name: "Strawberries", value: "strawberry" },
@@ -39,33 +32,7 @@ const getValue = (cb: (value: string) => void) => {
   }
 };
 
-type SelectorProps = {
-  selectedValue: string;
-  setSelectedValue: React.Dispatch<string>;
-  valueList: { name: string, value: string }[];
-};
-function Selector({ selectedValue, setSelectedValue, valueList }: SelectorProps) {
-  return (
-    <div className={styles.selector}>
-      {valueList.map(({ name, value }) => {
-        const activeClass = selectedValue === value && styles.active;
-
-        return (
-          <button
-            className={`${styles.selectorItem} ${activeClass}`}
-            onClick={() => setSelectedValue(value)}
-            key={value}
-          >
-            {name}
-          </button>
-        );
-      })}
-    </div>
-  );
-}
-
 function Filters({ loadReceipts, showReceiptModal }: FiltersProps) {
-  const [selectedView, setSelectedView] = useState(DEFAULT_SELECTED_VIEW);
   const [selectedKind, setSelectedKind] = useState(DEFAULT_SELECTED_KIND);
   const [searchBy, setSearchBy] = useState("folio");
   const [search, setSearch] = useState("");
@@ -88,64 +55,76 @@ function Filters({ loadReceipts, showReceiptModal }: FiltersProps) {
 
   return (
     <>
-      <div className={styles.mainFilters}>
-        <Selector
-          selectedValue={selectedView}
-          setSelectedValue={setSelectedView}
-          valueList={VIEW_LIST}
-        />
-
-        <Selector
-          selectedValue={selectedKind}
-          setSelectedValue={setSelectedKind}
-          valueList={KIND_LIST}
-        />
-      </div>
-
       <div className={styles.filters}>
-        <div className={styles.searchBar}>
-          <select className={styles.select} value={searchBy} onChange={handleSearchBy}>
-            {SEARCH_BY_LIST.map(({ value, name }) => {
-              return (
-                <option value={value} key={value}>{name}</option>
-              );
-            })}
-          </select>
+        <div className={styles.mainFilters}>
+          <div className={styles.searchBar}>
+            <select className={styles.folioSelect} value={searchBy} onChange={handleSearchBy}>
+              {SEARCH_BY_LIST.map(({ value, name }) => {
+                return (
+                  <option value={value} key={value}>{name}</option>
+                );
+              })}
+            </select>
 
-          { searchBy === "date" ? (
-            <input
-              type="date"
-              className={`${styles.input} ${styles.dateInput}`}
-              value={search}
-              onChange={getValue(v => setSearch(v))}
-            />
-          ) : (
+            { searchBy === "date" ? (
               <input
-                type="text"
-                className={styles.input}
-                placeholder={`Enter a ${searchBy.toLowerCase()} to filter`}
+                type="date"
+                className={`${styles.input} ${styles.dateInput}`}
                 value={search}
                 onChange={getValue(v => setSearch(v))}
               />
-            )}
-        </div>
-
-        <div className={styles.extraFilters}>
-          <select
-            className={styles.select}
-            value={status}
-            onChange={getValue(v => setStatus(v))}
-          >
-            {STATUS_LIST.map(status => {
-              return (
-                <option key={status.name} value={status.value}>{status.name}</option>
-              );
-            })}
-          </select>
+            ) : (
+                <input
+                  type="text"
+                  className={styles.input}
+                  placeholder={`Enter a ${searchBy.toLowerCase()} to filter`}
+                  value={search}
+                  onChange={getValue(v => setSearch(v))}
+                />
+              )}
+          </div>
 
           <button className={styles.addReceiptBtn} onClick={showReceiptModal}>
             Add Receipt
           </button>
+        </div>
+
+        <div className={styles.advancedFilters}>
+          <div className={styles.advancedFilter}>
+            <span className={styles.filterName}>Status</span>
+
+            {STATUS_LIST.map(({ name, value }) => {
+              const buttonClass = status === value && styles.active;
+
+              return (
+                <button
+                  key={name}
+                  className={`${styles.filterOption} ${buttonClass}`}
+                  onClick={() => setStatus(value)}
+                >
+                  {name}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className={styles.advancedFilter}>
+            <span className={styles.filterName}>Kind</span>
+
+            {KIND_LIST.map(({ name, value }) => {
+              const buttonClass = selectedKind === value && styles.active;
+
+              return (
+                <button
+                  key={name}
+                  className={`${styles.filterOption} ${buttonClass}`}
+                  onClick={() => setSelectedKind(value)}
+                >
+                  {name}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
     </>

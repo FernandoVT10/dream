@@ -144,9 +144,8 @@ function Receipt({ receipt, setReceiptAsDelivered, showDeleteModal }: ReceiptPro
           <ChevronUpIcon size={22} className={styles.icon}/>
         </div>
         <div className={tableStyles.colDate}>{getFormattedDate(receipt.date)}</div>
-        <div className={tableStyles.col2}>{receipt.folio}</div>
+        <div className={tableStyles.col1}>{receipt.folio}</div>
         <div className={tableStyles.col1}>{receipt.sap}</div>
-        <div className={`${tableStyles.col1} ${styles.kind}`}>{receipt.kind}</div>
         <div className={tableStyles.col1}>
           <Status status={receipt.status}/>
         </div>

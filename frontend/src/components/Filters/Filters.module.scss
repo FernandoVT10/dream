@@ -1,125 +1,90 @@
-.selector {
-  display: flex;
-  column-gap: 10px;
-
-  & .selectorItem {
-    position: relative;
-    border: none;
-    background: transparent;
-    font-size: 14px;
-    font-weight: bold;
-    padding: 0 10px;
-    transition: .3s;
-    color: var(--text-dim);
-
-    &:before {
-      position: absolute;
-      left: 0;
-      bottom: -10px;
-      content: "";
-      width: 100%;
-      border-bottom: solid 3px var(--border-accent);
-      border-radius: 2px;
-      opacity: 0;
-      transition: .3s;
-    }
-
-    &:hover, &.active {
-      color: var(--text-accent);
-
-      &:before {
-        opacity: 1;
-      }
-    }
-  }
-}
-
-.mainFilters {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 30px;
-}
-
 .filters {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
+  margin-bottom: 40px;
 
-  & .select {
-    cursor: pointer;
-    padding: 0 20px;
-    font-size: 14px;
-    background: var(--background-alt);
-    color: var(--text-accent);
-    font-weight: bold;
-    border: none;
-    border-radius: 5px;
-  }
-
-  & .searchBar {
+  & .mainFilters {
     display: flex;
-    flex: 1;
-    column-gap: 20px;
-    padding-right: 40px;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    column-gap: 40px;
 
-    & .input {
-      width: 100%;
-      max-width: 800px;
-      padding: 10px 15px;
-      background: transparent;
-      border: solid 1px var(--border);
-      color: var(--text);
-      border-radius: 5px;
-      font-size: 14px;
-    }
-
-    & .dateInput {
-      font-weight: bold;
-    }
-  }
-
-  & .extraFilters {
-    display: flex;
-    column-gap: 20px;
-
-    & .kindFilters {
+    & .searchBar {
       display: flex;
+      width: 100%;
       column-gap: 20px;
 
-      & .filter {
-        display: flex;
-        align-items: center;
-        padding: 5px 20px;
-        color: var(--text);
-        background: transparent;
-        border: solid 2px var(--border);
-        border-radius: 5px;
+      & .folioSelect {
+        cursor: pointer;
+        padding: 0 20px;
+        font-size: 14px;
+        background: var(--background-alt);
+        color: var(--text-accent);
         font-weight: bold;
+        border: none;
+        border-radius: 5px;
+      }
 
-        &.active {
-          border-color: var(--border-accent);
-          color: var(--text-accent);
-        }
+      & .input {
+        width: 100%;
+        padding: 10px 15px;
+        background: transparent;
+        border: solid 1px var(--border);
+        color: var(--text);
+        border-radius: 5px;
+        font-size: 14px;
+      }
 
-        &:hover {
-          background: var(--background-alt);
-          transition: background .3s;
-        }
+      & .dateInput {
+        font-weight: bold;
       }
     }
 
     & .addReceiptBtn {
       background: transparent;
       border: none;
+      width: 150px;
       background: var(--green);
       color: var(--text-alt);
       border-radius: 5px;
       font-weight: bold;
-      padding: 5px 20px;
+      transition: .3s;
 
       &:hover {
-        transition: .3s;
         background: var(--green-dark);
+      }
+    }
+  }
+
+  & .advancedFilters {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+    padding: 0 20px;
+
+    & .advancedFilter {
+      display: flex;
+
+      & .filterName {
+        width: 70px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+
+      & .filterOption {
+        border: none;
+        background: transparent;
+        color: var(--text-dim);
+        font-size: 14px;
+        transition: .3s;
+
+        &:hover {
+          color: var(--text);
+        }
+
+        &.active {
+          color: var(--text-accent);
+          font-weight: bold;
+        }
       }
     }
   }

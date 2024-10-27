@@ -104,9 +104,8 @@ function ReceiptsTable({
       <div className={tableStyles.colHeader}>
         <div className={tableStyles.colIcon}></div>
         <div className={tableStyles.colDate}>Date</div>
-        <div className={tableStyles.col2}>Folio</div>
+        <div className={tableStyles.col1}>Folio</div>
         <div className={tableStyles.col1}>SAP</div>
-        <div className={tableStyles.col1}>Kind</div>
         <div className={tableStyles.col1}>Status</div>
         <div className={tableStyles.colActions}>Actions</div>
       </div>
