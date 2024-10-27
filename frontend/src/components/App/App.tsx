@@ -14,6 +14,20 @@ function App() {
 
   return (
     <div className={styles.app}>
+      <div className={styles.viewSelector}>
+        {VIEW_LIST.map(v => {
+          const activeClass = view === v && styles.active;
+
+          return (
+            <button
+              className={`${styles.viewOption} ${activeClass}`}
+              onClick={() => setView(v)}
+            >
+              {v}
+            </button>
+          );
+        })}
+      </div>
 
       {view === "receipts" ? (
         <Receipts/>
