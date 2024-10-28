@@ -55,7 +55,7 @@ function MixesTable({ loading, mixes }: MixesTableProps) {
           const colDateClass = mix.deliveredDate || styles.noDate;
           const numberOfMixClass = mix.numberOfMix || styles.noNumber;
 
-          const deliveredDate = mix.deliveredDate !== undefined
+          const deliveredDate = mix.deliveredDate !== null
             ? getFormattedDate(mix.deliveredDate) : "Not delivered";
 
           return (

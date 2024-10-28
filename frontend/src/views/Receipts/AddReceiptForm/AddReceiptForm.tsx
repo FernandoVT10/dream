@@ -1,13 +1,13 @@
 import { useState, useReducer } from "react";
-import { CheckIcon } from "../../icons";
-import { Receipt } from "../../types";
+import { CheckIcon } from "@/icons";
+import { Receipt } from "@/types";
 import { getISODate } from "@utils/date";
 import { getNumbersFromStr } from "@utils/formatters";
 
-import Spinner from "../Spinner";
-import Notifications from "../../Notifications";
+import Spinner from "@components/Spinner";
+import Notifications from "@/Notifications";
 import MixesForms from "./MixesForms";
-import Api, { CreateReceiptData } from "../../Api";
+import Api, { CreateReceiptData } from "@/Api";
 
 import mixesFormsReducer, { MixFormActions, intialMixesForms } from "./mixesFormsReducer";
 

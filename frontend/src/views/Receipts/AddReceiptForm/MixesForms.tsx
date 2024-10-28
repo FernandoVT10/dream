@@ -1,4 +1,4 @@
-import { XIcon, CopyIcon } from "../../icons";
+import { XIcon, CopyIcon } from "@/icons";
 import { MixFormActions, MixFormAction } from "./mixesFormsReducer";
 import { getNumbersFromStr } from "@utils/formatters";
 

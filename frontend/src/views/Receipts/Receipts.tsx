@@ -8,7 +8,7 @@ import Notifications from "@/Notifications";
 import Spinner from "@components/Spinner";
 import Api from "@/Api";
 import Receipt from "./Receipt";
-import AddReceiptForm from "@components/AddReceiptForm";
+import AddReceiptForm from "./AddReceiptForm";
 import Filters from "@components/Filters";
 
 import styles from "./Receipts.module.scss";
