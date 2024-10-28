@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import Receipts from "@views/Receipts";
+import Mixes from "@views/Mixes";
 
 import styles from "./App.module.scss";
 
@@ -10,7 +11,7 @@ const VIEW_LIST = ["receipts", "mixes"];
 const DEFAULT_SELECTED_VIEW = VIEW_LIST[0];
 
 function App() {
-  const [view, setView] = useState<ViewList>(DEFAULT_SELECTED_VIEW);
+  const [view, setView] = useState(DEFAULT_SELECTED_VIEW);
 
   return (
     <div className={styles.app}>
@@ -22,6 +23,7 @@ function App() {
             <button
               className={`${styles.viewOption} ${activeClass}`}
               onClick={() => setView(v)}
+              key={v}
             >
               {v}
             </button>
@@ -29,11 +31,7 @@ function App() {
         })}
       </div>
 
-      {view === "receipts" ? (
-        <Receipts/>
-      ) : (
-        <span>Not implemented yet! :)</span>
-      )}
+      {view === "receipts" ? (<Receipts/>) : (<Mixes/>)}
     </div>
   );
 }

@@ -1,5 +1,5 @@
 import { API_URL } from "./constants";
-import { Mix, Receipt } from "./types";
+import { Mix, Receipt, MixWithReceipt } from "./types";
 
 export type CreateReceiptData = {
   date: string;
@@ -14,7 +14,7 @@ export type CreateReceiptData = {
 };
 
 class Api {
-  static async getMixes(search?: string): Promise<Mix[]> {
+  static async getMixes(search?: string): Promise<MixWithReceipt[]> {
     let query = "";
     if(search) query = `?search=${search}`;
 

@@ -17,4 +17,8 @@ export type Mix = {
   deliveredDate: string;
 };
 
+export type MixWithReceipt = Mix & {
+  receipt: Receipt;
+};
+
 export type ReactSetState<T> = React.Dispatch<React.SetStateAction<T>>;

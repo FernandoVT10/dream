@@ -15,15 +15,10 @@ const STATUS_LIST = [
   { name: "Delivered", value: "delivered" },
 ];
 
-const SEARCH_BY_LIST = [
-  { name: "Folio", value: "folio" },
-  { name: "SAP", value: "sap" },
-  { name: "Date", value: "date" },
-];
-
 type FiltersProps = {
-  loadReceipts: (search?: string) => Promise<void>;
-  showReceiptModal: () => void;
+  loadData: (search?: string) => Promise<void>;
+  addButton?: JSX.Element;
+  searchByList: { name: string, value: string }[];
 };
 
 const getValue = (cb: (value: string) => void) => {
@@ -32,9 +27,9 @@ const getValue = (cb: (value: string) => void) => {
   }
 };
 
-function Filters({ loadReceipts, showReceiptModal }: FiltersProps) {
+function Filters({ loadData, addButton, searchByList }: FiltersProps) {
   const [selectedKind, setSelectedKind] = useState(DEFAULT_SELECTED_KIND);
-  const [searchBy, setSearchBy] = useState("folio");
+  const [searchBy, setSearchBy] = useState(searchByList[0].value);
   const [search, setSearch] = useState("");
   const [status, setStatus] = useState(STATUS_LIST[1].value);
 
@@ -45,7 +40,7 @@ function Filters({ loadReceipts, showReceiptModal }: FiltersProps) {
     if(search) query += `${searchBy}:${search};`;
     if(status !== "all") query += `status:${status};`;
 
-    loadReceipts(query);
+    loadData(query);
   }, [selectedKind, search, status]);
 
   const handleSearchBy = (e: React.ChangeEvent<HTMLSelectElement>): void => {
@@ -59,14 +54,14 @@ function Filters({ loadReceipts, showReceiptModal }: FiltersProps) {
         <div className={styles.mainFilters}>
           <div className={styles.searchBar}>
             <select className={styles.folioSelect} value={searchBy} onChange={handleSearchBy}>
-              {SEARCH_BY_LIST.map(({ value, name }) => {
+              {searchByList.map(({ value, name }) => {
                 return (
                   <option value={value} key={value}>{name}</option>
                 );
               })}
             </select>
 
-            { searchBy === "date" ? (
+            { (searchBy === "date" || searchBy === "deliveredDate") ? (
               <input
                 type="date"
                 className={`${styles.input} ${styles.dateInput}`}
@@ -84,9 +79,7 @@ function Filters({ loadReceipts, showReceiptModal }: FiltersProps) {
               )}
           </div>
 
-          <button className={styles.addReceiptBtn} onClick={showReceiptModal}>
-            Add Receipt
-          </button>
+          { addButton || null }
         </div>
 
         <div className={styles.advancedFilters}>

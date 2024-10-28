@@ -1,0 +1,80 @@
+.loader {
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+.infoMessage {
+  display: flex;
+  justify-content: center;
+
+  & .text {
+    font-weight: bold;
+    color: var(--text-accent);
+    font-size: 20px;
+  }
+}
+
+.mixesTable {
+  width: 100%;
+  border-collapse: collapse;
+
+  & .deliveredDate {
+    width: 180px;
+    text-align: center;
+  }
+
+  & .colActions {
+    text-align: center;
+    width: 100px;
+  }
+
+  & .numberOfMix {
+    text-align: center;
+    width: 140px;
+  }
+
+  & .head {
+    border-bottom: solid 1px var(--border-dark);
+
+    & th {
+      color: var(--text-dimer);
+      font-size: 14px;
+      text-transform: uppercase;
+      text-align: left;
+      padding-bottom: 10px;
+
+      &.colActions, &.numberOfMix, &.deliveredDate {
+        text-align: center;
+      }
+    }
+  }
+
+  & .body {
+    & tr {
+      border-top: solid 1px var(--border-dark);
+
+      &:nth-child(1) { border: none; }
+    }
+
+    & td {
+      padding: 20px 0;
+    }
+
+    & .deliveredDate {
+      color: var(--text-accent);
+
+      &.noDate {
+        color: var(--text-dim);
+      }
+    }
+
+    & .numberOfMix {
+      color: var(--text-accent);
+
+      &.noNumber {
+        color: var(--text-dim);
+      }
+    }
+  }
+}

@@ -37,21 +37,6 @@
         font-weight: bold;
       }
     }
-
-    & .addReceiptBtn {
-      background: transparent;
-      border: none;
-      width: 150px;
-      background: var(--green);
-      color: var(--text-alt);
-      border-radius: 5px;
-      font-weight: bold;
-      transition: .3s;
-
-      &:hover {
-        background: var(--green-dark);
-      }
-    }
   }
 
   & .advancedFilters {

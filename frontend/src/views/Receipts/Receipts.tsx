@@ -14,6 +14,12 @@ import Filters from "@components/Filters";
 import styles from "./Receipts.module.scss";
 import tableStyles from "./table.module.scss";
 
+const SEARCH_BY_LIST = [
+  { name: "Folio", value: "folio" },
+  { name: "SAP", value: "sap" },
+  { name: "Date", value: "date" },
+];
+
 type DeleteReceiptModalProps = {
   deleteModal: UseModalReturn;
   setReceipts: ReactSetState<ReceiptType[]>;
@@ -163,6 +169,12 @@ function Receipts() {
     setReceiptToDelete(receiptId);
   };
 
+  const addReceiptButton = (
+    <button className={styles.addReceiptBtn} onClick={addReceiptModal.show}>
+      Add Receipt
+    </button>
+  );
+
   return (
     <>
       <DeleteReceiptModal
@@ -179,8 +191,9 @@ function Receipts() {
       </Modal>
 
       <Filters
-        loadReceipts={loadReceipts}
-        showReceiptModal={() => addReceiptModal.show()}
+        loadData={loadReceipts}
+        addButton={addReceiptButton}
+        searchByList={SEARCH_BY_LIST}
       />
 
       <ReceiptsTable
