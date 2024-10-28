@@ -1,5 +1,6 @@
 import { XIcon, CopyIcon } from "../../icons";
 import { MixFormActions, MixFormAction } from "./mixesFormsReducer";
+import { getNumbersFromStr } from "@utils/formatters";
 
 import styles from "./AddReceiptForm.module.scss";
 
@@ -16,10 +17,6 @@ type MixFormProps = {
   updateForm: (formId: number, data: Omit<MixFormData, "id">) => void;
   duplicateForm: (formId: number) => void;
 };
-
-export function getNumbersFromStr(str: string): string {
-  return str.replace(/[^0-9]/g, "");
-}
 
 function MixForm({ mixForm, removeForm, updateForm, duplicateForm }: MixFormProps) {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,7 +108,7 @@ type MixesProps = {
   dispatch: React.Dispatch<MixFormAction>;
 };
 
-function Mixes({ mixesForms, dispatch }: MixesProps) {
+function MixesForms({ mixesForms, dispatch }: MixesProps) {
   const addMixForm = () => {
     dispatch({ type: MixFormActions.Add });
   };
@@ -154,4 +151,4 @@ function Mixes({ mixesForms, dispatch }: MixesProps) {
   );
 }
 
-export default Mixes;
+export default MixesForms;

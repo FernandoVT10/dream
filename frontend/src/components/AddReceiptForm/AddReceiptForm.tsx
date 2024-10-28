@@ -1,10 +1,12 @@
 import { useState, useReducer } from "react";
 import { CheckIcon } from "../../icons";
 import { Receipt } from "../../types";
+import { getISODate } from "@utils/date";
+import { getNumbersFromStr } from "@utils/formatters";
 
 import Spinner from "../Spinner";
 import Notifications from "../../Notifications";
-import Mixes, { getNumbersFromStr } from "./Mixes";
+import MixesForms from "./MixesForms";
 import Api, { CreateReceiptData } from "../../Api";
 
 import mixesFormsReducer, { MixFormActions, intialMixesForms } from "./mixesFormsReducer";
@@ -16,15 +18,6 @@ const KIND_LIST = [
   { name: "Strawberry", value: "strawberry" },
 ];
 const DEFAULT_KIND_VALUE = KIND_LIST[0].value;
-
-function getTodayDate(): string {
-  // the date should be formatted to yyyy-mm-dd
-  const d = new Date();
-  const year = d.getFullYear();
-  const month = (d.getMonth() + 1).toString().padStart(2, "0");
-  const day = d.getDate().toString().padStart(2, "0");
-  return `${year}-${month}-${day}`;
-}
 
 type AddReceiptFormProps = {
   hideModal: () => void;
@@ -60,7 +53,7 @@ function AddReceiptForm({ hideModal, addReceiptToState }: AddReceiptFormProps) {
       };
     });
 
-    const actualDate = useTodayDate ? getTodayDate() : date;
+    const actualDate = useTodayDate ? getISODate() : date;
 
     const receipt = await Api.createReceipt({ date: actualDate, kind, folio, sap, mixes });
 
@@ -156,7 +149,7 @@ function AddReceiptForm({ hideModal, addReceiptToState }: AddReceiptFormProps) {
             </div>
           </div>
 
-          <Mixes mixesForms={mixesForms} dispatch={dispatch} />
+          <MixesForms mixesForms={mixesForms} dispatch={dispatch} />
 
           <div className={styles.btnContainer}>
             <button type="submit" className="custom-btn">

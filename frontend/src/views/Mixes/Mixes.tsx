@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { MixWithReceipt } from "@/types";
 
+import { getFormattedDate } from "@utils/date";
+
 import Spinner from "@components/Spinner";
 import Filters from "@components/Filters";
 import Notifications from "@/Notifications";
@@ -53,12 +55,15 @@ function MixesTable({ loading, mixes }: MixesTableProps) {
           const colDateClass = mix.deliveredDate || styles.noDate;
           const numberOfMixClass = mix.numberOfMix || styles.noNumber;
 
+          const deliveredDate = mix.deliveredDate !== undefined
+            ? getFormattedDate(mix.deliveredDate) : "Not delivered";
+
           return (
             <tr key={mix.id}>
               <td
                 className={`${styles.deliveredDate} ${colDateClass}`}
               >
-                {mix.deliveredDate || "Not delivered"}
+                {deliveredDate}
               </td>
               <td>{mix.receipt.folio}</td>
               <td>{mix.receipt.sap}</td>

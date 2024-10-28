@@ -1,4 +1,4 @@
-import { MixFormData } from "./Mixes";
+import { MixFormData } from "./MixesForms";
 
 export enum MixFormActions {
   Add = "add",
