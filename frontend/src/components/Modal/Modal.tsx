@@ -5,16 +5,17 @@ import styles from "./Modal.module.scss";
 interface ModalProps {
   title: string,
   modal: UseModalReturn,
-  children: JSX.Element
+  children: JSX.Element,
+  maxWidth: number,
 }
 
-export default function Modal({ title, modal, children }: ModalProps) {
+export default function Modal({ title, modal, children, maxWidth = 800 }: ModalProps) {
   const wrapperClass = modal.isActive ? styles.active : "";
 
   return (
     <div className={`${styles.modalWrapper} ${wrapperClass}`}>
       <div className={styles.modalContainer}>
-        <div className={styles.modal}>
+        <div className={styles.modal} style={{ maxWidth }}>
           <div className={styles.modalHeader}>
             <h2 className={styles.title}>{ title }</h2>
 

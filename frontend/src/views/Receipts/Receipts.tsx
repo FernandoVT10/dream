@@ -47,7 +47,7 @@ function DeleteReceiptModal({ deleteModal, setReceipts, receiptToDelete }: Delet
   };
 
   return (
-    <Modal title="Delete Receipt" modal={deleteModal}>
+    <Modal title="Delete Receipt" modal={deleteModal} maxWidth={500}>
       <div className={styles.deleteModal}>
         {isDeletingReceipt && (
           <div className={styles.loader}>
@@ -183,7 +183,7 @@ function Receipts() {
         receiptToDelete={receiptToDelete}
       />
 
-      <Modal title="Add Receipt" modal={addReceiptModal}>
+      <Modal title="Add Receipt" modal={addReceiptModal} maxWidth={600}>
         <AddReceiptForm
           hideModal={addReceiptModal.hide}
           addReceiptToState={addReceipt}
