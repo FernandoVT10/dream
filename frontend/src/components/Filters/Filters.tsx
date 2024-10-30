@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Input, Select } from "@components/Form";
 
 import styles from "./Filters.module.scss";
 
@@ -21,12 +22,6 @@ type FiltersProps = {
   searchByList: { name: string, value: string }[];
 };
 
-const getValue = (cb: (value: string) => void) => {
-  return (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    cb(e.target.value);
-  }
-};
-
 function Filters({ loadData, addButton, searchByList }: FiltersProps) {
   const [selectedKind, setSelectedKind] = useState(DEFAULT_SELECTED_KIND);
   const [searchBy, setSearchBy] = useState(searchByList[0].value);
@@ -43,9 +38,15 @@ function Filters({ loadData, addButton, searchByList }: FiltersProps) {
     loadData(query);
   }, [selectedKind, search, status]);
 
-  const handleSearchBy = (e: React.ChangeEvent<HTMLSelectElement>): void => {
-    setSearchBy(e.target.value);
+  const handleSearchBy = (value: string): void => {
+    setSearchBy(value);
     setSearch("");
+  };
+
+  const getInputType = (): string => {
+    if(["date", "deliveredDate"].includes(searchBy))
+      return "date";
+    return "text";
   };
 
   return (
@@ -53,30 +54,18 @@ function Filters({ loadData, addButton, searchByList }: FiltersProps) {
       <div className={styles.filters}>
         <div className={styles.mainFilters}>
           <div className={styles.searchBar}>
-            <select className={styles.folioSelect} value={searchBy} onChange={handleSearchBy}>
-              {searchByList.map(({ value, name }) => {
-                return (
-                  <option value={value} key={value}>{name}</option>
-                );
-              })}
-            </select>
+            <Select
+              value={searchBy}
+              onChange={handleSearchBy}
+              valueList={searchByList}
+            />
 
-            { (searchBy === "date" || searchBy === "deliveredDate") ? (
-              <input
-                type="date"
-                className={`${styles.input} ${styles.dateInput}`}
-                value={search}
-                onChange={getValue(v => setSearch(v))}
-              />
-            ) : (
-                <input
-                  type="text"
-                  className={styles.input}
-                  placeholder={`Enter a ${searchBy.toLowerCase()} to filter`}
-                  value={search}
-                  onChange={getValue(v => setSearch(v))}
-                />
-              )}
+            <Input
+              type={getInputType()}
+              placeholder={`Enter a ${searchBy.toLowerCase()} to filter`}
+              value={search}
+              onChange={(v) => setSearch(v)}
+            />
           </div>
 
           { addButton || null }

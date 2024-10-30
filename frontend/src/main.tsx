@@ -6,7 +6,6 @@ import Notifications from "./Notifications";
 
 import "./styles/index.scss";
 import "./styles/buttons.scss";
-import "./styles/input.scss";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>

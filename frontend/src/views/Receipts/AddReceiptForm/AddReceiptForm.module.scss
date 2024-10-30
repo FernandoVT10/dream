@@ -30,37 +30,12 @@
     margin-bottom: 5px;
   }
 
-  & .select {
-    cursor: pointer;
-    padding: 0 20px;
-    font-size: 14px;
-    background: var(--background-alt);
-    color: var(--text-accent);
-    font-weight: bold;
-    border: none;
-    padding: 10px;
-  }
-
   & .checkboxContainer {
     display: flex;
     align-items: center;
     column-gap: 5px;
     padding: 5px;
     padding-bottom: 0;
-
-    & .checkbox {
-      cursor: pointer;
-      display: inline-flex;
-      width: 15px;
-      height: 15px;
-      border: solid 1px var(--border-accent);
-      color: black;
-      border-radius: 2px;
-
-      &.checked {
-        background: var(--border-accent);
-      }
-    }
 
     & .text {
       font-size: 14px;

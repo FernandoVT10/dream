@@ -11,31 +11,6 @@
       display: flex;
       width: 100%;
       column-gap: 20px;
-
-      & .folioSelect {
-        cursor: pointer;
-        padding: 0 20px;
-        font-size: 14px;
-        background: var(--background-alt);
-        color: var(--text-accent);
-        font-weight: bold;
-        border: none;
-        border-radius: 5px;
-      }
-
-      & .input {
-        width: 100%;
-        padding: 10px 15px;
-        background: transparent;
-        border: solid 1px var(--border);
-        color: var(--text);
-        border-radius: 5px;
-        font-size: 14px;
-      }
-
-      & .dateInput {
-        font-weight: bold;
-      }
     }
   }
 

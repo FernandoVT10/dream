@@ -1,9 +1,9 @@
 import { useState, useReducer } from "react";
-import { CheckIcon } from "@/icons";
 import { Receipt } from "@/types";
 import { getISODate } from "@utils/date";
 import { getNumbersFromStr } from "@utils/formatters";
 
+import { Input, Checkbox, Select } from "@components/Form";
 import Spinner from "@components/Spinner";
 import Notifications from "@/Notifications";
 import MixesForms from "./MixesForms";
@@ -32,12 +32,6 @@ function AddReceiptForm({ hideModal, addReceiptToState }: AddReceiptFormProps) {
   const [folio, setFolio] = useState("");
   const [sap, setSap] = useState("");
   const [loading, setLoading] = useState(false);
-
-  const getInputValue = (cb: (v: string) => void) => {
-    return (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-      cb(e.target.value);
-    };
-  };
 
   const handleOnSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -90,60 +84,49 @@ function AddReceiptForm({ hideModal, addReceiptToState }: AddReceiptFormProps) {
           <div className={styles.row}>
             <div className={styles.col}>
               <span className={styles.fieldName}>Date</span>
-              <input
+              <Input
                 type="date"
-                className="custom-input"
                 value={date}
-                onChange={getInputValue(v => setDate(v))}
+                onChange={(v) => setDate(v)}
                 required
                 disabled={useTodayDate}
               />
               <div className={styles.checkboxContainer}>
-                <span
-                  className={`${styles.checkbox} ${useTodayDate && styles.checked}`}
-                  onClick={() => setUseTodayDate(!useTodayDate)}
-                >
-                  <CheckIcon size={14}/>
-                </span>
+                <Checkbox
+                  onChange={(v) => setUseTodayDate(v)}
+                  checked={useTodayDate}
+                />
                 <span className={styles.text}>Use today's date</span>
               </div>
             </div>
             <div className={styles.col}>
               <span className={styles.fieldName}>Kind</span>
-              <select
-                className={styles.select}
+              <Select
                 value={kind}
-                onChange={getInputValue(v => setKind(v))}
-              >
-                {KIND_LIST.map(kind => {
-                  return (
-                    <option key={kind.name} value={kind.value}>{kind.name}</option>
-                  );
-                })}
-              </select>
+                onChange={(v) => setKind(v)}
+                valueList={KIND_LIST}
+              />
             </div>
           </div>
 
           <div className={styles.row}>
             <div className={styles.col}>
               <span className={styles.fieldName}>Folio</span>
-              <input
+              <Input
                 type="text"
-                className="custom-input"
                 placeholder="0000 Mya"
                 value={folio}
-                onChange={getInputValue(v => setFolio(v))}
+                onChange={(v) => setFolio(v)}
                 required
               />
             </div>
             <div className={styles.col}>
               <span className={styles.fieldName}>SAP</span>
-              <input
+              <Input
                 type="text"
-                className="custom-input"
                 placeholder="125222"
                 value={sap}
-                onChange={getInputValue(v => setSap(getNumbersFromStr(v)))}
+                onChange={(v) => setSap(getNumbersFromStr(v))}
                 required
               />
             </div>

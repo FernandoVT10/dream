@@ -1,6 +1,7 @@
 import { XIcon, CopyIcon } from "@/icons";
 import { MixFormActions, MixFormAction } from "./mixesFormsReducer";
 import { getNumbersFromStr } from "@utils/formatters";
+import { Input } from "@components/Form";
 
 import styles from "./AddReceiptForm.module.scss";
 
@@ -19,9 +20,7 @@ type MixFormProps = {
 };
 
 function MixForm({ mixForm, removeForm, updateForm, duplicateForm }: MixFormProps) {
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
+  const handleInputChange = (value: string, name: string) => {
     const data = {
       ...mixForm,
     };
@@ -45,38 +44,35 @@ function MixForm({ mixForm, removeForm, updateForm, duplicateForm }: MixFormProp
     <div className={`${styles.row} ${styles.mix}`}>
       <div className={styles.col}>
         <span className={styles.fieldName}>Quantity</span>
-        <input
+        <Input
           type="text"
-          className="custom-input"
           placeholder="1 and 1/2 willy"
           name="quantity"
           value={mixForm.quantity}
-          onChange={handleInputChange}
+          onChange={(v) => handleInputChange(v, "quantity")}
           required
         />
       </div>
       <div className={styles.col}>
         <span className={styles.fieldName}>Presentation</span>
-        <input
+        <Input
           type="text"
-          className="custom-input"
           placeholder="3 decanters 2 bags"
           name="presentation"
           value={mixForm.presentation}
-          onChange={handleInputChange}
+          onChange={(v) => handleInputChange(v, "presentation")}
           required
         />
       </div>
 
       <div className={styles.col}>
         <span className={styles.fieldName}>No.</span>
-        <input
+        <Input
           type="text"
-          className="custom-input"
           placeholder="#"
           name="numberOfMix"
           value={mixForm.numberOfMix}
-          onChange={handleInputChange}
+          onChange={(v) => handleInputChange(v, "numberOfMix")}
         />
       </div>
 
