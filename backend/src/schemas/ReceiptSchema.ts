@@ -1,5 +1,5 @@
 import { Schema, ParamSchema } from "express-validator";
-import { RECEIPT_KIND_LIST, RECEIPT_SEARCH_BY_VALUES } from "../constants";
+import { RECEIPT_KIND_LIST } from "../constants";
 import ReceiptController from "../controllers/ReceiptController";
 import Logger from "../Logger";
 

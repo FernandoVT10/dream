@@ -3,8 +3,6 @@ import app from "./app";
 
 import Logger from "./Logger";
 
-import { Receipt } from "./models";
-
 const PORT = 3001;
 
 async function main() {
