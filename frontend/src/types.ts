@@ -22,3 +22,7 @@ export type MixWithReceipt = Mix & {
 };
 
 export type ReactSetState<T> = React.Dispatch<React.SetStateAction<T>>;
+
+export type ReceiptWithMixes = Receipt & {
+  mixes: Mix[];
+};

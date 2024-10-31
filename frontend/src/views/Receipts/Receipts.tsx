@@ -10,6 +10,7 @@ import Api from "@/Api";
 import Receipt from "./Receipt";
 import AddReceiptForm from "./AddReceiptForm";
 import Filters from "@components/Filters";
+import EditReceiptForm from "./EditReceiptForm";
 
 import styles from "./Receipts.module.scss";
 import tableStyles from "./table.module.scss";
@@ -81,6 +82,7 @@ type ReceiptsTableProps = {
   receipts: ReceiptType[];
   showDeleteModal: (receiptId: number) => void;
   setReceiptAsDelivered: (receiptId: number) => void;
+  showEditModal: (receiptId: number) => void;
 };
 
 function ReceiptsTable({
@@ -88,6 +90,7 @@ function ReceiptsTable({
   receipts,
   showDeleteModal,
   setReceiptAsDelivered,
+  showEditModal,
 }: ReceiptsTableProps) {
   if(loading) {
     return (
@@ -122,6 +125,7 @@ function ReceiptsTable({
             receipt={receipt}
             setReceiptAsDelivered={setReceiptAsDelivered}
             showDeleteModal={showDeleteModal}
+            showEditModal={showEditModal}
             key={receipt.id}
           />
         );
@@ -134,8 +138,10 @@ function Receipts() {
   const [receipts, setReceipts] = useState<ReceiptType[]>([]);
   const [receiptToDelete, setReceiptToDelete] = useState(0);
   const [loadingReceipts, setLoadingReceipts] = useState(false);
+  const [receiptToEdit, setReceiptToEdit] = useState<number | undefined>();
 
   const addReceiptModal = useModal();
+  const editReceiptModal = useModal();
   const deleteModal = useModal();
 
   const loadReceipts = async (search?: string) => {
@@ -169,6 +175,11 @@ function Receipts() {
     setReceiptToDelete(receiptId);
   };
 
+  const showEditModal = (receiptId: number) => {
+    editReceiptModal.show();
+    setReceiptToEdit(receiptId);
+  };
+
   const addReceiptButton = (
     <button className={styles.addReceiptBtn} onClick={addReceiptModal.show}>
       Add Receipt
@@ -190,6 +201,10 @@ function Receipts() {
         />
       </Modal>
 
+      <Modal title="Edit Receipt" modal={editReceiptModal} maxWidth={600}>
+        <EditReceiptForm receiptId={receiptToEdit}/>
+      </Modal>
+
       <Filters
         loadData={loadReceipts}
         addButton={addReceiptButton}
@@ -200,6 +215,7 @@ function Receipts() {
         loading={loadingReceipts}
         receipts={receipts}
         showDeleteModal={showDeleteModal}
+        showEditModal={showEditModal}
         setReceiptAsDelivered={setReceiptAsDelivered}
       />
     </>

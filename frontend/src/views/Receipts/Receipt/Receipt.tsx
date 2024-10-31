@@ -94,9 +94,10 @@ type ReceiptProps = {
   receipt: ReceiptType;
   setReceiptAsDelivered: (receiptId: number) => void;
   showDeleteModal: (receiptId: number) => void;
+  showEditModal: (receiptId: number) => void;
 };
 
-function Receipt({ receipt, setReceiptAsDelivered, showDeleteModal }: ReceiptProps) {
+function Receipt({ receipt, setReceiptAsDelivered, showDeleteModal, showEditModal }: ReceiptProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [mixesFetched, setMixesFetched] = useState(false);
   const [mixes, setMixes] = useState<Mix[]>([]);
@@ -151,7 +152,7 @@ function Receipt({ receipt, setReceiptAsDelivered, showDeleteModal }: ReceiptPro
         </div>
 
         <div className={tableStyles.colActions} onClick={stopClickPropagation}>
-          <button type="button" title="Edit Receipt">
+          <button type="button" title="Edit Receipt" onClick={() => showEditModal(receipt.id)}>
             <PencilIcon size={20}/>
           </button>
 

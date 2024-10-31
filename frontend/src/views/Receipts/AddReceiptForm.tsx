@@ -112,6 +112,7 @@ function AddReceiptForm({ hideModal, addReceiptToState }: AddReceiptFormProps) {
       onChange={onChange}
       mixesForms={mixesForms}
       dispatchMixesForms={dispatchMixesForms}
+      submitBtnText="Add Receipt"
     />
   );
 }

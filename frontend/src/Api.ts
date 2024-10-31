@@ -1,5 +1,5 @@
 import { API_URL } from "./constants";
-import { Mix, Receipt, MixWithReceipt } from "./types";
+import { Mix, Receipt, MixWithReceipt, ReceiptWithMixes } from "./types";
 
 export type CreateReceiptData = {
   date: string;
@@ -67,6 +67,12 @@ class Api {
     }
 
     return null;
+  }
+
+  static async getReceiptById(id: number): Promise<ReceiptWithMixes> {
+    const res = await fetch(`${API_URL}/receipts/${id}`);
+    const json = await res.json();
+    return json.receipt;
   }
 }
 

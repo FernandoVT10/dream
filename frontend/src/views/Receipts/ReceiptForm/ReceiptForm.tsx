@@ -29,6 +29,7 @@ type ReceiptFormProps = {
   onChange: (value: string, name: string) => void;
   mixesForms: MixFormData[];
   dispatchMixesForms: React.Dispatch<MixFormAction>;
+  submitBtnText: string;
 };
 
 function ReceiptForm(props: ReceiptFormProps) {
@@ -97,7 +98,7 @@ function ReceiptForm(props: ReceiptFormProps) {
 
           <div className={getClassName("btn-container")}>
             <button type="submit" className="custom-btn">
-              Add Receipt
+              {props.submitBtnText}
             </button>
           </div>
         </div>
