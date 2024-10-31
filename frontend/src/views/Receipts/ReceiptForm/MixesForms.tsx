@@ -1,9 +1,12 @@
 import { XIcon, CopyIcon } from "@/icons";
 import { MixFormActions, MixFormAction } from "./mixesFormsReducer";
 import { getNumbersFromStr } from "@utils/formatters";
+import { parseCssModule } from "@utils/css";
 import { Input } from "@components/Form";
 
-import styles from "./AddReceiptForm.module.scss";
+import styles from "./ReceiptForm.module.scss";
+
+const getClassName = parseCssModule(styles);
 
 export type MixFormData = {
   id: number;
@@ -41,9 +44,9 @@ function MixForm({ mixForm, removeForm, updateForm, duplicateForm }: MixFormProp
   };
 
   return (
-    <div className={`${styles.row} ${styles.mix}`}>
-      <div className={styles.col}>
-        <span className={styles.fieldName}>Quantity</span>
+    <div className={getClassName("row", "mix")}>
+      <div className={getClassName("col")}>
+        <span className={getClassName("field-name")}>Quantity</span>
         <Input
           type="text"
           placeholder="1 and 1/2 willy"
@@ -53,8 +56,8 @@ function MixForm({ mixForm, removeForm, updateForm, duplicateForm }: MixFormProp
           required
         />
       </div>
-      <div className={styles.col}>
-        <span className={styles.fieldName}>Presentation</span>
+      <div className={getClassName("col")}>
+        <span className={getClassName("field-name")}>Presentation</span>
         <Input
           type="text"
           placeholder="3 decanters 2 bags"
@@ -65,8 +68,8 @@ function MixForm({ mixForm, removeForm, updateForm, duplicateForm }: MixFormProp
         />
       </div>
 
-      <div className={styles.col}>
-        <span className={styles.fieldName}>No.</span>
+      <div className={getClassName("col", "numberOfMix")}>
+        <span className={getClassName("field-name")}>No.</span>
         <Input
           type="text"
           placeholder="#"
@@ -76,10 +79,10 @@ function MixForm({ mixForm, removeForm, updateForm, duplicateForm }: MixFormProp
         />
       </div>
 
-      <div className={`${styles.col} ${styles.buttons}`}>
+      <div className={getClassName("col", "buttons")}>
         <button
           type="button"
-          className={styles.duplicateBtn}
+          className={getClassName("duplicate-btn")}
           onClick={() => duplicateForm(mixForm.id)}
           title="Duplicate"
         >
@@ -88,7 +91,7 @@ function MixForm({ mixForm, removeForm, updateForm, duplicateForm }: MixFormProp
 
         <button
           type="button"
-          className={styles.deleteBtn}
+          className={getClassName("delete-btn")}
           onClick={() => removeForm(mixForm.id)}
           title="Remove"
         >
@@ -124,7 +127,7 @@ function MixesForms({ mixesForms, dispatch }: MixesProps) {
 
   return (
     <>
-      <p className={styles.subtitle}>Mixes</p>
+      <p className={getClassName("mixes-subtitle")}>Mixes</p>
 
       {mixesForms.map((mixForm) => {
         return <MixForm
@@ -138,7 +141,7 @@ function MixesForms({ mixesForms, dispatch }: MixesProps) {
 
       <button
         type="button"
-        className={styles.addMixBtn}
+        className={getClassName("add-mix-btn")}
         onClick={addMixForm}
       >
         Add Mix

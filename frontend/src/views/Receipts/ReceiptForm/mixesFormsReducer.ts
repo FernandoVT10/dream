@@ -26,7 +26,7 @@ export type MixFormAction = {
 
 let mixFormId = 0;
 
-export const intialMixesForms: MixFormData[] = [
+export const initialMixesForms: MixFormData[] = [
   {
     id: mixFormId++,
     quantity: "",
@@ -44,10 +44,10 @@ function mixesFormsReducer(state: MixFormData[], action: MixFormAction): MixForm
         presentation: "",
         numberOfMix: "",
       }];
-    } break;
+    };
     case MixFormActions.Remove: {
       return state.filter(mix => mix.id !== action.formId);
-    } break;
+    };
     case MixFormActions.Update: {
       return state.map(mix => {
         if(mix.id === action.formId) {
@@ -59,11 +59,11 @@ function mixesFormsReducer(state: MixFormData[], action: MixFormAction): MixForm
 
         return mix;
       });
-    } break;
+    };
     case MixFormActions.Reset: {
       mixFormId = 0;
-      return intialMixesForms;
-    } break;
+      return initialMixesForms;
+    };
     case MixFormActions.Duplicate: {
       const index = state.findIndex((mix) => {
         return mix.id === action.formId;
@@ -76,7 +76,7 @@ function mixesFormsReducer(state: MixFormData[], action: MixFormAction): MixForm
       });
 
       return newState;
-    } break;
+    };
   }
 }
 

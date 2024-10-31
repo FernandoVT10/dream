@@ -63,3 +63,16 @@
     }
   }
 }
+
+.date-checkbox {
+  display: flex;
+  align-items: center;
+  column-gap: 5px;
+  padding: 5px;
+  padding-bottom: 0;
+
+  & .text {
+    font-size: 14px;
+    color: var(--text-accent);
+  }
+}
