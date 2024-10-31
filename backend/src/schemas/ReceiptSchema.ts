@@ -147,10 +147,12 @@ const updateSchema: Schema = {
 };
 
 const getMixesSchema: Schema = { id: receiptIdValidator };
+const getReceiptSchema: Schema = { id: receiptIdValidator };
 
 export default {
   create: createSchema,
   delete: deleteSchema,
   update: updateSchema,
   getMixes: getMixesSchema,
+  getReceipt: getReceiptSchema,
 };

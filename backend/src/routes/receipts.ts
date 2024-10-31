@@ -68,6 +68,18 @@ router.put("/:id", validateSchema(ReceiptSchema.update), async (req, res, next) 
   }
 });
 
+router.get("/:id", validateSchema(ReceiptSchema.getReceipt), async (req, res, next) => {
+  try {
+    const data = matchedData(req);
+    const id = parseInt(data.id);
+
+    const receipt = await ReceiptController.getOneWithMixes(id);
+    res.json({ receipt });
+  } catch(e) {
+    next(e);
+  }
+});
+
 router.get("/:id/mixes", validateSchema(ReceiptSchema.getMixes), async (req, res, next) => {
   try {
     const data = matchedData(req);

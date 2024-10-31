@@ -5,6 +5,10 @@ import { MIX_STATUS_LIST, RECEIPT_STATUS_LIST } from "../constants";
 import Logger from "../Logger";
 import getSearchTokens from "../utils/getSearchTokens";
 
+type ReceiptWithMixes = Receipt & {
+  mixes: Mix[];
+};
+
 const SUPPORTED_TOKENS = ["folio", "sap", "date", "kind", "status"];
 
 function getFiltersFromSearch(search: string): WhereOptions {
@@ -111,6 +115,15 @@ class ReceiptController {
 
     receipt.status = RECEIPT_STATUS_LIST.delivered;
     await receipt.save();
+  }
+
+  static async getOneWithMixes(id: number): Promise<ReceiptWithMixes | null> {
+    return await Receipt.findByPk(id, {
+      include: {
+        model: Mix,
+        as: "mixes",
+      }
+    });
   }
 }
 
