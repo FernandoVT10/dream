@@ -9,7 +9,12 @@ import Notifications from "@/Notifications";
 
 import Api, { CreateReceiptData } from "@/Api";
 import ReceiptForm, { ReceiptFormData } from "./ReceiptForm";
-import mixesFormsReducer, { MixFormActions, initialMixesForms } from "./ReceiptForm/mixesFormsReducer";
+
+import MixesForms, {
+  mixesFormsReducer,
+  MixFormActions,
+  initialMixesForms
+} from "./MixesForms";
 
 import styles from "./Receipts.module.scss";
 
@@ -103,6 +108,10 @@ function AddReceiptForm({ hideModal, addReceiptToState }: AddReceiptFormProps) {
     </>
   );
 
+  const mixesFormsComponent = (
+    <MixesForms mixesForms={mixesForms} dispatch={dispatchMixesForms}/>
+  );
+
   return (
     <ReceiptForm
       loadingText="Adding receipts..."
@@ -110,9 +119,8 @@ function AddReceiptForm({ hideModal, addReceiptToState }: AddReceiptFormProps) {
       dateComponent={dateComponent}
       data={data}
       onChange={onChange}
-      mixesForms={mixesForms}
-      dispatchMixesForms={dispatchMixesForms}
       submitBtnText="Add Receipt"
+      extraFields={mixesFormsComponent}
     />
   );
 }

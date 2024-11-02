@@ -8,10 +8,12 @@ export interface UseModalReturn {
   isActive: boolean
 }
 
-export default function useModal(): UseModalReturn {
+export default function useModal(onClose?: Function): UseModalReturn {
   const [isActive, setIsActive] = useState(false);
 
   const hide = (): void => {
+    if(onClose) onClose();
+
     setIsActive(false);
     document.body.style.overflow = "auto";
   };

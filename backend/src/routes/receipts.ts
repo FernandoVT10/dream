@@ -13,7 +13,7 @@ const router = Router();
 router.post("/", validateSchema(ReceiptSchema.create), async (req, res, next) => {
   try {
     const receipt = await ReceiptController.createOne(matchedData(req));
-    
+
     res.json({ receipt });
   } catch(e) {
     console.error(e);

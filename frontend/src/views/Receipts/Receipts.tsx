@@ -141,7 +141,7 @@ function Receipts() {
   const [receiptToEdit, setReceiptToEdit] = useState<number | undefined>();
 
   const addReceiptModal = useModal();
-  const editReceiptModal = useModal();
+  const editReceiptModal = useModal(() => setReceiptToEdit(undefined));
   const deleteModal = useModal();
 
   const loadReceipts = async (search?: string) => {
@@ -202,7 +202,7 @@ function Receipts() {
       </Modal>
 
       <Modal title="Edit Receipt" modal={editReceiptModal} maxWidth={600}>
-        <EditReceiptForm receiptId={receiptToEdit}/>
+        <EditReceiptForm receiptId={receiptToEdit} hideModal={editReceiptModal.hide}/>
       </Modal>
 
       <Filters

@@ -13,6 +13,13 @@ export type CreateReceiptData = {
   }[];
 };
 
+type UpdateReceiptData = {
+  date: string;
+  kind: string;
+  folio: string;
+  sap: string;
+};
+
 class Api {
   static async getMixes(search?: string): Promise<MixWithReceipt[]> {
     let query = "";
@@ -73,6 +80,17 @@ class Api {
     const res = await fetch(`${API_URL}/receipts/${id}`);
     const json = await res.json();
     return json.receipt;
+  }
+
+  static async updateReceipt(receiptId: number, data: UpdateReceiptData): Promise<boolean> {
+    const res = await fetch(`${API_URL}/receipts/${receiptId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    return res.status === 200;
   }
 }
 

@@ -6,7 +6,6 @@ export enum MixFormActions {
   Update = "update",
   Reset = "reset",
   Duplicate = "duplicate",
-  Set = "set",
 };
 
 export type MixFormAction = {
@@ -23,9 +22,6 @@ export type MixFormAction = {
 } | {
   type: MixFormActions.Duplicate;
   formId: number;
-} | {
-  type: MixFormActions.Set;
-  mixesForms: MixFormData[];
 };
 
 let mixFormId = 0;
@@ -81,9 +77,6 @@ function mixesFormsReducer(state: MixFormData[], action: MixFormAction): MixForm
 
       return newState;
     };
-    case MixFormActions.Set: {
-      return action.mixesForms;
-    }
   }
 }
 

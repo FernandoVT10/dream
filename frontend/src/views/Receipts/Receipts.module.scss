@@ -76,3 +76,52 @@
     color: var(--text-accent);
   }
 }
+
+.edit-receipt-loader {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.edit-receipt-form {
+  & .mix-test {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+    box-shadow: rgba(255, 255, 255, .5) 0 0 3px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+
+    & .col-1, & .col-2 {
+      flex: 1;
+    }
+
+    & .col-2 {
+      color: var(--text-dimer);
+    }
+
+    & .col-3 {
+      padding: 0 40px;
+      text-align: center;
+    }
+
+    & .col-4 {
+    }
+
+    & .btn {
+      color: var(--text-dim);
+
+      &:hover {
+        color: var(--text);
+      }
+    }
+  }
+
+  & .add-mix-btn {
+    color: var(--text-dim);
+
+    &:hover {
+      color: var(--text);
+    }
+  }
+}

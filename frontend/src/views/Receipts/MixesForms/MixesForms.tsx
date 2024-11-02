@@ -4,7 +4,7 @@ import { getNumbersFromStr } from "@utils/formatters";
 import { parseCssModule } from "@utils/css";
 import { Input } from "@components/Form";
 
-import styles from "./ReceiptForm.module.scss";
+import styles from "./MixesForms.module.scss";
 
 const getClassName = parseCssModule(styles);
 
@@ -44,7 +44,7 @@ function MixForm({ mixForm, removeForm, updateForm, duplicateForm }: MixFormProp
   };
 
   return (
-    <div className={getClassName("row", "mix")}>
+    <div className={getClassName("mix")}>
       <div className={getClassName("col")}>
         <span className={getClassName("field-name")}>Quantity</span>
         <Input
@@ -126,7 +126,7 @@ function MixesForms({ mixesForms, dispatch }: MixesProps) {
   };
 
   return (
-    <>
+    <div className={getClassName("mixes-forms")}>
       <p className={getClassName("mixes-subtitle")}>Mixes</p>
 
       {mixesForms.map((mixForm) => {
@@ -146,7 +146,7 @@ function MixesForms({ mixesForms, dispatch }: MixesProps) {
       >
         Add Mix
       </button>
-    </>
+    </div>
   );
 }
 

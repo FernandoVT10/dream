@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { parseCssModule } from "@/utils/css";
 import { Input, Select } from "@components/Form";
-import { MixFormAction } from "./mixesFormsReducer";
 
 import Spinner from "@/components/Spinner";
-import MixesForms, { MixFormData } from "./MixesForms";
 
 import styles from "./ReceiptForm.module.scss";
 
@@ -27,9 +25,8 @@ type ReceiptFormProps = {
   dateComponent: React.ReactNode;
   data: ReceiptFormData;
   onChange: (value: string, name: string) => void;
-  mixesForms: MixFormData[];
-  dispatchMixesForms: React.Dispatch<MixFormAction>;
   submitBtnText: string;
+  extraFields: React.ReactNode;
 };
 
 function ReceiptForm(props: ReceiptFormProps) {
@@ -94,7 +91,7 @@ function ReceiptForm(props: ReceiptFormProps) {
             </div>
           </div>
 
-          <MixesForms mixesForms={props.mixesForms} dispatch={props.dispatchMixesForms} />
+          {props.extraFields}
 
           <div className={getClassName("btn-container")}>
             <button type="submit" className="custom-btn">
