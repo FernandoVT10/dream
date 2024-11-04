@@ -100,8 +100,6 @@ class ReceiptController {
       },
     });
 
-    if(count > 0) return;
-
     const receipt = await Receipt.findByPk(id);
 
     // TODO: here we should log this as if this was an error
@@ -113,7 +111,11 @@ class ReceiptController {
       return;
     }
 
-    receipt.status = RECEIPT_STATUS_LIST.delivered;
+    if(count > 0)
+      receipt.status = RECEIPT_STATUS_LIST.pending;
+    else
+      receipt.status = RECEIPT_STATUS_LIST.delivered;
+
     await receipt.save();
   }
 

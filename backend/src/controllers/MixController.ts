@@ -8,6 +8,13 @@ import getSearchTokens from "../utils/getSearchTokens";
 
 const SUPPORTED_TOKENS = ["status", "deliveredDate", "folio", "sap", "kind"];
 
+type UpdateByIdData = {
+  quantity: string;
+  presentation: string;
+  status: string;
+  deliveredDate: string | null;
+};
+
 function getTodayDate(): string {
   // the date should be formatted to yyyy-mm-dd
   const d = new Date();
@@ -89,6 +96,28 @@ class MixController {
         }
       ],
     });
+  }
+
+  static async existsWithId(id: number): Promise<boolean> {
+    return (await Mix.count({
+      where: { id },
+    })) > 0;
+  }
+
+  static async updateById(id: number, data: UpdateByIdData): Promise<Mix> {
+    const mix = await Mix.findByPk(id)
+
+    if(!mix) {
+      Logger.logError("mix is null and it shoudn't");
+      throw new Error("Server error");
+    }
+
+    await mix.update(data);
+
+    // Important to call this after mix is updated
+    await ReceiptController.updateStatus(mix.receiptId);
+
+    return mix;
   }
 }
 

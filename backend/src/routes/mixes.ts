@@ -29,4 +29,21 @@ router.put("/:id/markAsDelivered", validateSchema(MixSchema.markAsDelivered), as
   }
 });
 
+router.put("/:id", validateSchema(MixSchema.update), async (req, res, next) => {
+  try {
+    const data = matchedData(req);
+
+    const mix = await MixController.updateById(data.id, {
+      quantity: data.quantity,
+      presentation: data.presentation,
+      status: data.status,
+      deliveredDate: data.deliveredDate || null,
+    });
+
+    res.json({ mix });
+  } catch(e) {
+    next(e);
+  }
+});
+
 export default router;
