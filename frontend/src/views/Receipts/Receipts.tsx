@@ -141,7 +141,7 @@ function Receipts() {
   const [receiptToEdit, setReceiptToEdit] = useState<number | undefined>();
 
   const addReceiptModal = useModal();
-  const editReceiptModal = useModal(() => setReceiptToEdit(undefined));
+  const editReceiptModal = useModal();
   const deleteModal = useModal();
 
   const loadReceipts = async (search?: string) => {
@@ -170,12 +170,12 @@ function Receipts() {
     }));
   };
 
-  const showDeleteModal = (receiptId: number) => {
+  const showDeleteReceiptModal = (receiptId: number) => {
     deleteModal.show();
     setReceiptToDelete(receiptId);
   };
 
-  const showEditModal = (receiptId: number) => {
+  const showEditReceiptModal = (receiptId: number) => {
     editReceiptModal.show();
     setReceiptToEdit(receiptId);
   };
@@ -201,9 +201,10 @@ function Receipts() {
         />
       </Modal>
 
-      <Modal title="Edit Receipt" modal={editReceiptModal} maxWidth={600}>
-        <EditReceiptForm receiptId={receiptToEdit} hideModal={editReceiptModal.hide}/>
-      </Modal>
+      <EditReceiptForm
+        receiptId={receiptToEdit}
+        editReceiptModal={editReceiptModal}
+      />
 
       <Filters
         loadData={loadReceipts}
@@ -214,8 +215,8 @@ function Receipts() {
       <ReceiptsTable
         loading={loadingReceipts}
         receipts={receipts}
-        showDeleteModal={showDeleteModal}
-        showEditModal={showEditModal}
+        showDeleteModal={showDeleteReceiptModal}
+        showEditModal={showEditReceiptModal}
         setReceiptAsDelivered={setReceiptAsDelivered}
       />
     </>
