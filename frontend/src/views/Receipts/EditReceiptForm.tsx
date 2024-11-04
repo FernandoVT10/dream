@@ -50,6 +50,7 @@ function EditReceiptForm(props: EditReceiptFormProps) {
           folio: receipt.folio,
           sap: receipt.sap,
         });
+
         setMixes(receipt.mixes);
       } catch(e) {
         console.error(e);
