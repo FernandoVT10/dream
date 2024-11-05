@@ -38,6 +38,7 @@ router.put("/:id", validateSchema(MixSchema.update), async (req, res, next) => {
       presentation: data.presentation,
       status: data.status,
       deliveredDate: data.deliveredDate || null,
+      numberOfMix: data.numberOfMix || null,
     });
 
     res.json({ mix });

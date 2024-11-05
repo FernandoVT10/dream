@@ -87,6 +87,15 @@ const updateSchema: Schema = {
       options: { values: "falsy" },
     },
   },
+  numberOfMix: {
+    optional: {
+      options: { values: "falsy" },
+    },
+    isInt: {
+      errorMessage: "numberOfMixes should only contain numbers",
+      options: { gt: 0 },
+    },
+  },
   status: {
     optional: {
       options: { values: "falsy" },

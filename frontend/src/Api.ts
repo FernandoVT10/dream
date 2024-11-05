@@ -25,6 +25,7 @@ type UpdateMixData = {
   presentation: string;
   status: string;
   deliveredDate: string | null;
+  numberOfMix: string | null;
 };
 
 class Api {

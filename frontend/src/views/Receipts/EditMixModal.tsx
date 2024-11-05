@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import Modal, { UseModalReturn } from "@/components/Modal";
 
 import { parseCssModule } from "@/utils/css";
+import { getNumbersFromStr } from "@/utils/formatters";
 import { Button, Input, Select } from "@/components/Form";
 import { Mix } from "@/types";
 import { MIX_STATUS_LIST } from "@/constants";
@@ -25,6 +26,7 @@ type EditMixData = {
   presentation: string;
   status: string;
   deliveredDate: string;
+  numberOfMix: string;
 };
 
 const initialData: EditMixData = {
@@ -32,8 +34,8 @@ const initialData: EditMixData = {
   presentation: "",
   status: "",
   deliveredDate: "",
+  numberOfMix: "",
 };
-
 
 type EditMixModalProps = {
   modal: UseModalReturn;
@@ -53,10 +55,15 @@ function EditMixModal(props: EditMixModalProps) {
       presentation: props.mixToEdit.presentation,
       status: props.mixToEdit.status,
       deliveredDate: props.mixToEdit.deliveredDate || "",
+      numberOfMix: props.mixToEdit.numberOfMix || "",
     });
   }, [props.mixToEdit]);
 
   const onChange = (value: string, name: string) => {
+    if(name === "numberOfMix") {
+      value = getNumbersFromStr(value);
+    }
+
     setData({
       ...data,
       [name]: value,
@@ -83,6 +90,7 @@ function EditMixModal(props: EditMixModalProps) {
         presentation: data.presentation,
         status: data.status,
         deliveredDate,
+        numberOfMix: data.numberOfMix || null,
       });
 
       props.onMixUpdate(updatedMix);
@@ -119,6 +127,9 @@ function EditMixModal(props: EditMixModalProps) {
                 required
               />
             </div>
+          </div>
+
+          <div className={getClassName("row")}>
             <div className={getClassName("col")}>
               <span className={getClassName("field-name")}>Presentation</span>
               <Input
@@ -127,6 +138,15 @@ function EditMixModal(props: EditMixModalProps) {
                 value={data.presentation}
                 onChange={(v) => onChange(v, "presentation")}
                 required
+              />
+            </div>
+            <div className={getClassName("col")}>
+              <span className={getClassName("field-name")}>No. of Mix</span>
+              <Input
+                type="text"
+                placeholder="#"
+                value={data.numberOfMix}
+                onChange={(v) => onChange(v, "numberOfMix")}
               />
             </div>
           </div>

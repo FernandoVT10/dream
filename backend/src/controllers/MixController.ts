@@ -13,6 +13,7 @@ type UpdateByIdData = {
   presentation: string;
   status: string;
   deliveredDate: string | null;
+  numberOfMix: string | null;
 };
 
 function getTodayDate(): string {
@@ -105,7 +106,7 @@ class MixController {
   }
 
   static async updateById(id: number, data: UpdateByIdData): Promise<Mix> {
-    const mix = await Mix.findByPk(id)
+    const mix = await Mix.findByPk(id);
 
     if(!mix) {
       Logger.logError("mix is null and it shoudn't");
