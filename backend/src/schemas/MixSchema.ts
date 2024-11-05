@@ -1,14 +1,11 @@
 import { ParamSchema, Schema } from "express-validator";
 import { MIX_STATUS_LIST } from "../constants";
 import { receiptIdValidator } from "./ReceiptSchema";
+import { isDateValid } from "../utils/validators";
 
 import MixController from "../controllers/MixController";
 import Logger from "../Logger";
 
-// TODO: make a better date validation, this is garbage
-function isDateValid(value: string): boolean {
-  return /\d{4}(-\d{2}){2}/.test(value);
-}
 
 const MIX_STATUS_ARRAY = Object.values(MIX_STATUS_LIST);
 
@@ -53,7 +50,6 @@ const markAsDeliveredSchema: Schema = {
 const deliveredDateValidator: ParamSchema = {
   custom: {
     options: (value, { req }) => {
-      // TODO: validate this is a valid date
       if(req.body.status !== MIX_STATUS_LIST.delivered) {
         if(value)
           throw new Error("delivery date cannot be set if the \"status\" is not equal to delivered");

@@ -25,7 +25,6 @@ function getSearchTokens(search: string, supportedTokens: string[]): Record<stri
         if(c === ";" || i === search.length - 1) {
           // only add supported keys to the tokens
           if(supportedTokens.includes(key)) {
-            // TODO: validate that date is a valid date
             tokens[key] = val;
           }
 
