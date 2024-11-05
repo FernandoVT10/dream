@@ -12,6 +12,7 @@ import ReceiptForm, { ReceiptFormData } from "./ReceiptForm";
 import Notifications from "@/Notifications";
 import Api from "@/Api";
 import Spinner from "@/components/Spinner";
+import Status from "@/components/Status";
 
 import styles from "./Receipts.module.scss";
 
@@ -135,40 +136,44 @@ function EditReceiptForm(props: EditReceiptFormProps) {
     setMixes([...mixes, newMix]);
   };
 
-  // TODO: Fix this
-  if(loading) {
+  const getContent = () => {
+    if(loading) {
+      return (
+        <div className={getClassName("edit-receipt-loader")}>
+          <Spinner size={35} />
+        </div>
+      );
+    }
+
     return (
-      <div className={getClassName("edit-receipt-loader")}>
-        <Spinner size={35} />
-      </div>
-    );
-  }
+      <div className={getClassName("edit-receipt-form")}>
+        <ReceiptForm
+          loadingText="Saving changes..."
+          onSubmit={onSubmit}
+          dateComponent={dateComponent}
+          data={data}
+          onChange={onChange}
+          submitBtnText="Save changes"
+          extraFields={null}
+        />
 
-  return (
-    <>
-      <Modal title="Edit Recipt" modal={props.editReceiptModal} maxWidth={600}>
-        <div className={getClassName("edit-receipt-form")}>
-          <ReceiptForm
-            loadingText="Saving changes..."
-            onSubmit={onSubmit}
-            dateComponent={dateComponent}
-            data={data}
-            onChange={onChange}
-            submitBtnText="Save changes"
-            extraFields={null}
-          />
+        <h3>Mixes</h3>
 
-          <h3>Mixes</h3>
-
+        <div className={getClassName("mixes")}>
           {mixes.map(mix => {
             const numberOfMix = mix.numberOfMix ? "#" + mix.numberOfMix : null;
 
             return (
-              <div key={mix.id} className={getClassName("mix-test")}>
-                <div className={getClassName("col-1")}>{mix.quantity}</div>
-                <div className={getClassName("col-2")}>{mix.presentation}</div>
-                <div className={getClassName("col-3")}>{numberOfMix}</div>
-                <div className={getClassName("col-4")}>
+              <div key={mix.id} className={getClassName("mix")}>
+                {numberOfMix && (
+                  <div className={getClassName("col-mix-number")}>{numberOfMix}</div>
+                )}
+                <div className={getClassName("col-quantity")}>{mix.quantity}</div>
+                <div className={getClassName("col-presentation")}>{mix.presentation}</div>
+                <div className={getClassName("col-status")}>
+                  <Status status={mix.status}/>
+                </div>
+                <div className={getClassName("col-actions")}>
                   <Button
                     type="button"
                     title="Edit Mix"
@@ -191,16 +196,24 @@ function EditReceiptForm(props: EditReceiptFormProps) {
               </div>
             );
           })}
-
-          <Button
-            type="button"
-            modifier="link"
-            className={getClassName("add-mix-btn")}
-            onClick={addMixModal.show}
-          >
-            + Add Mix
-          </Button>
         </div>
+
+        <Button
+          type="button"
+          modifier="link"
+          className={getClassName("add-mix-btn")}
+          onClick={addMixModal.show}
+        >
+          + Add Mix
+        </Button>
+      </div>
+    );
+  };
+
+  return (
+    <>
+      <Modal title="Edit Recipt" modal={props.editReceiptModal} maxWidth={600}>
+        {getContent()}
       </Modal>
 
       <EditMixModal
