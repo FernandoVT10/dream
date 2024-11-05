@@ -102,7 +102,6 @@ class ReceiptController {
 
     const receipt = await Receipt.findByPk(id);
 
-    // TODO: here we should log this as if this was an error
     if(!receipt) {
       Logger.logError(
         "Receipt is null, it's either a problem of the database or with the validation",
