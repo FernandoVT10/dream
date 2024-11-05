@@ -5,14 +5,17 @@ import Modal, { UseModalReturn } from "@/components/Modal";
 import { parseCssModule } from "@/utils/css";
 import { Button, Input, Select } from "@/components/Form";
 import { Mix } from "@/types";
+import { MIX_STATUS_LIST } from "@/constants";
 
 import Notifications from "@/Notifications";
+import Api from "@/Api";
+import Spinner from "@/components/Spinner";
 
 import styles from "./Receipts.module.scss";
 
 const STATUS_LIST = [
-  { name: "Pending", value: "pending" },
-  { name: "Delivered", value: "delivered" },
+  { name: "Pending", value: MIX_STATUS_LIST.pending },
+  { name: "Delivered", value: MIX_STATUS_LIST.delivered },
 ];
 
 const getClassName = parseCssModule(styles);
@@ -40,6 +43,7 @@ type EditMixModalProps = {
 
 function EditMixModal(props: EditMixModalProps) {
   const [data, setData] = useState<EditMixData>(initialData);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if(!props.mixToEdit) return;
@@ -60,30 +64,50 @@ function EditMixModal(props: EditMixModalProps) {
   };
 
   const isStatusPending = (): boolean => {
-    return data.status === "pending";
+    return data.status === MIX_STATUS_LIST.pending;
   };
 
-  const handleSubmit: React.FormEventHandler = (e) => {
+  const handleSubmit: React.FormEventHandler = async (e) => {
     e.preventDefault();
 
-    props.onMixUpdate({
-      id: props.mixToEdit?.id || 1000,
-      quantity: "Test",
-      presentation: "Test",
-      status: "delivered",
-      deliveredDate: "2222-02-22",
-      numberOfMix: "69",
-    });
+    if(!props.mixToEdit) return;
 
-    Notifications.success("Mix updated successfully!");
+    setLoading(true);
 
-    props.modal.hide();
+    try {
+      const deliveredDate = data.status === MIX_STATUS_LIST.delivered
+        ? data.deliveredDate : null;
+
+      const updatedMix = await Api.updateMix(props.mixToEdit.id, {
+        quantity: data.quantity,
+        presentation: data.presentation,
+        status: data.status,
+        deliveredDate,
+      });
+
+      props.onMixUpdate(updatedMix);
+      props.modal.hide();
+
+      Notifications.success("Mix updated successfully!");
+    } catch(e) {
+      console.error(e);
+      Notifications.error("There was an error trying to save the changes");
+    }
+
+    setLoading(false);
   };
 
   return (
     <Modal title="Edit Mix" modal={props.modal} maxWidth={600}>
       <form onSubmit={handleSubmit}>
         <div className={getClassName("form-table")}>
+          {loading && (
+            <div className={getClassName("loader")}>
+              <span className={getClassName("loader-text")}>Saving Changes...</span>
+              <Spinner size={35} borderWidth={5}/>
+            </div>
+          )}
+
           <div className={getClassName("row")}>
             <div className={getClassName("col")}>
               <span className={getClassName("field-name")}>Quantity</span>

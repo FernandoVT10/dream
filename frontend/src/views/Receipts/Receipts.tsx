@@ -51,7 +51,7 @@ function DeleteReceiptModal({ deleteModal, setReceipts, receiptToDelete }: Delet
     <Modal title="Delete Receipt" modal={deleteModal} maxWidth={500}>
       <div className={styles.deleteModal}>
         {isDeletingReceipt && (
-          <div className={styles.loader}>
+          <div className={styles.receiptsLoader}>
             <Spinner size={35} borderWidth={5}/>
             <span className={styles.text}>Deleting Receipt...</span>
           </div>
