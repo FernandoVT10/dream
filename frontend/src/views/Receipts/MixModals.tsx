@@ -275,8 +275,12 @@ type DeleteMixModalProps = {
 };
 
 export function DeleteMixModal(props: DeleteMixModalProps) {
+  const [loading, setLoading] = useState(false);
+
   const deleteMix = async () => {
     if(!props.mixIdToDelete) return;
+
+    setLoading(true);
 
     try {
       await Api.deleteMixById(props.mixIdToDelete);
@@ -288,11 +292,20 @@ export function DeleteMixModal(props: DeleteMixModalProps) {
       console.error(e);
       Notifications.error("There was an error trying to delete a mix");
     }
+
+    setLoading(false);
   };
 
   return (
     <Modal title="Confirm action" modal={props.modal} maxWidth={400}>
       <div className={getClassName("delete-mix-modal")}>
+        {loading && (
+          <div className={getClassName("loader")}>
+            <span className={getClassName("loader-text")}>Deleting Mix...</span>
+            <Spinner size={35} borderWidth={5}/>
+          </div>
+        )}
+
         <p>Are you sure you want to delete this mix?</p>
 
         <div className={getClassName("buttons-container")}>
