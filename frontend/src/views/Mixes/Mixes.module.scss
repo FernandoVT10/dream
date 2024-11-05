@@ -24,11 +24,6 @@
     text-align: center;
   }
 
-  & .colActions {
-    text-align: center;
-    width: 100px;
-  }
-
   & .numberOfMix {
     text-align: center;
     width: 140px;
@@ -44,7 +39,7 @@
       text-align: left;
       padding-bottom: 10px;
 
-      &.colActions, &.numberOfMix, &.deliveredDate {
+      &.numberOfMix, &.deliveredDate {
         text-align: center;
       }
     }

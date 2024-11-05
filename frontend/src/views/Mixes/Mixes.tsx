@@ -47,7 +47,6 @@ function MixesTable({ loading, mixes }: MixesTableProps) {
           <th>SAP</th>
           <th>Quantity</th>
           <th className={styles.numberOfMix}>No. of Mix</th>
-          <th className={styles.colActions}>Actions</th>
         </tr>
       </thead>
       <tbody className={styles.body}>
@@ -71,7 +70,6 @@ function MixesTable({ loading, mixes }: MixesTableProps) {
               <td className={`${styles.numberOfMix} ${numberOfMixClass}`}>
                 {mix.numberOfMix || "-"}
               </td>
-              <td className={styles.colActions}>No actions yet</td>
             </tr>
           );
         })}

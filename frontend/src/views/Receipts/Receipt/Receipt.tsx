@@ -55,7 +55,7 @@ function Mixes({ mixes, setMixes, onMixUpdate }: MixesProps) {
         <div className={tableStyles.col1}>Quantity</div>
         <div className={tableStyles.col1}>Presentation</div>
         <div className={tableStyles.col1}>Status</div>
-        <div className={tableStyles.colActions}>Actions</div>
+        <div className={tableStyles.colActions} style={{ marginRight: 10 }}>Actions</div>
       </div>
 
       {mixes.map(mix => {
@@ -68,7 +68,7 @@ function Mixes({ mixes, setMixes, onMixUpdate }: MixesProps) {
               <Status status={mix.status} deliveredDate={mix.deliveredDate}/>
             </div>
             <div className={tableStyles.colActions}>
-              {mix.status !== MIX_STATUS_LIST.delivered && (
+              {mix.status !== MIX_STATUS_LIST.delivered ? (
                 <button
                   type="button"
                   title="Mark as delivered"
@@ -76,11 +76,7 @@ function Mixes({ mixes, setMixes, onMixUpdate }: MixesProps) {
                 >
                   <CheckIcon size={20}/>
                 </button>
-              )}
-
-              <button type="button" title="Edit mix">
-                <PencilIcon size={20}/>
-              </button>
+              ) : "-"}
             </div>
           </div>
         );
@@ -117,7 +113,19 @@ function Receipt({ receipt, reloadReceipts, showDeleteModal, showEditModal }: Re
   }, [isOpen]);
 
   const onMixUpdate = () => {
-    reloadReceipts();
+    let allMixesAreDelivered = true;
+
+    for(const mix of mixes) {
+      if(mix.status !== MIX_STATUS_LIST.delivered) {
+        allMixesAreDelivered = false;
+        break;
+      }
+    }
+
+    if(allMixesAreDelivered) {
+      reloadReceipts();
+    }
+
     Notifications.success("Mix marked as delivered");
   };
 
