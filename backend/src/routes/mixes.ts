@@ -47,4 +47,23 @@ router.put("/:id", validateSchema(MixSchema.update), async (req, res, next) => {
   }
 });
 
+router.post("/", validateSchema(MixSchema.create), async (req, res, next) => {
+  try {
+    const data = matchedData(req);
+
+    const mix = await MixController.createOne({
+      receiptId: data.receiptId,
+      quantity: data.quantity,
+      presentation: data.presentation,
+      status: data.status,
+      deliveredDate: data.deliveredDate || null,
+      numberOfMix: data.numberOfMix || null,
+    });
+
+    res.json({ mix });
+  } catch(e) {
+    next(e);
+  }
+});
+
 export default router;

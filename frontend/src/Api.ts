@@ -28,6 +28,15 @@ type UpdateMixData = {
   numberOfMix: string | null;
 };
 
+type CreateMixData = {
+  receiptId: number;
+  quantity: string;
+  presentation: string;
+  status: string;
+  deliveredDate: string | null;
+  numberOfMix: string | null;
+};
+
 class Api {
   static async getMixes(search?: string): Promise<MixWithReceipt[]> {
     let query = "";
@@ -54,6 +63,18 @@ class Api {
   static async updateMix(mixId: number, data: UpdateMixData): Promise<Mix> {
     const res = await fetch(`${API_URL}/mixes/${mixId}`, {
       method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+    const json = await res.json();
+    return json.mix;
+  }
+
+  static async createMix(data: CreateMixData): Promise<Mix> {
+    const res = await fetch(`${API_URL}/mixes`, {
+      method: "POST",
       headers: {
         "Content-Type": "application/json",
       },

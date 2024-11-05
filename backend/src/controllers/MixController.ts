@@ -16,6 +16,15 @@ type UpdateByIdData = {
   numberOfMix: string | null;
 };
 
+type CreateOneData = {
+  receiptId: number;
+  quantity: string;
+  presentation: string;
+  status: string;
+  deliveredDate: string | null;
+  numberOfMix: string | null;
+};
+
 function getTodayDate(): string {
   // the date should be formatted to yyyy-mm-dd
   const d = new Date();
@@ -119,6 +128,10 @@ class MixController {
     await ReceiptController.updateStatus(mix.receiptId);
 
     return mix;
+  }
+
+  static async createOne(data: CreateOneData): Promise<Mix> {
+    return await Mix.create(data);
   }
 }
 

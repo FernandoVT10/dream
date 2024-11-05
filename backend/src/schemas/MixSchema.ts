@@ -1,5 +1,6 @@
-import { Schema } from "express-validator";
+import { ParamSchema, Schema } from "express-validator";
 import { MIX_STATUS_LIST } from "../constants";
+import { receiptIdValidator } from "./ReceiptSchema";
 
 import MixController from "../controllers/MixController";
 import Logger from "../Logger";
@@ -45,6 +46,28 @@ const markAsDeliveredSchema: Schema = {
 
         return true;
       },
+    },
+  },
+};
+
+const deliveredDateValidator: ParamSchema = {
+  custom: {
+    options: (value, { req }) => {
+      // TODO: validate this is a valid date
+      if(req.body.status !== MIX_STATUS_LIST.delivered) {
+        if(value)
+          throw new Error("delivery date cannot be set if the \"status\" is not equal to delivered");
+
+        return true;
+      }
+
+      if(!value)
+        throw new Error("deliveredDate is required when setting \"status\" as delivered");
+
+      if(!isDateValid(value))
+        throw new Error("deliveredDate is not a valid date");
+
+      return true;
     },
   },
 };
@@ -105,30 +128,50 @@ const updateSchema: Schema = {
       options: [MIX_STATUS_ARRAY],
     },
   },
-  deliveredDate: {
-    custom: {
-      options: (value, { req }) => {
-        // TODO: validate this is a valid date
-        if(req.body.status !== MIX_STATUS_LIST.delivered) {
-          if(value)
-            throw new Error("delivery date cannot be set if the \"status\" is not equal to delivered");
+  deliveredDate: deliveredDateValidator
+};
 
-          return true;
-        }
-
-        if(!value)
-          throw new Error("deliveredDate is required when setting \"status\" as delivered");
-
-        if(!isDateValid(value))
-          throw new Error("deliveredDate is not a valid date");
-
-        return true;
-      },
+const createSchema: Schema = {
+  receiptId: {
+    ...receiptIdValidator,
+    in: "body",
+  },
+  quantity: {
+    exists: {
+      errorMessage: "quantity is required",
+      options: { values: "falsy" },
     },
   },
+  presentation: {
+    exists: {
+      errorMessage: "presentation is required",
+      options: { values: "falsy" },
+    },
+  },
+  numberOfMix: {
+    optional: {
+      options: { values: "falsy" },
+    },
+    isInt: {
+      errorMessage: "numberOfMixes should only contain numbers",
+      options: { gt: 0 },
+    },
+  },
+  status: {
+    exists: {
+      errorMessage: "status is required",
+      options: { values: "falsy" },
+    },
+    isIn: {
+      errorMessage: INVALID_STATUS_MSG,
+      options: [MIX_STATUS_ARRAY],
+    },
+  },
+  deliveredDate: deliveredDateValidator,
 };
 
 export default {
   markAsDelivered: markAsDeliveredSchema,
   update: updateSchema,
+  create: createSchema,
 };

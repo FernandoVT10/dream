@@ -74,7 +74,7 @@ const createSchema: Schema = {
   },
 };
 
-const receiptIdValidator: ParamSchema = {
+export const receiptIdValidator: ParamSchema = {
   in: "params",
   isInt: {
     errorMessage: "id should be a number greater than 0",

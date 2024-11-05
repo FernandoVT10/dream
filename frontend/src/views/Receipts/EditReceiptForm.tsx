@@ -4,13 +4,14 @@ import { Input, Button } from "@components/Form";
 import { parseCssModule } from "@/utils/css";
 import { PencilIcon, TrashIcon } from "@/icons";
 import { Mix } from "@/types";
+import { EditMixModal, AddMixModal } from "./MixModals";
+
 import Modal, { useModal, UseModalReturn } from "@/components/Modal";
 import ReceiptForm, { ReceiptFormData } from "./ReceiptForm";
 
 import Notifications from "@/Notifications";
 import Api from "@/Api";
 import Spinner from "@/components/Spinner";
-import EditMixModal from "./EditMixModal";
 
 import styles from "./Receipts.module.scss";
 
@@ -40,6 +41,7 @@ function EditReceiptForm(props: EditReceiptFormProps) {
   const [mixToEdit, setMixToEdit] = useState<Mix | undefined>();
 
   const editMixModal = useModal(() => setMixToEdit(undefined));
+  const addMixModal = useModal();
 
   useEffect(() => {
     const loadReceipt = async () => {
@@ -129,6 +131,10 @@ function EditReceiptForm(props: EditReceiptFormProps) {
     }));
   };
 
+  const onMixCreation = (newMix: Mix) => {
+    setMixes([...mixes, newMix]);
+  };
+
   // TODO: Fix this
   if(loading) {
     return (
@@ -190,6 +196,7 @@ function EditReceiptForm(props: EditReceiptFormProps) {
             type="button"
             modifier="link"
             className={getClassName("add-mix-btn")}
+            onClick={addMixModal.show}
           >
             + Add Mix
           </Button>
@@ -200,6 +207,12 @@ function EditReceiptForm(props: EditReceiptFormProps) {
         modal={editMixModal}
         mixToEdit={mixToEdit}
         onMixUpdate={onMixUpdate}
+      />
+
+      <AddMixModal
+        modal={addMixModal}
+        onMixCreation={onMixCreation}
+        receiptId={props.receiptId}
       />
     </>
   );
