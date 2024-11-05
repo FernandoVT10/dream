@@ -84,6 +84,12 @@ class Api {
     return json.mix;
   }
 
+  static async deleteMixById(id: number): Promise<void> {
+    await fetch(`${API_URL}/mixes/${id}`, {
+      method: "DELETE",
+    });
+  }
+
   static async deleteReceipt(receiptId: number): Promise<boolean> {
     const res = await fetch(`${API_URL}/receipts/${receiptId}`, {
       method: "DELETE",

@@ -47,19 +47,31 @@
     font-size: 14px;
   }
 
-  &.primary {
+  &.primary, &.danger {
     display: inline-flex;
     align-items: center;
-    background: var(--btn-background);
-    color: var(--text-accent);
     border: none;
     border-radius: 5px;
     padding: 10px 20px;
     font-weight: bold;
     transition: .3s;
+  }
+
+  &.primary {
+    background: var(--btn-background);
+    color: var(--text-accent);
 
     &:hover {
       background: var(--btn-hover-background);
+    }
+  }
+
+  &.danger {
+    background: rgba(243, 139, 168, 0.2);
+    color: var(--red);
+
+    &:hover {
+      background: rgba(243, 139, 168, 0.4);
     }
   }
 }

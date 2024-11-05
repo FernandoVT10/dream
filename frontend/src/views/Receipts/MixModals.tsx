@@ -267,3 +267,52 @@ export function AddMixModal(props: AddMixModalProps) {
     </Modal>
   );
 }
+
+type DeleteMixModalProps = {
+  modal: UseModalReturn;
+  mixIdToDelete?: number;
+  onMixDeletion: (mixId: number) => void;
+};
+
+export function DeleteMixModal(props: DeleteMixModalProps) {
+  const deleteMix = async () => {
+    if(!props.mixIdToDelete) return;
+
+    try {
+      await Api.deleteMixById(props.mixIdToDelete);
+
+      props.onMixDeletion(props.mixIdToDelete);
+      props.modal.hide();
+      Notifications.success("Mix was deleted successfully!");
+    } catch(e) {
+      console.error(e);
+      Notifications.error("There was an error trying to delete a mix");
+    }
+  };
+
+  return (
+    <Modal title="Confirm action" modal={props.modal} maxWidth={400}>
+      <div className={getClassName("delete-mix-modal")}>
+        <p>Are you sure you want to delete this mix?</p>
+
+        <div className={getClassName("buttons-container")}>
+          <Button
+            type="button"
+            modifier="primary"
+            onClick={props.modal.hide}
+          >
+            Cancel
+          </Button>
+
+          <Button
+            type="button"
+            modifier="danger"
+            onClick={deleteMix}
+          >
+            Delete Mix
+          </Button>
+        </div>
+      </div>
+    </Modal>
+  );
+}

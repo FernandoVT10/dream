@@ -72,33 +72,35 @@ const deliveredDateValidator: ParamSchema = {
   },
 };
 
-const updateSchema: Schema = {
-  id: {
-    in: "params",
-    isInt: {
-      errorMessage: "id should be a number greater than 0",
-      options: { gt: 0 },
-      bail: true,
-    },
-    custom: {
-      options: async (value) => {
-        let exists: boolean;
+const idValidator: ParamSchema = {
+  in: "params",
+  isInt: {
+    errorMessage: "id should be a number greater than 0",
+    options: { gt: 0 },
+    bail: true,
+  },
+  custom: {
+    options: async (value) => {
+      let exists: boolean;
 
-        try {
-          const id = parseInt(value);
-          exists = await MixController.existsWithId(id);
-        } catch(e) {
-          Logger.logError("Error trying to connect with db", e);
-          throw new Error("Sever Error");
-        }
+      try {
+        const id = parseInt(value);
+        exists = await MixController.existsWithId(id);
+      } catch(e) {
+        Logger.logError("Error trying to connect with db", e);
+        throw new Error("Sever Error");
+      }
 
-        if(exists)
-          return true;
+      if(exists)
+        return true;
         else
-          throw new Error("there is no a mix with this id");
-      },
+        throw new Error("there is no a mix with this id");
     },
   },
+};
+
+const updateSchema: Schema = {
+  id: idValidator,
   quantity: {
     optional: {
       options: { values: "falsy" },
@@ -170,8 +172,11 @@ const createSchema: Schema = {
   deliveredDate: deliveredDateValidator,
 };
 
+const deleteSchema: Schema = { id: idValidator };
+
 export default {
   markAsDelivered: markAsDeliveredSchema,
   update: updateSchema,
   create: createSchema,
+  delete: deleteSchema,
 };

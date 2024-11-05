@@ -66,4 +66,14 @@ router.post("/", validateSchema(MixSchema.create), async (req, res, next) => {
   }
 });
 
+router.delete("/:id", validateSchema(MixSchema.delete), async (req, res, next) => {
+  try {
+    const id = matchedData(req).id;
+    await MixController.deleteById(id);
+    res.sendStatus(200);
+  } catch(e) {
+    next(e);
+  }
+});
+
 export default router;

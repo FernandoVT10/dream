@@ -188,3 +188,11 @@
     }
   }
 }
+
+.delete-mix-modal {
+  & .buttons-container {
+    margin-top: 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+}

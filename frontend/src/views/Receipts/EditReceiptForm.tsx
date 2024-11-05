@@ -4,7 +4,7 @@ import { Input, Button } from "@components/Form";
 import { parseCssModule } from "@/utils/css";
 import { PencilIcon, TrashIcon } from "@/icons";
 import { Mix } from "@/types";
-import { EditMixModal, AddMixModal } from "./MixModals";
+import { EditMixModal, AddMixModal, DeleteMixModal } from "./MixModals";
 
 import Modal, { useModal, UseModalReturn } from "@/components/Modal";
 import ReceiptForm, { ReceiptFormData } from "./ReceiptForm";
@@ -40,9 +40,11 @@ function EditReceiptForm(props: EditReceiptFormProps) {
   const [mixes, setMixes] = useState<Mix[]>([]);
 
   const [mixToEdit, setMixToEdit] = useState<Mix | undefined>();
+  const [mixIdToDelete, setMixIdToDelete] = useState<number | undefined>();
 
   const editMixModal = useModal(() => setMixToEdit(undefined));
   const addMixModal = useModal();
+  const deleteMixModal = useModal(() => setMixIdToDelete(undefined));
 
   useEffect(() => {
     const loadReceipt = async () => {
@@ -136,6 +138,17 @@ function EditReceiptForm(props: EditReceiptFormProps) {
     setMixes([...mixes, newMix]);
   };
 
+  const showDeleteMixModal = (mixId: number) => {
+    setMixIdToDelete(mixId);
+    deleteMixModal.show();
+  };
+
+  const onMixDeletion = (mixId: number) => {
+    setMixes(mixes.filter(mix => {
+      return mix.id !== mixId;
+    }));
+  };
+
   const getContent = () => {
     if(loading) {
       return (
@@ -189,6 +202,7 @@ function EditReceiptForm(props: EditReceiptFormProps) {
                     title="Delete Mix"
                     modifier="link"
                     className={getClassName("btn")}
+                    onClick={() => showDeleteMixModal(mix.id)}
                   >
                     <TrashIcon size={18}/>
                   </Button>
@@ -212,7 +226,7 @@ function EditReceiptForm(props: EditReceiptFormProps) {
 
   return (
     <>
-      <Modal title="Edit Recipt" modal={props.editReceiptModal} maxWidth={600}>
+      <Modal title="Edit Recipt" modal={props.editReceiptModal} maxWidth={650}>
         {getContent()}
       </Modal>
 
@@ -226,6 +240,12 @@ function EditReceiptForm(props: EditReceiptFormProps) {
         modal={addMixModal}
         onMixCreation={onMixCreation}
         receiptId={props.receiptId}
+      />
+
+      <DeleteMixModal
+        modal={deleteMixModal}
+        mixIdToDelete={mixIdToDelete}
+        onMixDeletion={onMixDeletion}
       />
     </>
   );

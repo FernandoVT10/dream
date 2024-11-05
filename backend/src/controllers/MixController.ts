@@ -133,6 +133,12 @@ class MixController {
   static async createOne(data: CreateOneData): Promise<Mix> {
     return await Mix.create(data);
   }
+
+  static async deleteById(id: number): Promise<void> {
+    await Mix.destroy({
+      where: { id },
+    });
+  }
 }
 
 export default MixController;
