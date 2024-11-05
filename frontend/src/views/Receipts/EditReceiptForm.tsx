@@ -32,6 +32,7 @@ const initialData: EditReceiptFormData = {
 type EditReceiptFormProps = {
   receiptId?: number,
   editReceiptModal: UseModalReturn;
+  reloadReceipts: () => Promise<void>;
 };
 
 function EditReceiptForm(props: EditReceiptFormProps) {
@@ -87,8 +88,7 @@ function EditReceiptForm(props: EditReceiptFormProps) {
       setData(initialData);
       setMixes([]);
       props.editReceiptModal.hide();
-
-      // TODO: create a system on the parent to update the receipt when changes are saved
+      await props.reloadReceipts();
 
       Notifications.success("Changes saved succesfully!");
     } else {

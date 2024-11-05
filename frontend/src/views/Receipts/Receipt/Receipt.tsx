@@ -92,12 +92,12 @@ function Mixes({ mixes, setMixes, onMixUpdate }: MixesProps) {
 
 type ReceiptProps = {
   receipt: ReceiptType;
-  setReceiptAsDelivered: (receiptId: number) => void;
+  reloadReceipts: () => Promise<void>;
   showDeleteModal: (receiptId: number) => void;
   showEditModal: (receiptId: number) => void;
 };
 
-function Receipt({ receipt, setReceiptAsDelivered, showDeleteModal, showEditModal }: ReceiptProps) {
+function Receipt({ receipt, reloadReceipts, showDeleteModal, showEditModal }: ReceiptProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [mixesFetched, setMixesFetched] = useState(false);
   const [mixes, setMixes] = useState<Mix[]>([]);
@@ -117,18 +117,8 @@ function Receipt({ receipt, setReceiptAsDelivered, showDeleteModal, showEditModa
   }, [isOpen]);
 
   const onMixUpdate = () => {
-    let allMixesAreDelivered = true;
-
-    for(const mix of mixes) {
-      if(mix.status !== MIX_STATUS_LIST.delivered) {
-        allMixesAreDelivered = false;
-        break;
-      }
-    }
-
-    if(allMixesAreDelivered) {
-      setReceiptAsDelivered(receipt.id);
-    }
+    reloadReceipts();
+    Notifications.success("Mix marked as delivered");
   };
 
   const stopClickPropagation = (e: React.UIEvent) => {

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Receipt as ReceiptType, ReactSetState } from "@/types";
-import { RECEIPT_STATUS_LIST } from "@/constants";
 
 import Modal, { useModal, UseModalReturn } from "@components/Modal";
 
@@ -81,7 +80,7 @@ type ReceiptsTableProps = {
   loading: boolean;
   receipts: ReceiptType[];
   showDeleteModal: (receiptId: number) => void;
-  setReceiptAsDelivered: (receiptId: number) => void;
+  reloadReceipts: () => Promise<void>;
   showEditModal: (receiptId: number) => void;
 };
 
@@ -89,7 +88,7 @@ function ReceiptsTable({
   loading,
   receipts,
   showDeleteModal,
-  setReceiptAsDelivered,
+  reloadReceipts,
   showEditModal,
 }: ReceiptsTableProps) {
   if(loading) {
@@ -123,7 +122,7 @@ function ReceiptsTable({
         return (
           <Receipt
             receipt={receipt}
-            setReceiptAsDelivered={setReceiptAsDelivered}
+            reloadReceipts={reloadReceipts}
             showDeleteModal={showDeleteModal}
             showEditModal={showEditModal}
             key={receipt.id}
@@ -139,9 +138,10 @@ function Receipts() {
   const [receiptToDelete, setReceiptToDelete] = useState(0);
   const [loadingReceipts, setLoadingReceipts] = useState(false);
   const [receiptToEdit, setReceiptToEdit] = useState<number | undefined>();
+  const [previousSearch, setPreviousSearch] = useState("");
 
   const addReceiptModal = useModal();
-  const editReceiptModal = useModal();
+  const editReceiptModal = useModal(() => setReceiptToEdit(undefined));
   const deleteModal = useModal();
 
   const loadReceipts = async (search?: string) => {
@@ -153,21 +153,12 @@ function Receipts() {
       Notifications.error("There was an error with the server.");
     }
 
+    setPreviousSearch(search || "");
     setLoadingReceipts(false);
   };
 
-  const addReceipt = (receipt: ReceiptType) => {
-    setReceipts([receipt, ...receipts]);
-  };
-
-  const setReceiptAsDelivered = (receiptId: number) => {
-    setReceipts(receipts.map(receipt => {
-      if(receipt.id === receiptId) {
-        receipt.status = RECEIPT_STATUS_LIST.delivered;
-      }
-
-      return receipt;
-    }));
+  const reloadReceipts = async () => {
+    loadReceipts(previousSearch);
   };
 
   const showDeleteReceiptModal = (receiptId: number) => {
@@ -197,13 +188,14 @@ function Receipts() {
       <Modal title="Add Receipt" modal={addReceiptModal} maxWidth={600}>
         <AddReceiptForm
           hideModal={addReceiptModal.hide}
-          addReceiptToState={addReceipt}
+          reloadReceipts={reloadReceipts}
         />
       </Modal>
 
       <EditReceiptForm
         receiptId={receiptToEdit}
         editReceiptModal={editReceiptModal}
+        reloadReceipts={reloadReceipts}
       />
 
       <Filters
@@ -217,7 +209,7 @@ function Receipts() {
         receipts={receipts}
         showDeleteModal={showDeleteReceiptModal}
         showEditModal={showEditReceiptModal}
-        setReceiptAsDelivered={setReceiptAsDelivered}
+        reloadReceipts={reloadReceipts}
       />
     </>
   );

@@ -3,7 +3,6 @@ import { parseCssModule } from "@/utils/css";
 import { getNumbersFromStr } from "@/utils/formatters";
 import { getISODate } from "@utils/date";
 import { Input, Checkbox } from "@components/Form";
-import { Receipt } from "@/types";
 
 import Notifications from "@/Notifications";
 
@@ -34,10 +33,10 @@ const initialData: AddReceiptFormData = {
 
 type AddReceiptFormProps = {
   hideModal: () => void;
-  addReceiptToState: (receipt: Receipt) => void;
+  reloadReceipts: () => Promise<void>;
 };
 
-function AddReceiptForm({ hideModal, addReceiptToState }: AddReceiptFormProps) {
+function AddReceiptForm({ hideModal, reloadReceipts }: AddReceiptFormProps) {
   const [data, setData] = useState<AddReceiptFormData>(initialData);
   const [mixesForms, dispatchMixesForms] = useReducer(mixesFormsReducer, initialMixesForms);
 
@@ -81,7 +80,8 @@ function AddReceiptForm({ hideModal, addReceiptToState }: AddReceiptFormProps) {
       setData(initialData);
       dispatchMixesForms({ type: MixFormActions.Reset });
       hideModal();
-      addReceiptToState(receipt);
+
+      await reloadReceipts();
 
       Notifications.success("Receipt added!");
     } else {
