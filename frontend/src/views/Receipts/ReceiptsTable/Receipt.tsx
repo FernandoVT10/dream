@@ -6,24 +6,27 @@ import {
   ChevronUpIcon,
   TrashIcon
 } from "@/icons";
+import { parseCssModule } from "@/utils/css";
 import { getFormattedDate } from "@utils/date";
 import { MIX_STATUS_LIST } from "@/constants";
+import { Button } from "@/components/Form";
 
 import Api from "@/Api";
 import Notifications from "@/Notifications";
 import Status from "@components/Status";
 import Spinner from "@components/Spinner";
 
-import styles from "./Receipt.module.scss";
-import tableStyles from "../table.module.scss";
+import styles from "./ReceiptsTable.module.scss";
 
-type MixesProps = {
+const getClassName = parseCssModule(styles);
+
+type MixesTableProps = {
   mixes: Mix[];
   setMixes: React.Dispatch<Mix[]>;
   onMixUpdate: () => void;
 };
 
-function Mixes({ mixes, setMixes, onMixUpdate }: MixesProps) {
+function MixesTable({ mixes, setMixes, onMixUpdate }: MixesTableProps) {
   const [loading, setLoading] = useState(false);
 
   const markAsDelivered = async (mixId: number) => {
@@ -49,33 +52,35 @@ function Mixes({ mixes, setMixes, onMixUpdate }: MixesProps) {
   };
 
   return (
-    <div className={styles.mixes}>
-      <div className={tableStyles.colHeader}>
-        <div className={styles.colNumberOfMix}>#</div>
-        <div className={tableStyles.col1}>Quantity</div>
-        <div className={tableStyles.col1}>Presentation</div>
-        <div className={tableStyles.col1}>Status</div>
-        <div className={tableStyles.colActions} style={{ marginRight: 10 }}>Actions</div>
+    <div className={getClassName("mixes-table")}>
+      <div className={getClassName("header")}>
+        <div className={getClassName("col-mix-number")}>#</div>
+        <div className={getClassName("col-quantity")}>Quantity</div>
+        <div className={getClassName("col-presentation")}>Presentation</div>
+        <div className={getClassName("col-status")}>Status</div>
+        <div className={getClassName("col-actions")}>Actions</div>
       </div>
 
       {mixes.map(mix => {
         return (
-          <div className={styles.mix} key={mix.id}>
-            <div className={styles.colNumberOfMix}>{mix.numberOfMix || "0"}</div>
-            <div className={tableStyles.col1}>{mix.quantity}</div>
-            <div className={tableStyles.col1}>{mix.presentation}</div>
-            <div className={tableStyles.col1}>
+          <div className={getClassName("mix")} key={mix.id}>
+            <div className={getClassName("col-mix-number")}>{mix.numberOfMix || "-"}</div>
+            <div className={getClassName("col-quantity")}>{mix.quantity}</div>
+            <div className={getClassName("col-presentation")}>{mix.presentation}</div>
+            <div className={getClassName("col-status")}>
               <Status status={mix.status} deliveredDate={mix.deliveredDate}/>
             </div>
-            <div className={tableStyles.colActions}>
+            <div className={getClassName("col-actions")}>
               {mix.status !== MIX_STATUS_LIST.delivered ? (
-                <button
+                <Button
                   type="button"
                   title="Mark as delivered"
+                  modifier="link"
+                  className={getClassName("action-btn")}
                   onClick={() => markAsDelivered(mix.id)}
                 >
                   <CheckIcon size={20}/>
-                </button>
+                </Button>
               ) : "-"}
             </div>
           </div>
@@ -84,7 +89,6 @@ function Mixes({ mixes, setMixes, onMixUpdate }: MixesProps) {
     </div>
   );
 }
-
 
 type ReceiptProps = {
   receipt: ReceiptType;
@@ -133,39 +137,53 @@ function Receipt({ receipt, reloadReceipts, showDeleteModal, showEditModal }: Re
     e.stopPropagation();
   };
 
+  const receiptClass = getClassName("receipt", { open: isOpen });
+
   return (
-    <div className={`${styles.receipt} ${isOpen && styles.open}`}>
+    <div className={receiptClass}>
       <div
-        className={styles.details}
+        className={getClassName("details-row")}
         onClick={() => setIsOpen(!isOpen)}
       >
-        <div className={tableStyles.colIcon}>
-          <ChevronUpIcon size={22} className={styles.icon}/>
+        <div className={getClassName("col-icon")}>
+          <ChevronUpIcon size={22} className={getClassName("icon")}/>
         </div>
-        <div className={tableStyles.colDate}>{getFormattedDate(receipt.date)}</div>
-        <div className={tableStyles.col1}>{receipt.folio}</div>
-        <div className={tableStyles.col1}>{receipt.sap}</div>
-        <div className={tableStyles.col1}>
+        <div className={getClassName("col-date")}>{getFormattedDate(receipt.date)}</div>
+        <div className={getClassName("col-folio")}>{receipt.folio}</div>
+        <div className={getClassName("col-sap")}>{receipt.sap}</div>
+        <div className={getClassName("col-status")}>
           <Status status={receipt.status}/>
         </div>
 
-        <div className={tableStyles.colActions} onClick={stopClickPropagation}>
-          <button type="button" title="Edit Receipt" onClick={() => showEditModal(receipt.id)}>
+        <div className={getClassName("col-actions")} onClick={stopClickPropagation}>
+          <Button
+            type="button"
+            title="Edit Receipt"
+            modifier="link"
+            onClick={() => showEditModal(receipt.id)}
+            className={getClassName("action-btn")}
+          >
             <PencilIcon size={20}/>
-          </button>
+          </Button>
 
-          <button type="button" title="Delete Receipt" onClick={() => showDeleteModal(receipt.id)}>
+          <Button
+            type="button"
+            title="Delete Receipt"
+            modifier="link"
+            onClick={() => showDeleteModal(receipt.id)}
+            className={getClassName("action-btn")}
+          >
             <TrashIcon size={20}/>
-          </button>
+          </Button>
         </div>
       </div>
 
       { loading ? (
-        <div className={styles.mixesLoader}>
+        <div className={getClassName("mixes-loader")}>
           <Spinner size={25} borderWidth={3}/>
         </div>
       ) : (
-        <Mixes mixes={mixes} setMixes={setMixes} onMixUpdate={onMixUpdate}/>
+        <MixesTable mixes={mixes} setMixes={setMixes} onMixUpdate={onMixUpdate}/>
       )}
     </div>
   );

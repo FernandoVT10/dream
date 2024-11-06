@@ -6,13 +6,12 @@ import Modal, { useModal, UseModalReturn } from "@components/Modal";
 import Notifications from "@/Notifications";
 import Spinner from "@components/Spinner";
 import Api from "@/Api";
-import Receipt from "./Receipt";
 import AddReceiptForm from "./AddReceiptForm";
 import Filters from "@components/Filters";
 import EditReceiptForm from "./EditReceiptForm";
+import ReceiptsTable from "./ReceiptsTable";
 
 import styles from "./Receipts.module.scss";
-import tableStyles from "./table.module.scss";
 
 const SEARCH_BY_LIST = [
   { name: "Folio", value: "folio" },
@@ -73,63 +72,6 @@ function DeleteReceiptModal({ deleteModal, setReceipts, receiptToDelete }: Delet
         </div>
       </div>
     </Modal>
-  );
-}
-
-type ReceiptsTableProps = {
-  loading: boolean;
-  receipts: ReceiptType[];
-  showDeleteModal: (receiptId: number) => void;
-  reloadReceipts: () => Promise<void>;
-  showEditModal: (receiptId: number) => void;
-};
-
-function ReceiptsTable({
-  loading,
-  receipts,
-  showDeleteModal,
-  reloadReceipts,
-  showEditModal,
-}: ReceiptsTableProps) {
-  if(loading) {
-    return (
-      <div className={styles.loader}>
-        <Spinner size={50}/>
-      </div>
-    );
-  }
-
-  if(!receipts.length) {
-    return (
-      <div className={styles.infoMessage}>
-        <p className={styles.text}>No receipts found</p>
-      </div>
-    );
-  }
-
-  return (
-    <div className={styles.receipts}>
-      <div className={tableStyles.colHeader}>
-        <div className={tableStyles.colIcon}></div>
-        <div className={tableStyles.colDate}>Date</div>
-        <div className={tableStyles.col1}>Folio</div>
-        <div className={tableStyles.col1}>SAP</div>
-        <div className={tableStyles.col1}>Status</div>
-        <div className={tableStyles.colActions}>Actions</div>
-      </div>
-
-      {receipts.map(receipt => {
-        return (
-          <Receipt
-            receipt={receipt}
-            reloadReceipts={reloadReceipts}
-            showDeleteModal={showDeleteModal}
-            showEditModal={showEditModal}
-            key={receipt.id}
-          />
-        );
-      })}
-    </div>
   );
 }
 
