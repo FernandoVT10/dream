@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { Mix, Receipt as ReceiptType } from "@/types";
 import {
-  CheckIcon,
   PencilIcon,
   ChevronUpIcon,
   TrashIcon
@@ -15,80 +14,11 @@ import Api from "@/Api";
 import Notifications from "@/Notifications";
 import Status from "@components/Status";
 import Spinner from "@components/Spinner";
+import MixesTable from "../MixesTable";
 
 import styles from "./ReceiptsTable.module.scss";
 
 const getClassName = parseCssModule(styles);
-
-type MixesTableProps = {
-  mixes: Mix[];
-  setMixes: React.Dispatch<Mix[]>;
-  onMixUpdate: () => void;
-};
-
-function MixesTable({ mixes, setMixes, onMixUpdate }: MixesTableProps) {
-  const [loading, setLoading] = useState(false);
-
-  const markAsDelivered = async (mixId: number) => {
-    if(loading) return;
-
-    setLoading(true);
-
-    if(await Api.markMixAsDelivered(mixId)) {
-      setMixes(mixes.map(mix => {
-        if(mix.id === mixId) {
-          mix.status = MIX_STATUS_LIST.delivered;
-        }
-
-        return mix;
-      }));
-
-      onMixUpdate();
-    } else {
-      Notifications.error("Couldn't mark this mix as delivered");
-    }
-
-    setLoading(false);
-  };
-
-  return (
-    <div className={getClassName("mixes-table")}>
-      <div className={getClassName("header")}>
-        <div className={getClassName("col-mix-number")}>#</div>
-        <div className={getClassName("col-quantity")}>Quantity</div>
-        <div className={getClassName("col-presentation")}>Presentation</div>
-        <div className={getClassName("col-status")}>Status</div>
-        <div className={getClassName("col-actions")}>Actions</div>
-      </div>
-
-      {mixes.map(mix => {
-        return (
-          <div className={getClassName("mix")} key={mix.id}>
-            <div className={getClassName("col-mix-number")}>{mix.numberOfMix || "-"}</div>
-            <div className={getClassName("col-quantity")}>{mix.quantity}</div>
-            <div className={getClassName("col-presentation")}>{mix.presentation}</div>
-            <div className={getClassName("col-status")}>
-              <Status status={mix.status} deliveredDate={mix.deliveredDate}/>
-            </div>
-            <div className={getClassName("col-actions")}>
-              {mix.status !== MIX_STATUS_LIST.delivered ? (
-                <Button
-                  type="button"
-                  title="Mark as delivered"
-                  modifier="link"
-                  className={getClassName("action-btn")}
-                  onClick={() => markAsDelivered(mix.id)}
-                >
-                  <CheckIcon size={20}/>
-                </Button>
-              ) : "-"}
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
-}
 
 type ReceiptProps = {
   receipt: ReceiptType;
@@ -178,12 +108,17 @@ function Receipt({ receipt, reloadReceipts, showDeleteModal, showEditModal }: Re
         </div>
       </div>
 
-      { loading ? (
+      { isOpen && loading ? (
         <div className={getClassName("mixes-loader")}>
           <Spinner size={25} borderWidth={3}/>
         </div>
       ) : (
-        <MixesTable mixes={mixes} setMixes={setMixes} onMixUpdate={onMixUpdate}/>
+        <MixesTable
+          mixes={mixes}
+          setMixes={setMixes}
+          onMixUpdate={onMixUpdate}
+          isActive={isOpen}
+        />
       )}
     </div>
   );

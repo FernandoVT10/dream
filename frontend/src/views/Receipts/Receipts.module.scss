@@ -28,6 +28,16 @@
   &:hover {
     background: var(--green-dark);
   }
+
+  @media screen and (max-width: 700px) {
+    position: fixed;
+    z-index: 2;
+    bottom: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    width: fit-content;
+    box-shadow: 0 0 10px 1px var(--background);
+  }
 }
 
 .deleteModal {

@@ -5,11 +5,6 @@
     font-size: 14px;
     color: var(--text-dimer);
     margin-bottom: 10px;
-
-    & .col-actions {
-      display: flex;
-      justify-content: center;
-    }
   }
 
   & .col-icon {
@@ -37,8 +32,33 @@
   }
 
   & .col-actions {
+    display: flex;
     padding-right: 10px;
     width: 80px;
+    justify-content: center;
+  }
+
+  @media screen and (max-width: 700px) {
+    font-size: 14px;
+
+    & .header { font-size: 12px; }
+
+    & .col-icon,
+    & .col-sap,
+    & .col-actions {
+      display: none;
+    }
+
+    & .col-date {
+      padding-left: 20px;
+    }
+
+    & .col-status,
+    & .col-date {
+      flex: 1;
+      width: auto;
+      text-align: left;
+    }
   }
 }
 
@@ -57,14 +77,6 @@
       box-shadow: 0px 0px 3px 1px var(--border-accent);
       background: var(--background-alt-dark);
       margin-top: 10px;
-    }
-
-    & .mixes-loader {
-      display: flex;
-    }
-
-    & .mixes-table {
-      display: block;
     }
 
     & .col-icon .icon {
@@ -95,85 +107,28 @@
     }
 
     & .col-actions {
-      display: flex;
-      justify-content: center;
       column-gap: 10px;
     }
   }
 
   & .mixes-loader {
-    display: none;
+    display: flex;
     justify-content: center;
     padding: 20px;
   }
-}
 
-.mixes-table {
-  display: none;
-  padding-left: 40px;
-  margin-bottom: 20px;
-
-  & .header {
-    font-weight: bold;
-    color: var(--text-dimer);
-    text-transform: uppercase;
-    font-size: 12px;
-    margin: 10px 0;
-    padding: 0 20px;
-  }
-
-  & .col-mix-number {
-    width: 30px;
-    color: var(--text-dimer);
-  }
-
-  & .col-quantity {
-    width: 100px;
-  }
-
-  & .col-presentation {
-    flex: 1;
-  }
-
-  & .col-status {
-    width: 160px;
-    text-align: center;
-  }
-
-  & .col-actions {
-    width: 80px;
-    display: flex;
-    justify-content: center;
-  }
-
-  & .mix {
-    position: relative;
-    display: flex;
-    padding: 20px;
-    background: var(--background-alt-dark);
-    margin-top: 10px;
+  @media screen and (max-width: 700px) {
+    margin-top: 20px;
     border-radius: 5px;
 
-    & .col-presentation {
-      color: var(--text-dim);
-    }
+    &.open {
+      background: var(--background-alt-dark);
 
-    &:nth-child(2) {
-      &:before {
-        top: -35px;
-        height: 68px;
+      & .details-row {
+        box-shadow: 0 0 5px 3px var(--background);
       }
     }
 
-    &:before {
-      top: -42px;
-      left: -20px;
-      width: 20px;
-      height: 74px;
-      content: "";
-      position: absolute;
-      border-left: solid 2px var(--border-dark);
-      border-bottom: solid 2px var(--border-dark);
-    }
+    & .details-row { border: none; }
   }
 }
