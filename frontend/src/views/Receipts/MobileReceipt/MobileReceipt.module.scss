@@ -1,0 +1,90 @@
+.mobile-receipt {
+  position: fixed;
+  z-index: 100;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--background);
+  transform: translateX(100%);
+  overflow: auto;
+  transition: .3s;
+
+  &.active {
+    transform: translateX(0);
+  }
+
+  & .subtitle {
+    color: var(--text-accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 18px;
+  }
+
+  & .close-btn {
+    padding-top: 10px;
+
+    & .icon {
+      transform: rotate(-90deg);
+    }
+  }
+
+  & .table {
+    display: flex;
+    flex-direction: column;
+
+    & .row {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    & .col {
+      flex: 1;
+
+      &.value {
+        text-align: right;
+      }
+    }
+  }
+
+  & .receipt-details {
+    row-gap: 20px;
+    padding: 20px;
+
+    & .col.label {
+      color: var(--text-dim);
+    }
+  }
+
+  & .edit-receipt-btn {
+    color: var(--text-accent);
+    --hover-color: var(--text-accent-light);
+  }
+
+  & .delete-receipt-btn {
+    color: var(--red);
+    --hover-color: var(--red-light);
+  }
+
+  & .mixes-container {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    padding: 20px;
+
+    $mix-background: var(--background-alt-dark);
+
+    & .mix {
+      row-gap: 10px;
+      background: $mix-background;
+      padding: 20px;
+      border-radius: 5px;
+    }
+
+    & .mark-delivered-btn {
+      margin-top: 10px;
+      width: 100%;
+      justify-content: center;
+    }
+  }
+}

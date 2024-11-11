@@ -149,6 +149,7 @@ function Receipts() {
       <ReceiptsTable
         loading={loadingReceipts}
         receipts={receipts}
+        setReceipts={setReceipts}
         showDeleteModal={showDeleteReceiptModal}
         showEditModal={showEditReceiptModal}
         reloadReceipts={reloadReceipts}

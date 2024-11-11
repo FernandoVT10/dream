@@ -71,6 +71,32 @@
   }
 }
 
+.receipt-card {
+  width: 100%;
+  display: flex;
+  padding: 20px 0;
+  border-top: solid 1px var(--border-dark);
+  cursor: pointer;
+  border-radius: 5px;
+  transition: .3s;
+
+  &:hover {
+    background: var(--background-alt-dark);
+  }
+
+  & .col-date {
+    color: var(--text-dim);
+  }
+
+  & .col-folio {
+    font-weight: bold;
+  }
+
+  & .col-actions {
+    column-gap: 10px;
+  }
+}
+
 .receipt {
   &.open {
     & .details-row {
@@ -85,47 +111,16 @@
     }
   }
 
-  & .details-row {
-    width: 100%;
-    display: flex;
-    padding: 20px 0;
-    border-top: solid 1px var(--border-dark);
-    cursor: pointer;
-    border-radius: 5px;
-    transition: .3s;
-
-    &:hover {
-      background: var(--background-alt-dark);
-    }
-
-    & .col-date {
-      color: var(--text-dim);
-    }
-
-    & .col-folio {
-      font-weight: bold;
-    }
-
-    & .col-actions {
-      column-gap: 10px;
-    }
-  }
-
-  & .mixes-loader {
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-  }
-
   @media screen and (max-width: 700px) {
     margin-top: 20px;
     border-radius: 5px;
+    box-shadow: 0 0 5px 0px var(--blue);
 
     &.open {
-      background: var(--background-alt-dark);
-
       & .details-row {
-        box-shadow: 0 0 5px 3px var(--background);
+        margin: 0;
+        box-shadow: none;
+        background: transparent;
       }
     }
 

@@ -45,6 +45,10 @@
     background: transparent;
     font-weight: bold;
     font-size: 14px;
+
+    &:hover {
+      color: var(--hover-color, var(--text));
+    }
   }
 
   &.primary, &.danger {

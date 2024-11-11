@@ -1,3 +1,9 @@
+.loader {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
 .mixes-table {
   .table {
     display: block;
@@ -67,49 +73,6 @@
         border-left: solid 2px var(--border-dark);
         border-bottom: solid 2px var(--border-dark);
       }
-    }
-  }
-
-  .cards {
-    display: none;
-    flex-direction: column;
-    row-gap: 20px;
-    padding: 20px;
-
-    $card-background: var(--background);
-
-    & .card {
-      display: flex;
-      flex-direction: column;
-      row-gap: 10px;
-      background: $card-background;
-      padding: 20px;
-      border-radius: 5px;
-
-      & .row {
-        display: flex;
-        justify-content: space-between;
-
-        & .col {
-          flex: 1;
-        }
-      }
-
-      & .mark-delivered-btn {
-        margin-top: 10px;
-        width: 100%;
-        justify-content: center;
-      }
-    }
-  }
-
-  @media screen and (max-width: 700px) {
-    & .table {
-      display: none;
-    }
-
-    & .cards {
-      display: flex;
     }
   }
 }

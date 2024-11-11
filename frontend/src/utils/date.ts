@@ -5,7 +5,6 @@ export function getFormattedDate(isoDate: string): string {
   return `${day}-${month}-${year}`;
 }
 
-
 // returns actual date in the form yyyy-mm-dd
 export function getISODate(): string {
   const d = new Date();
