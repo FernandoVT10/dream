@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "nodemon --watch ./src ./src/main.ts",
     "check": "tsc --noEmit",
-    "check:watch": "tsc --noEmit --watch"
+    "check:watch": "tsc --noEmit --watch",
+    "build": "tsc -b",
+    "start": "node ./build/main.js"
   },
   "author": "",
   "license": "ISC",
