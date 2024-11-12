@@ -103,7 +103,10 @@ function AddReceiptForm({ hideModal, reloadReceipts }: AddReceiptFormProps) {
           onChange={(v) => setUseActualDate(v)}
           checked={useActualDate}
         />
-        <span className={styles.text}>Use today's date</span>
+        <span
+          className={styles.text}
+          onClick={() => setUseActualDate(!useActualDate)}
+        >Use today's date</span>
       </div>
     </>
   );

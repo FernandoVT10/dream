@@ -22,6 +22,7 @@ type ReceiptCardProps = {
   receipt: ReceiptType;
   showDeleteModal: (receiptId: number) => void;
   showEditModal: (receiptId: number) => void;
+  className?: string;
 };
 
 function ReceiptCard(props: ReceiptCardProps) {
@@ -31,7 +32,7 @@ function ReceiptCard(props: ReceiptCardProps) {
 
   return (
     <div
-      className={getClassName("receipt-card")}
+      className={getClassName("receipt-card", props.className)}
       onClick={props.onClick}
     >
       <div className={getClassName("col-icon")}>
@@ -105,6 +106,7 @@ function Receipt(props: ReceiptProps) {
           receipt={props.receipt}
           showEditModal={props.showEditModal}
           showDeleteModal={props.showDeleteModal}
+          className={getClassName("mobile")}
         />
       </div>
     );
